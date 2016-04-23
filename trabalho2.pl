@@ -4,6 +4,11 @@
 % Programacao em logica estendida
 % Representacao de conhecimento imperfeito
 %
+% permitida a evolucao sobre utentes, servicos, consultas 
+% utente: IdUt, Nome, Idade, Morada -> {V,F,D}
+% serviço: Serv, Descrição, Instituição, Cidade -> {V,F,D}
+% consulta: Data, IdUt, Serv, Custo -> {V,F,D}
+%
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 
 %SICStus PROLOG: Declaracoes iniciais
@@ -13,36 +18,23 @@
 :- set_prolog_flag( unknown,fail ).
 
 % SICStus PROLOG: Definicoes iniciais
-% permitida a evolucao sobre utentes, profissionais, servicos, instituicoes, registos de actividade medica
-
 :- op(900,xfy,'::').
 
-:- dynamic utenteOBR/3.
+:- dynamic utente.
 :- dynamic utenteOPC/2.
 
-:_ dynamic servico/4.
-
-:- dynamic consultaOBR/4.
-:- dynamic consultaOPC/2.
-
+:- dynamic utente/4.
+:- dynamic servico/4.
+:- dynamic consulta/4.
 
 %% Invariantes -------------------------------------------------------------------------------------------
 %  >>>>> Invariantes para operacao de adicao <<<<<
 %
 %   - utente:
 %        Invariante Estrutural:
-%           - utentes distintos nao teem o mesmo nome
-+utente(Utente)::(
-  solucoes( (Utente), ( utente(Utente) ), Lista),
-  comprimento(Lista,N),
-  N==1
-  ).
-
-%   - instituicao:
-%        Invariante Estrutural:
-%           - instituicoes distintas nao teem o mesmo nome
-+instituicao(Instituicao)::(
-  solucoes( (Instituicao), ( instituicao(Instituicao) ), Lista),
+%           - utentes distintos nao teem o mesmo IdUt
++utente(IdUt,Nome,Idade,Morada)::(
+  solucoes( (IdUt), ( utente(IdUt,_,_,_) ), Lista),
   comprimento(Lista,N),
   N==1
   ).
@@ -52,34 +44,13 @@
 %           - servicos distintos da mesma instituicao nao teem o mesmo nome
 %        Invariante Referencial:
 %           - a instituicao associada ao servico existe
-+servico(Servico,Instituicao)::(
-  solucoes( (Servico,Instituicao) , ( servico(Servico,Instituicao) ), Lista),
++servico(Servico,Descricao,Instituicao,Cidade)::(
+  solucoes( (Servico) , ( servico(Servico,_,_,_) ), Lista),
   comprimento(Lista,N),
-  N==1,
-  solucoes( (Instituicao) , ( instituicao(Instituicao) ), ListaInst),
-  comprimento(ListaInst,NInst),
-  NInst==1
+  N==1
   ).
 
-%   - profissional:
-%        Invariante Estrutural:
-%           - profissionais distintos nao teem o mesmo nome 
-%        Invariante Referencial:
-%           - a instituicao a ele associada existe
-%           - o servico a ele associado existe na instituicao a ele associado
-+profissional(Profissional,Servico,Instituicao)::(
-  solucoes( (Profissional), ( profissional(Profissional,Servico,Instituicao) ), Lista),
-  comprimento(Lista,N),
-  N==1,
-  solucoes( (Instituicao) , ( instituicao(Instituicao) ), ListaInst),
-  comprimento(ListaInst,NInst),
-  NInst==1,
-  solucoes( (Servico,Instituicao) , ( servico(Servico,Instituicao) ), ListaServ),
-  comprimento(ListaServ,NServ),
-  NServ==1
-  ).
-
-%   - registo:
+%   - consulta:
 %        Invariante Estrutural:
 %           - tem que existir pelo menos um registo com essas caracteristicas depois da insercao
 %        Invariante Referencial:
@@ -160,23 +131,8 @@
   NProf==0
   ).
 
-%   - profissional:
-%        Invariante Estrutural:
-%           - nao pode existir o profissional depois da operacao de remocao 
-%        Invariante Referencial:
-%           - profissionais apenas podem ser eliminados se nao exitirem registos a ele associados
--profissional(Profissional,Servico,Instituicao)::(
-  solucoes( (Profissional), ( profissional(Profissional,Servico,Instituicao) ), Lista),
-  comprimento(Lista,N),
-  N==0,
-  solucoes( (_,Instituicao,Servico,Profissional), ( registo(_,Instituicao,Servico,Profissional) ), ListaReg),
-  comprimento(ListaReg,NReg),
-  NReg==0
-  ).
-
 %% Base de Conhecimento sobre Utentes --------------------------------------------------------------------------------------------
-%% utente: #IdUt, Nome, Idade, Morada -> {V,F,D}
-%%
+% utente: IdUt, Nome, Idade, Morada -> {V,F,D}
 
 utente(antonio_sousa).
 utente(antonio_marques).
@@ -186,15 +142,8 @@ utente(delfina_araujo).
 utente(jorge_marques).
 utente(rosa_sousa).
 
-% Base de Conhecimento sobre Instituições ---------------------------------------------------------------------------------------
-
-instituicao(hospital_sao_marcos).
-instituicao(hospital_braga).
-instituicao(hospital_lisboa).
-instituicao(hospital_porto).
-instituicao(hospital_leiria).
-
 % Base de Conhecimento sobre Serviços -------------------------------------------------------------------------------------------
+% serviço: Serv, Descrição, Instituição, Cidade -> {V,F,D}
 
 servico(cardiologia,hospital_sao_marcos).
 servico(cardiologia,hospital_braga).
@@ -220,29 +169,8 @@ servico(clinica_geral,hospital_porto).
 
 servico(psiquiatria,hospital_braga).
 
-% Base de Conhecimento sobre Profissionais --------------------------------------------------------------------------------------
-
-profissional(salvador_sousa, oncologia, hospital_porto).
-profissional(filipe_oliveira, nutricionismo, hospital_porto).
-profissional(filipe_marques, nutricionismo, hospital_porto).
-profissional(filipe_oliveira, clinical_geral, hospital_porto).
-profissional(filipe_marques, clinical_geral, hospital_porto).
-profissional(luis_mendes, clinica_geral, hospital_porto).
-profissional(andre_santos, geriatria, hospital_porto).
-
-profissional(tiago_sousa, cirurgia, hospital_lisboa).
-
-profissional(vanessa_goncalves, cardiologia, hospital_sao_marcos).
-profissional(marta_caetano, nutricionismo, hospital_sao_marcos).
-
-profissional(filipe_oliveira, nutricionismo, hospital_braga).
-profissional(filipe_marques, nutricionismo, hospital_braga).
-profissional(luis_mendes, nutricionismo, hospital_braga).
-profissional(luis_mendes, clinical_geral, hospital_braga).
-profissional(luis_sousa, clinica_geral, hospital_braga).
-profissional(andreia_goncalves, cirurgia, hospital_braga).
-
-% Base de Conhecimento sobre Registo de entradas --------------------------------------------------------------------------------
+% Base de Conhecimento sobre Consultas --------------------------------------------------------------------------------
+% consulta: Data, IdUt, Serv, Custo -> {V,F,D}
 
 registo(antonio_sousa, hospital_sao_marcos, cardiologia, vanessa_goncalves).
 registo(antonio_sousa, hospital_sao_marcos, cardiologia, vanessa_goncalves).
