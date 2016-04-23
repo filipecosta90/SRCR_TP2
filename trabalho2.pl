@@ -41,7 +41,7 @@
   solucoes( (IdUt), ( utente(IdUt,_,_,_) ), Lista),
   comprimento(Lista,N),
   N==1
-  ).
+).
 
 %   - servico:
 %        Invariante Estrutural:
@@ -51,7 +51,7 @@
   solucoes( (Servico) , ( servico(Servico,_,_,_) ), Lista),
   comprimento(Lista,N),
   N==1
-  ).
+).
 
 %   - consulta:
 %        Invariante Estrutural:
@@ -69,7 +69,7 @@
   solucoes( (IdServico) , ( servico(IdServico,_,_,_ ) ), ListaServ),
   comprimento(ListaServ,NServ),
   NServ==1
-  ).
+).
 
 % -------------------------------------------------
 %  >>>>> Invariantes para operacao de remocao <<<<<
@@ -86,7 +86,7 @@
   solucoes( (_,IdUtente,_,_), ( consulta(Data,IdUtente,_,_) ), ListaCons),
   comprimento(ListaCons,NCons),
   NCons==0
-  ).
+).
 
 %   - servico:
 %        Invariante Estrutural:
@@ -100,7 +100,7 @@
   solucoes( (Dat,IdUtente,IdServico,Custo), ( consulta(Data,IdUtente,IdServico,Custo) ), ListaCons),
   comprimento(ListaCons,NCons),
   NCons==0
-  ).
+).
 
 % -----------------------------------
 % Base de Conhecimento sobre Utentes --------------------------------------------------------------------------------------------
@@ -108,7 +108,7 @@
 % Extensao do predicado utente: IdUt, Nome, Idade, Morada -> {V,F,D}
 
 -utente(IdUt, Nome, Idade, Morada) :- nao(utente(IdUt, Nome, Idade, Morada)),
-                                      nao(excecao(utente(IdUt, Nome, Idade, Morada))).
+nao(excecao(utente(IdUt, Nome, Idade, Morada))).
 
 % -------------------------------------------------
 % conhecimento perfeito positivo relativo a utentes
@@ -156,7 +156,7 @@ nulo(imperfeito_interdito1).
   solucoes( (IdUt,Nome,Idade,Morada), ( utente(ut009,carlos_sa,Idade,fundacao_abcd),nao(nulo(Idade))),S),
   comprimento(S,N),
   N==0
-  ).
+).
 
 % ------------------------------------
 % Base de Conhecimento sobre Serviços --------------------------------------------------------------------------------------------
@@ -164,7 +164,7 @@ nulo(imperfeito_interdito1).
 % Extensao do predicado serviço: IdServ, Descrição, Instituição, Cidade -> {V,F,D}
 
 -servico(IdServ, Descricao, Instituicao, Cidade) :- nao(servico(IdServ, Descricao, Instituicao, Cidade)),
-                                                    nao(excecao(servico(IdServ, Descricao, Instituicao, Cidade))).
+nao(excecao(servico(IdServ, Descricao, Instituicao, Cidade))).
 
 % --------------------------------------------------
 % conhecimento perfeito positivo relativo a servicos
@@ -213,7 +213,7 @@ nulo(imperfeito_interdito2).
   solucoes( (IdServ,Descricao,Instituicao,Cidade), ( servico(sv010,Descricao,hospital_matosinhos,matosinhos),nao(nulo(Descricao))),S),
   comprimento(S,N),
   N==0
-  ).
+).
 
 % -------------------------------------
 % Base de Conhecimento sobre Consultas -------------------------------------------------------------------------------------------
@@ -221,7 +221,7 @@ nulo(imperfeito_interdito2).
 % Extensao do predicado consulta: Data, IdUt, IdServ, Custo -> {V,F,D}
 
 -consulta(Data, IdUt, IdServ, Custo) :- nao(consulta(Data, IdUt, IdServ, Custo)),
-                                                    nao(excecao(consulta(Data, IdUt, IdServ, Custo))).
+nao(excecao(consulta(Data, IdUt, IdServ, Custo))).
 
 % ---------------------------------------------------
 % conhecimento perfeito positivo relativo a consultas
@@ -268,39 +268,68 @@ nulo(imperfeito_interdito3).
   solucoes( (Data,IdUt,IdServ,Custo), ( consulta(31-12-2015,ut005,sv010,Custo),nao(nulo(Custo))),S),
   comprimento(S,N),
   N==0
-  ).
+).
 
 %% Queries a base de conhecimento -------------------------------------------------------------------------------------
 
-% 9) Extensao do predicado Registar utentes, profissionais, serviços ou instituições
+% E1) Extensao do predicado que permite identificar todos as consultas medicas de um utente
+%consultasMedicasUtente(ItUt, ListaEventosMedicos) -> {V,F,D}
+consultasMedicasUtente(IdUt,ListaEventosMedicos) :-
+solucoes( (Data,IdUt,IdServ,Custo), ( consulta(Data,IdUt,IdServ,Custo) ), ListaEventosMedicos).
+
+% E2) Extensao do predicado que permite calcular o custo de todos as consultas medicas de um utente
+%custoConsultasMedicasUtente(ItUt, CustoTotal) -> {V,F,D}
+custoConsultasMedicasUtente(IdUt,CustoTotal) :-(
+solucoes( (Custo), ( consulta(Data,IdUt,IdServ,Custo) ), ListaCustosMedicos),
+somarElementos(ListaCustosMedicos,CustoTotal)
+).
+
+% E3) Extensao do predicado que permite calcular os utentes que recorreram a um determinado servico
+% recorreuServico(IdUt,IdServ) -> {V,F,D}
+recorreuServico(IdUt,IdServ) :- consulta(_,IdUt,IdServ,_).
+
+% 1) Extensao do predicado Identificar os servicos existentes numa instituicao
+% servicosInstituicao(Instituicao,ListaServicos) -> {V,F,D}
+servicosInstituicao(Instituicao,ListaServicos) :- solucoes((IdServ,Descricao), servico(IdServ,Descricao,Instituicao,Cidade), ListaServicos).
+
+% 3) Extensao do predicado Identificar os utentes de um determinado servico
+% utentesServico(Servico,ListaUtentes) -> {V,F,D}
+utentesServico(IdServ,ListaUtentes) :-
+solucoes(X, recorreuServico(X, Servico), ListaUtentesRep),
+removerduplicados(ListaUtentesRep,ListaUtentes).
+
+% 9) Extensao do predicado Registar utentes, serviços, ou consultas
 
 % Extensao do predicado que pemite registar utentes
-% registarUtente(Nome) -> {V,F}
-registarUtente(Nome) :- evolucao(utente(Nome)).
+% registarUtente(IdUt,Nome,Idade,Morada) -> {V,F,D}
+registarUtente(IdUt,Nome,Idade,Morada) :- evolucao(utente(IdUt,Nome,Idade,Morada)).
 
 % Extensao do predicado que pemite registar servicos numa instituicao
-% registarServico(Servico,Instituicao) -> {V,F}
-registarServico(Servico,Instituicao) :- evolucao(servico(Servico,Instituicao)).
+% registarServico(IdServ,Descricao, Instituicao, Cidade ) -> {V,F,D}
+registarServico(IdServ,Descricao,Instituicao,Cidade) :- evolucao(servico(IdServ,Descricao,Instituicao,Cidade)).
 
-% Extensao do predicado que pemite registar eventos medicos numa instituicao indicando o utente, o profissional, o servico e a instituicao
-% registarEvento(Utente,Profissional,Servico,Instituicao) -> {V,F}
-registarEvento(Utente,Profissional,Servico,Instituicao) :- evolucao(registo(Utente,Profissional,Servico,Instituicao)).
+% Extensao do predicado que pemite registar consultas medicas, indicando a data, a identificacao do utente, do servico,
+% numa instituicao indicando o utente, o profissional, o servico e a instituicao
+% registarConsulta(Data,IdUt,IdServ,Custo) -> {V,F,D}
+registarConsulta(Data,IdUt,IdServ,Custo) :- evolucao(consulta(Data,IdUt,IdServ,Custo)).
 
 % 10) Remover utentes (ou profissionais ou serviços ou instituições) dos registos
 
 % Extensao do predicado que pemite remover utentes
-% removerUtente(Nome) -> {V,F}
-removerUtente(Nome) :- remocao(utente(Nome)).
+% removerUtente(IdUt,Nome,Idade,Morada) -> {V,F,D}
+removerUtente(IdUt,Nome,Idade,Morada) :- remocao(utente(IdUt,Nome,Idade,Morada)).
 
-% Extensao do predicado que pemite remover servicos numa instituicao
-% registarServico(Servico,Instituicao) -> {V,F}
-removerServico(Servico,Instituicao) :- remocao(servico(Servico,Instituicao)).
+% Extensao do predicado que pemite remover servicos
+% removerServico(IdServ,Descricao, Instituicao, Cidade ) -> {V,F,D}
+removerServico(IdServ,Descricao,Instituicao,Cidade) :- evolucao(servico(IdServ,Descricao,Instituicao,Cidade)).
 
-% Extensao do predicado que pemite remover eventos medicos numa instituicao indicando o utente, o profissional, o servico e a instituicao
-% removerEvento(Utente,Profissional,Servico,Instituicao) -> {V,F}
-removerEvento(Utente,Profissional,Servico,Instituicao) :- remocao(registo(Utente,Profissional,Servico,Instituicao)).
+% Extensao do predicado que pemite remover consultas medicas, indicando a data, a identificacao do utente, do servico,
+% numa instituicao indicando o utente, o profissional, o servico e a instituicao
+% removerConsulta(Data,IdUt,IdServ,Custo) -> {V,F,D}
+removerConsulta(Data,IdUt,IdServ,Custo) :- remocao(consulta(Data,IdUt,IdServ,Custo)).
 
-% Predicados que permitem evolução do conhecimento ------------------------------------------------------------------------------ 
+
+% Predicados que permitem evolução do conhecimento ------------------------------------------------------------------------------
 
 % Extensão do predicado que permite a evolucao do conhecimento
 % disponibilizada pelo professor na aula prática da semana5
@@ -364,6 +393,10 @@ pertence(X,[ _ | XS]) :- pertence(X,XS).
 comprimento([],0).
 comprimento([_ | L],R) :- comprimento(L,N),R is N+1.
 
+% Somar todos os elementos existentes numa listasomarElementos([],0).
+somarElementos([],0).
+somarElementos([Valor | L],Resultado) :- somarElementos(L,N),Resultado is N+Valor.
+
 % Apaga a primeira ocurrencia de um elemento numa lista
 apagar(X, [X | XS], XS).
 apagar(E, [X | XS], [X | YS]) :- apagar(E, XS, YS).
@@ -389,7 +422,7 @@ inverter([X | XS], L2) :- inverter(XS, YS), concatenar(YS,[X],L2).
 sublista(S,L) :- concatenar(S,_,L).
 sublista(S,L) :- concatenar(_,S,L).
 sublista(S, [ _ | YS]) :- 
-  sublista(S, YS).
+sublista(S, YS).
 
 % Remove elementos duplicados de uma lista
 removerduplicados([],[]).
