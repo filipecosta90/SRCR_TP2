@@ -4,10 +4,13 @@
 % Programacao em logica estendida
 % Representacao de conhecimento imperfeito
 %
+% Trabalho pratico 2
+% Filipe Oliveira, Filipe Marques, Luis Mendes
+%
 % permitida a evolucao sobre utentes, servicos, consultas 
-% utente: IdUt, Nome, Idade, Morada -> {V,F,D}
-% serviço: Serv, Descrição, Instituição, Cidade -> {V,F,D}
-% consulta: Data, IdUt, Serv, Custo -> {V,F,D}
+%     utente: IdUt, Nome, Idade, Morada -> {V,F,D}
+%     serviço: IdServ, Descrição, Instituição, Cidade -> {V,F,D}
+%     consulta: Data, IdUt, IdServ, Custo -> {V,F,D}
 %
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 
@@ -20,9 +23,6 @@
 % SICStus PROLOG: Definicoes iniciais
 :- op(900,xfy,'::').
 
-:- dynamic utente.
-:- dynamic utenteOPC/2.
-
 :- dynamic utente/4.
 :- dynamic servico/4.
 :- dynamic consulta/4.
@@ -33,6 +33,7 @@
 %   - utente:
 %        Invariante Estrutural:
 %           - utentes distintos nao teem o mesmo IdUt
+
 +utente(IdUt,Nome,Idade,Morada)::(
   solucoes( (IdUt), ( utente(IdUt,_,_,_) ), Lista),
   comprimento(Lista,N),
@@ -41,9 +42,8 @@
 
 %   - servico:
 %        Invariante Estrutural:
-%           - servicos distintos da mesma instituicao nao teem o mesmo nome
-%        Invariante Referencial:
-%           - a instituicao associada ao servico existe
+%           - servicos distintos da mesma instituicao nao teem o mesmo IdServ
+
 +servico(Servico,Descricao,Instituicao,Cidade)::(
   solucoes( (Servico) , ( servico(Servico,_,_,_) ), Lista),
   comprimento(Lista,N),
@@ -52,28 +52,20 @@
 
 %   - consulta:
 %        Invariante Estrutural:
-%           - tem que existir pelo menos um registo com essas caracteristicas depois da insercao
+%           - tem que existir pelo menos uma consulta com essas caracteristicas depois da insercao
 %        Invariante Referencial:
-%           - o utente a ele associado existe
-%           - a instituicao a ele associado existe
-%           - o servico a ele associado existe na instituicao a ele associado
-%           - o profissional associado ao registo esta associado ao servico e instituicao
-+registo(Utente,Instituicao,Servico,Profissional)::(
-  solucoes( (Utente,Instituicao,Servico,Profissional), ( registo(Utente,Instituicao,Servico,Profissional) ), Lista),
+%           - o utente a ela associada existe
+%           - o servico a ela associada existe
++consulta(Data,IdUtente,IdServico,Custo)::(
+  solucoes( (Data,IdUtente,IdServico,Custo), ( consulta(Data,IdUtente,IdServico,Custo) ), Lista),
   comprimento(Lista,N),
   N>=1,
-  solucoes( (Utente), ( utente(Utente) ), ListaUten),
+  solucoes( (IdUtente), ( utente(IdUtente,_,_,_) ), ListaUten),
   comprimento(ListaUten,NUten),
   NUten==1,
-  solucoes( (Instituicao) , ( instituicao(Instituicao) ), ListaInst),
-  comprimento(ListaInst,NInst),
-  NInst==1,
-  solucoes( (Servico,Instituicao) , ( servico(Servico,Instituicao) ), ListaServ),
+  solucoes( (IdServico) , ( servico(IdServico,_,_,_ ) ), ListaServ),
   comprimento(ListaServ,NServ),
-  NServ==1,
-  solucoes( (Profissional,Servico,Instituicao), ( profissional(Profissional,Servico,Instituicao) ), ListaProf),
-  comprimento(ListaProf,NProf),
-  NProf==1
+  NServ==1
   ).
 
 %  >>>>> Invariantes para operacao de remocao <<<<<
@@ -81,289 +73,81 @@
 %        Invariante Estrutural:
 %           - nao pode existir o utente depois da operacao de remocao
 %        Invariante Referencial:
-%           - utentes apenas podem ser eliminado se nao existirem registos a ele associado
--utente(Utente)::(
-  solucoes( (Utente), ( utente(Utente) ), Lista),
+%           - utentes apenas podem ser eliminado se nao existirem consultas a ele associado
+-utente(IdUtente,Nome,Idade,Morada)::(
+  solucoes( (IdUtente), ( utente(IdUtente,Nome,Idade,Morada) ), Lista),
   comprimento(Lista,N),
   N==0,
-  solucoes( (Utente,_,_,_), ( registo(Utente,_,_,_) ), ListaReg),
-  comprimento(ListaReg,NReg),
-  NReg==0
-  ).
-
-%   - instituicao:
-%        Invariante Estrutural:
-%           - nao pode existir a instituicao depois da operacao de remocao
-%        Invariante Referencial:
-%           - instituicoes apenas pode ser eliminadas se nao exitirem registos a ela associada
-%           - instituicoes apenas pode ser eliminadas se nao exitirem servicos a ela associada
-%           - instituicoes apenas pode ser eliminadas se nao exitirem profissionais a ela associada
--instituicao(Instituicao)::(
-  solucoes( (Instituicao), ( instituicao(Instituicao) ), Lista),
-  comprimento(Lista,N),
-  N==0,
-  solucoes( (_,Instituicao,_,_), ( registo(_,Instituicao,_,_) ), ListaReg),
-  comprimento(ListaReg,NReg),
-  NReg==0,
-  solucoes( (_,Instituicao) , ( servico(_,Instituicao) ), ListaServ),
-  comprimento(ListaServ,NServ),
-  NServ==0,
-  solucoes( (_,_,Instituicao), ( profissional(_,_,Instituicao) ), ListaProf),
-  comprimento(ListaProf,NProf),
-  NProf==0
+  solucoes( (_,IdUtente,_,_), ( consulta(Data,IdUtente,_,_) ), ListaCons),
+  comprimento(ListaCons,NCons),
+  NCons==0
   ).
 
 %   - servico:
 %        Invariante Estrutural:
 %           - nao pode existir o servico depois da operacao de remocao 
 %        Invariante Referencial:
-%           - servicos apenas podem ser eliminados se nao exitirem registos a ele associados
-%           - servicos apenas podem ser eliminados se nao exitirem profissionais a ele associados
--servico(Servico,Instituicao)::(
-  solucoes( (Servico,Instituicao) , ( servico(Servico,Instituicao) ), Lista),
+%           - servicos apenas podem ser eliminados se nao exitirem consultas a ele associados
+-servico(IdServico,Descricao,Instituicao,Cidade)::(
+  solucoes( (IdServico) , ( servico(IdServico,_,_,_) ), Lista),
   comprimento(Lista,N),
   N==0,
-  solucoes( (_,Instituicao,Servico,_), ( registo(_,Instituicao,Servico,_) ), ListaReg),
-  comprimento(ListaReg,NReg),
-  NReg==0,
-  solucoes( (_,Servico,Instituicao), ( profissional(_,Servico,Instituicao) ), ListaProf),
-  comprimento(ListaProf,NProf),
-  NProf==0
+  solucoes( (Dat,IdUtente,IdServico,Custo), ( consulta(Data,IdUtente,IdServico,Custo) ), ListaCons),
+  comprimento(ListaCons,NCons),
+  NCons==0
   ).
 
-%% Base de Conhecimento sobre Utentes --------------------------------------------------------------------------------------------
-% utente: IdUt, Nome, Idade, Morada -> {V,F,D}
+% Base de Conhecimento sobre Utentes --------------------------------------------------------------------------------------------
+% Extensao do predicado utente: IdUt, Nome, Idade, Morada -> {V,F,D}
 
-utente(antonio_sousa).
-utente(antonio_marques).
-utente(maria_meireles).
-utente(diamantino_marques).
-utente(delfina_araujo).
-utente(jorge_marques).
-utente(rosa_sousa).
+-utente(IdUt, Nome, Idade, Morada) :- nao(utente(IdUt, Nome, Idade, Morada)),
+                                      nao(excecao(utente(IdUt, Nome, Idade, Morada))).
 
-% Base de Conhecimento sobre Serviços -------------------------------------------------------------------------------------------
-% serviço: Serv, Descrição, Instituição, Cidade -> {V,F,D}
+% conhecimento perfeito positivo relativo a utentes
+utente(ut001,antonio_sousa,24,rua_de_santo_ovideo).
+utente(ut002,filipe_oliveira,25,urb_qta_orfaos).
+utente(ut003,fernando_oliveira,55,rua_gen_humberto_delgado).
+utente(ut004,fernanda_oliveira,52,rua_gen_humberto_delgado).
+utente(ut005,ricardo_oliveira,27,rua_gen_humberto_delgado).
 
-servico(cardiologia,hospital_sao_marcos).
-servico(cardiologia,hospital_braga).
-servico(cardiologia,hospital_leiria).
-servico(cardiologia,hospital_porto).
+% Explicitacao das situacoes de excecao
 
-servico(nutricionismo,hospital_sao_marcos).
-servico(nutricionismo,hospital_braga).
-servico(nutricionismo,hospital_leiria).
-servico(nutricionismo,hospital_porto).
+% Base de Conhecimento sobre Serviços --------------------------------------------------------------------------------------------
+% Extensao do predicado serviço: IdServ, Descrição, Instituição, Cidade -> {V,F,D}
 
-servico(geriatria,hospital_porto).
+-servico(IdServ, Descricao, Instituicao, Cidade) :- nao(servico(IdServ, Descricao, Instituicao, Cidade)),
+                                                    nao(excecao(servico(IdServ, Descricao, Instituicao, Cidade))).
 
-servico(neurologia,hospital_porto).
+% conhecimento perfeito positivo relativo a servicos
 
-servico(oncologia,hospital_porto).
+servico(sv001,cardiologia,hospital_viana_castelo,viana_castelo).
+servico(sv002,maternidade,hospital_viana_castelo,viana_castelo).
+servico(sv003,maternidade,hospital_matosinhos,matosinhos).
+servico(sv004,maternidade,hospital_sao_marcos,braga).
+servico(sv005,maternidade,hospital_da_prelada,porto).
+servico(sv006,maternidade,hospital_de_sao_joao,porto).
+servico(sv007,maternidade,maternidade_julio_dinis,porto).
 
-servico(cirurgia,hospital_braga).
-servico(cirurgia,hospital_lisboa).
-
-servico(clinica_geral,hospital_braga).
-servico(clinica_geral,hospital_porto).
-
-servico(psiquiatria,hospital_braga).
+% Explicitacao das situacoes de excecao
 
 % Base de Conhecimento sobre Consultas --------------------------------------------------------------------------------
-% consulta: Data, IdUt, Serv, Custo -> {V,F,D}
+% Extensao do predicado consulta: Data, IdUt, IdServ, Custo -> {V,F,D}
 
-registo(antonio_sousa, hospital_sao_marcos, cardiologia, vanessa_goncalves).
-registo(antonio_sousa, hospital_sao_marcos, cardiologia, vanessa_goncalves).
-registo(antonio_sousa, hospital_sao_marcos, nutricionismo, filipe_oliveira).
-registo(antonio_marques, hospital_porto, nutricionismo, filipe_marques).
-registo(maria_meireles, hospital_porto, geriatria, andre_santos).
-registo(maria_meireles, hospital_porto, geriatria, andre_santos).
-registo(diamantino_marques, hospital_porto, geriatria, andre_santos).
-registo(diamantino_marques, hospital_porto, geriatria, andre_santos).
-registo(rosa_sousa, hospital_porto, geriatria, andre_santos).
-registo(jorge_marques, hospital_porto, geriatria, andre_santos).
+-consulta(Data, IdUt, IdServ, Custo) :- nao(consulta(Data, IdUt, IdServ, Custo)),
+                                                    nao(excecao(consulta(Data, IdUt, IdServ, Custo))).
 
-% Predicados Extra ---------------------------------------------------------------------------------------------------------------
-% predicados criados com o intuito de facilitar as queries 'a base de conhecimento
+% conhecimento perfeito positivo relativo a consultas
 
-recorreuInstituicao(Utente, Instituicao) :- registo(Utente,Instituicao,_,_).
-recorreuServico(Utente, Servico) :- registo(Utente,_,Servico,_).
-recorreuProfissional(Utente, Profissional) :- registo(Utente,_,_,Profissional).
+consulta(23-04-2016,ut001,sv001,10).
+consulta(19-12-1990,ut002,sv003,0).
+consulta(18-12-1960,ut003,sv002,0).
+consulta(08-08-1963,ut004,sv002,0).
+consulta(17-06-1988,ut005,sv006,0).
 
-todosProfissionais(Profissional) :- profissional(Profissional,_,_).
-profissionaisNoServico(Servico,Profissional) :- profissional(Profissional,Servico,_).
-profissionaisNaInstituicao(Instituicao,Profissional) :- profissional(Profissional,_,Instituicao).
-
-% E1) Extensao do predicado que permite determinar o numero de utentes de uma instituicao 
-% quantosUtentesInstituicao(Instituicao,NumeroUtentes) -> {V,F}
-quantosUtentesInstituicao(Instituicao,NumeroUtentes) :- 
-  utentesInstituicao(Instituicao,ListaUtentes),
-  comprimento(ListaUtentes,NumeroUtentes).
-
-% E2.0.1) Extensao do predicado dada uma lista de instituicoes determina a lista de utilizacao em numero de utentes para cada instituicao 
-%listaUtilizacaoInstituicoes( [I],  [[I,N]]) -> {V,F}
-listaUtilizacaoInstituicoes( [I],  [[I,N]]) :- 
-  quantosUtentesInstituicao(I,N).
-listaUtilizacaoInstituicoes( [I|TAIL_INST],  [[I,N] | XS]) :- 
-  quantosUtentesInstituicao(I,N),
-  listaUtilizacaoInstituicoes(TAIL_INST,XS).
-
-% E2) Extensao do predicado que permite determinar a lista de utilizacao em numero de utentes de todas as instituicoes na base de conhecimento 
-%utilizacaoInstituicoes(ListaUtilizacao) -> {V,F} 
-mapaUtilizacaoInstituicoes(ListaUtilizacao) :- 
-  solucoes( (Instituicao),( instituicao(Instituicao) ), ListaInstituicoes),
-  listaUtilizacaoInstituicoes(ListaInstituicoes,ListaUtilizacao).
-
-% E3) Extensao do predicado que permite determinar o numero de eventos medicos de um utente 
-% quantosEventosUtente(Utente,NumeroEventos) -> {V,F}
-quantosEventosMedicosUtente(Utente,NumeroEventos) :-
-  eventosMedicosUtente(Utente,ListaEventosMedicos),
-  comprimento(ListaEventosMedicos,NumeroEventos).
-
-% E3.0.1) Extensao do predicado que permite identificar todos os eventos medicos de um utente 
-eventosMedicosUtente(Utente,ListaEventosMedicos) :-
-  solucoes( (Utente), ( registo(Utente,_,_,_) ), ListaEventosMedicos).
-
-% E4.0.1) Extensao do predicado dada uma lista de utentes determina a lista do numero de eventos medicos para cada utentes 
-%listaEventosMedicosUtente( [Utentes],  [[Utente,N]]) -> {V,F}
-listaEventosMedicosUtente( [Utente],  [[Utente,N]]) :- 
-  quantosEventosMedicosUtente(Utente,N).
-listaEventosMedicosUtente( [Utente|TAIL_UT],  [[Utente,N] | XS]) :- 
-  quantosEventosMedicosUtente(Utente,N),
-  listaEventosMedicosUtente(TAIL_UT,XS).
-
-% E4) Extensao do predicado que permite determinar a lista de numero de eventos medicos por utente de todos os utentes na base de conhecimento 
-%mapaEventosMedicosUtentes(ListaEventos) -> {V,F} 
-mapaEventosMedicosPorUtente(ListaEventosUtente) :- 
-  solucoes( (Utente),( utente(Utente) ), ListaUtentes),
-  listaEventosMedicosUtente(ListaUtentes,ListaEventosUtente).
-
-% E5) Extensao do predicado que permite determinar o numero de eventos medicos em que um profissional esteve envolvido 
-% quantosEventosMedicosProfissional(Profissional,NumeroEventos) -> {V,F}
-quantosEventosMedicosProfissional(Profissional,NumeroEventos) :-
-  eventosMedicosProfissional(Profissional,ListaEventosMedicos),
-  comprimento(ListaEventosMedicos,NumeroEventos).
-
-% E5.0.1) Extensao do predicado que permite identificar todos os eventos medicos de um profissional 
-eventosMedicosProfissional(Profissional,ListaEventosMedicos) :-
-  solucoes( (Profissional), ( registo(_,_,_,Profissional) ), ListaEventosMedicos).
-
-% E6.0.1) Extensao do predicado dada uma lista de profissionais determina a lista do numero de eventos medicos em que cada um esteve envolvido 
-%listaEventosMedicosProfissional( [Profissionais],  [[Profissional,N]]) -> {V,F}
-listaEventosMedicosProfissional( [Profissional],  [[Profissional,N]]) :- 
-  quantosEventosMedicosProfissional(Profissional,N).
-listaEventosMedicosProfissional( [Profissional|TAIL_PF],  [[Profissional,N] | XS]) :- 
-  quantosEventosMedicosProfissional(Profissional,N),
-  listaEventosMedicosProfissional(TAIL_PF,XS).
-
-% E6) Extensao do predicado que permite determinar a lista de numero de eventos medicos por utente de todos os profissionais na base de conhecimento 
-%mapaEventosMedicosPorProfissional(ListaEventosProfissional) -> {V,F} 
-mapaEventosMedicosPorProfissional(ListaEventosProfissional) :- 
-  solucoes( (Profissional),( profissional(Profissional,_,_) ), ListaProfissionaisRep),
-  removerduplicados(ListaProfissionaisRep, ListaProfissionais),
-  listaEventosMedicosProfissional(ListaProfissionais,ListaEventosProfissional).
-
-% E7) Extensao do predicado que permite determinar o numero de eventos medicos em que um servico esteve envolvido 
-% quantosEventosMedicosServico(Servico,NumeroEventos) -> {V,F}
-quantosEventosMedicosServico(Servico,NumeroEventos) :-
-  eventosMedicosServico(Servico,ListaEventosMedicos),
-  comprimento(ListaEventosMedicos,NumeroEventos).
-
-% E7.0.1) Extensao do predicado que permite identificar todos os eventos medicos de um servico
-eventosMedicosServico(Servico,ListaEventosMedicos) :-
-  solucoes( (Servico), ( registo(_,_,Servico,_) ), ListaEventosMedicos).
-
-% E8.0.1) Extensao do predicado dada uma lista de servicos determina a lista do numero de eventos medicos em que cada um esteve envolvido 
-%listaEventosMedicosServico( [Servicos],  [[Servico,N]]) -> {V,F}
-listaEventosMedicosServico( [Servico],  [[Servico,N]]) :- 
-  quantosEventosMedicosServico(Servico,N).
-listaEventosMedicosServico( [Servico|TAIL_SERV],  [[Servico,N] | XS]) :- 
-  quantosEventosMedicosServico(Servico,N),
-  listaEventosMedicosServico(TAIL_SERV,XS).
-
-% E8) Extensao do predicado que permite determinar a lista de numero de eventos medicos por servico de todos os servicos na base de conhecimento 
-%mapaEventosMedicosPorServico(ListaEventosServico) -> {V,F} 
-mapaEventosMedicosPorServico(ListaEventosServico) :- 
-  solucoes( (Servico),( servico(Servico,_) ), ListaServicosRep),
-  removerduplicados(ListaServicosRep, ListaServicos),
-  listaEventosMedicosServico(ListaServicos,ListaEventosServico).
-
-% Queries a base de conhecimento -------------------------------------------------------------------------------------------------
-
-% 1) Extensao do predicado Identificar os servicos existentes numa instituicao
-% servicosInstituicao(Instituicao,Servicos) -> {V,F}
-servicosInstituicao(Instituicao,Servicos) :- solucoes(X, servico(X, Instituicao), Servicos).
-
-% 2) Extensao do predicado Identificar os utentes de uma instituição
-% utentesInstituicao(Instituicao,ListaUtentes) -> {V,F}
-utentesInstituicao(Instituicao,ListaUtentes) :-
-  solucoes(X, recorreuInstituicao(X, Instituicao), ListaUtentesRep),
-  removerduplicados(ListaUtentesRep, ListaUtentes).
-
-% 3) Extensao do predicado Identificar os utentes de um determinado serviço
-% utentesServico(Servico,ListaUtentes) -> {V,F}
-utentesServico(Servico,ListaUtentes) :-
-  solucoes(X, recorreuServico(X, Servico), ListaUtentesRep),
-  removerduplicados(ListaUtentesRep,ListaUtentes).
-
-% 4) Extensao do predicado Identificar os utentes de um determinado serviço numa instituição
-% utentesServicoInstituicao(Servico,Instituicao,ListaUtentes) -> {V,F}
-utentesServicoInstituicao(Servico,Instituicao,ListaUtentes) :-
-  solucoes( (Utente) , (registo(Utente, Instituicao, Servico,_) ), ListaUtentesRep),
-  removerduplicados(ListaUtentesRep,ListaUtentes).
-
-% 5) Extensao do predicado Identificar as instituicoes onde seja prestado um servico ou um conjunto de servicos
-% instituicoesComServicos(Servico,Instituicao) -> {V,F}
-% instituicoesComServicos([Servicos],Instituicao) -> {V,F}
-instituicoesComServicos([ ],_).
-instituicoesComServicos(Servico,ListaInstituicoes) :- solucoes((Instituicao), (servico(Servico,Instituicao)), ListaInstituicoes).
-instituicoesComServicos([Servico | TailServicos], ListaInstituicoes) :-
-  solucoes( (Instituicao),(servico(Servico,Instituicao)), ListaInst1),
-  instituicoesComServicos(TailServicos, ListaInst2),
-  concatenar(ListaInst1, ListaInst2, ListaInstituicoes).
+% Explicitacao das situacoes de excecao
 
 
-% 6) Extensao do predicado Identificar os servicos que nao se podem encontrar numa instituicao
-% servicosNaoEncontrados(Instituicao,[Servicos]) -> {V,F}
-servicosNaoEncontrados(Instituicao, ListaServicosNaoEncontrados) :-
-  solucoes(Servico, servico(Servico, _), L1),
-  removerduplicados(L1, ListaServicosTotal),
-  solucoes(Servico, servico(Servico, Instituicao), ListaServicosInst),
-  intercepcao(ListaServicosInst, ListaServicosTotal, R2),
-  removerduplicados(R2, ListaServicosNaoEncontrados).
-
-% 7) Extensao do predicado Determinar as instituicoes onde um profissional presta servico
-% instituicoesProfissionalPrestaServico(Professional, [Instituicoes] ) -> {V,F}
-instituicoesProfissionalPrestaServico(Profissional,ListaInstituicoes) :-
-  solucoes((Instituicao),profissional(Profissional,_,Instituicao),ListaInstituicoesDupl),
-  removerduplicados(ListaInstituicoesDupl,ListaInstituicoes).
-
-% 8.0.1) Extensao do predicado Determinar todas as instituições a que um utente já recorreu
-% utenteRecorreuInstituicao(Utente,[Instituicoes]) -> {V,F}
-utenteRecorreuInstituicao(Utente,Instituicoes) :- 
-  solucoes(X, recorreuInstituicao(Utente,X), InstituicoesComDupl),
-  removerduplicados(InstituicoesComDupl, Instituicoes).
-
-% 8.0.2) Extensao do predicado Determinar todos os serviços a que um utente já recorreu
-% utenteRecorreuServico(Utente,[Servicos]) -> {V,F}
-utenteRecorreuServico(Utente,Servicos) :- 
-  solucoes(X, recorreuServico(Utente,X), ServicosComDupl),
-  removerduplicados(ServicosComDupl, Servicos).
-
-% 8.0.3) Extensao do predicado Determinar todos os profissionais a que um utente já recorreu
-%utenteRecorreuProfissional(Utente,[Profissionais]) -> {V,F}
-utenteRecorreuProfissional(Utente,Profissionais) :- 
-  solucoes(X, recorreuProfissional(Utente,X), ProfissionaisComDupl),
-  removerduplicados(ProfissionaisComDupl, Profissionais).
-
-% 8) Extensao do predicado Determinar todas as instituições (ou serviços, ou profissionais) a que um utente já recorreu
-% utenteRecorreu(Utente,Lista) -> {V,F}
-utenteRecorreu(Utente,Lista) :-
-  utenteRecorreuInstituicao(Utente,LInst),
-  utenteRecorreuServico(Utente,LServ),
-  utenteRecorreuProfissional(Utente,LProf),
-  concatenar(LInst, LServ, LInstServ),
-  concatenar(LInstServ,LProf,Lista).
+%% Queries a base de conhecimento -------------------------------------------------------------------------------------
 
 % 9) Extensao do predicado Registar utentes, profissionais, serviços ou instituições
 
@@ -371,17 +155,9 @@ utenteRecorreu(Utente,Lista) :-
 % registarUtente(Nome) -> {V,F}
 registarUtente(Nome) :- evolucao(utente(Nome)).
 
-% Extensao do predicado que pemite registar instituicoes
-% registarInstituicao(Instituicao) -> {V,F}
-registarInstituicao(Instituicao) :- evolucao(instituicao(Instituicao)).
-
 % Extensao do predicado que pemite registar servicos numa instituicao
 % registarServico(Servico,Instituicao) -> {V,F}
 registarServico(Servico,Instituicao) :- evolucao(servico(Servico,Instituicao)).
-
-% Extensao do predicado que pemite registar profissionais num determinado servico de numa instituicao
-% registarProfissional(Profissional,Servico,Instituicao) -> {V,F}
-registarProfissional(Profissional,Servico,Instituicao) :- evolucao(profissional(Profissional,Servico,Instituicao)).
 
 % Extensao do predicado que pemite registar eventos medicos numa instituicao indicando o utente, o profissional, o servico e a instituicao
 % registarEvento(Utente,Profissional,Servico,Instituicao) -> {V,F}
@@ -393,17 +169,9 @@ registarEvento(Utente,Profissional,Servico,Instituicao) :- evolucao(registo(Uten
 % removerUtente(Nome) -> {V,F}
 removerUtente(Nome) :- remocao(utente(Nome)).
 
-% Extensao do predicado que pemite remover instituicoes
-% removerInstituicao(Instituicao) -> {V,F}
-removerInstituicao(Instituicao) :- remocao(instituicao(Instituicao)).
-
 % Extensao do predicado que pemite remover servicos numa instituicao
 % registarServico(Servico,Instituicao) -> {V,F}
 removerServico(Servico,Instituicao) :- remocao(servico(Servico,Instituicao)).
-
-% Extensao do predicado que pemite remover profissionais num determinado servico de numa instituicao
-% removerProfissional(Profissional,Servico,Instituicao) -> {V,F}
-removerProfissional(Profissional,Servico,Instituicao) :- remocao(profissional(Profissional,Servico,Instituicao)).
 
 % Extensao do predicado que pemite remover eventos medicos numa instituicao indicando o utente, o profissional, o servico e a instituicao
 % removerEvento(Utente,Profissional,Servico,Instituicao) -> {V,F}
@@ -440,6 +208,24 @@ remover(Termo):-assert(Termo),!,fail.
 % predicado disponibilizado pelo professor na semana5
 % solucoes X,Y,Z -> {V,F}
 solucoes(X,Y,Z):-findall(X,Y,Z).
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do meta-predicado demo: Questao,Resposta -> {V,F}
+
+demo( Questao,verdadeiro ) :-
+Questao.
+demo( Questao, falso ) :-
+-Questao.
+demo( Questao,desconhecido ) :-
+nao( Questao ),
+nao( -Questao ).
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do meta-predicado nao: Questao -> {V,F}
+
+nao( Questao ) :-
+Questao, !, fail.
+nao( Questao ).
 
 % Funcoes sobre listas ----------------------------------------------------------------------------------------------------------
 
