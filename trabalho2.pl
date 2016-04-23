@@ -149,7 +149,7 @@ excecao(utente(IdUt, Nome, Idade, Morada)) :- utente(IdUt, Nome, imperfeito_inte
 nulo(imperfeito_interdito1).
 
 +utente(IdUt,Nome,Idade,Morada)::(
-  solucoes( (IdUt,Nome;Idade,Morada), ( utente(ut009,carlos_sa,Idade,fundacao_abcd),nao(nulo(Idade))),S),
+  solucoes( (IdUt,Nome,Idade,Morada), ( utente(ut009,carlos_sa,Idade,fundacao_abcd),nao(nulo(Idade))),S),
   comprimento(S,N),
   N==0
   ).
@@ -172,7 +172,42 @@ servico(sv005,maternidade,hospital_da_prelada,porto).
 servico(sv006,maternidade,hospital_de_sao_joao,porto).
 servico(sv007,maternidade,maternidade_julio_dinis,porto).
 
+% -------------------------------------
 % Explicitacao das situacoes de excecao
+% -------------------------------------
+%   Consideramos que apenas sao permitidas situacoes de conhecimento incerto/impreciso/interdito para os campos IdServ, Descricao, Instituicao, Cidade
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Conhecimento imperfeito incerto
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     Foi adicionada a instituicao hospital de viana do castelo , na cidade de viana do castelo, um novo servico de codigo IdServ sv008,
+%     contudo, a descricao do novo servico e ainda desconhecida de momento
+servico(sv008,imperfeito_incerto_3,hospital_viana_castelo,viana_castelo).
+
+excecao(servico(IdServ, Descricao, Instituicao, Cidade)) :- utente(IdServ, Descricao, imperfeito_incerto3, Cidade).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Conhecimento imperfeito impreciso
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      Sabe-se que o novo servico, de codigo IdServ sv009, na Instituicao hospital de sao marcos, na cidade de braga, e de cardiologia ou geriatria 
+excecao(servico(sv009,cardiologia,hospital_sao_marcos,braga)).
+excecao(servico(sv009,geriatria,hospital_sao_marcos,braga)).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Conhecimento imperfeito interdito
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      Os registos hospitalares em papel, devido a um incendio, foram perdidos. sabia-se apenas que o servico de codigo sv010, estava localizado 
+%      no hospital de matosinhos, na cidade de matosinhos, pelo que se torna impossivel vir a saber a descricao do mesmo 
+
+servico(sv010,imperfeito_interdito_2,hospital_matosinhos,matosinhos).
+excecao(servico(IdServ, Descricao, Instituicao, Cidade)) :- servico(IdServ, imperfeito_interdito2, Instituicao, Cidade).
+nulo(imperfeito_interdito2).
+
++servico(IdServ, Descricao, Instituicao, Cidade)::(
+  solucoes( (IdServ,Descricao,Instituicao,Cidade), ( servico(sv010,Descricao,hospital_matosinhos,matosinhos),nao(nulo(Descricao))),S),
+  comprimento(S,N),
+  N==0
+  ).
 
 % -------------------------------------
 % Base de Conhecimento sobre Consultas -------------------------------------------------------------------------------------------
