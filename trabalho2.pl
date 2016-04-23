@@ -110,7 +110,10 @@
 -utente(IdUt, Nome, Idade, Morada) :- nao(utente(IdUt, Nome, Idade, Morada)),
                                       nao(excecao(utente(IdUt, Nome, Idade, Morada))).
 
+% -------------------------------------------------
 % conhecimento perfeito positivo relativo a utentes
+% -------------------------------------------------
+
 utente(ut001,antonio_sousa,24,rua_de_santo_ovideo).
 utente(ut002,filipe_oliveira,25,urb_qta_orfaos).
 utente(ut003,fernando_oliveira,55,rua_gen_humberto_delgado).
@@ -121,6 +124,7 @@ utente(ut005,ricardo_oliveira,27,rua_gen_humberto_delgado).
 % Explicitacao das situacoes de excecao
 % -------------------------------------
 %   Consideramos que apenas sao permitidas situacoes de conhecimento incerto/impreciso/interdito para os campos Idade e Morada
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   Conhecimento imperfeito incerto
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -162,7 +166,9 @@ nulo(imperfeito_interdito1).
 -servico(IdServ, Descricao, Instituicao, Cidade) :- nao(servico(IdServ, Descricao, Instituicao, Cidade)),
                                                     nao(excecao(servico(IdServ, Descricao, Instituicao, Cidade))).
 
+% --------------------------------------------------
 % conhecimento perfeito positivo relativo a servicos
+% --------------------------------------------------
 
 servico(sv001,cardiologia,hospital_viana_castelo,viana_castelo).
 servico(sv002,maternidade,hospital_viana_castelo,viana_castelo).
@@ -217,7 +223,9 @@ nulo(imperfeito_interdito2).
 -consulta(Data, IdUt, IdServ, Custo) :- nao(consulta(Data, IdUt, IdServ, Custo)),
                                                     nao(excecao(consulta(Data, IdUt, IdServ, Custo))).
 
+% ---------------------------------------------------
 % conhecimento perfeito positivo relativo a consultas
+% ---------------------------------------------------
 
 consulta(23-04-2016,ut001,sv001,10).
 consulta(19-12-1990,ut002,sv003,0).
@@ -225,8 +233,42 @@ consulta(18-12-1960,ut003,sv002,0).
 consulta(08-08-1963,ut004,sv002,0).
 consulta(17-06-1988,ut005,sv006,0).
 
+% -------------------------------------
 % Explicitacao das situacoes de excecao
+% -------------------------------------
+%   Consideramos que apenas sao permitidas situacoes de conhecimento incerto/impreciso/interdito para os campos Data, IdUt, IdServ, Custo 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Conhecimento imperfeito incerto
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     Foi realizada uma intervencao medica urgente num utente que havia dado entrada acompanhado pela policia, no dia 25-04-2016,
+%     no servico hospitalar de codigo sv004. o servico medico teve um custo de 200euros. A identificacao do individuo e ainda desconhecida de momento
+consulta(25-04-2016,imperfeito_incerto4,sv004,200).
+
+excecao(consulta(Data,IdUt,IdServ,Custo)) :- consulta(Data, imperfeito_incerto4, IdServ,Custo).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Conhecimento imperfeito impreciso
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      Sabe-se que o utente de codigo ut001, no servico sv009, teve uma consulta ou no dia 24-05-2016, ou no dia 25-05-2016, tendo a consulta tido um custo de 100euros
+excecao(consulta(24-05-2016,ut001,sv009,100)).
+excecao(consulta(25-05-2016,ut001,sv009,100)).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Conhecimento imperfeito interdito
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      No dia 31-12-2015, foi realizada uma consulta medica, no servico de codigo sv010, ao utente ut005. Logo de seguida a secretaria do hospital foi assaltada
+%      tendo sido os computadores roubados e a caixa com o dinheiro, pelo que se torna impossivel vir a saber o valor pago pela consulta 
+
+consulta(31-12-2015,ut005,sv010,imperfeito_interdito_3).
+excecao(consulta(Data,IdUt,IdServ,Custo)) :- consulta(Data,IdIt,IdServ,imperfeito_interdito_3).
+nulo(imperfeito_interdito3).
+
++consulta(Data,IdUt,IdServ,Custo)::(
+  solucoes( (Data,IdUt,IdServ,Custo), ( consulta(31-12-2015,ut005,sv010,Custo),nao(nulo(Custo))),S),
+  comprimento(S,N),
+  N==0
+  ).
 
 %% Queries a base de conhecimento -------------------------------------------------------------------------------------
 
