@@ -1,4 +1,4 @@
-%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+%--------------------------------------------------------------------- - - - - - - - - - -  -  -  -  -   -
 % SIST. REPR. CONHECIMENTO E RACIOCINIO - MiEI/3
 %
 % Programacao em logica estendida
@@ -11,8 +11,7 @@
 %     utente: IdUt, Nome, Idade, Morada -> {V,F,D}
 %     serviço: IdServ, Descrição, Instituição, Cidade -> {V,F,D}
 %     consulta: Data, IdUt, IdServ, Custo -> {V,F,D}
-%
-%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+%--------------------------------------------------------------------- - - - - - - - - - -  -  -  -  -   -
 
 %SICStus PROLOG: Declaracoes iniciais
 
@@ -27,8 +26,12 @@
 :- dynamic servico/4.
 :- dynamic consulta/4.
 
-%% Invariantes -------------------------------------------------------------------------------------------
+%-------------
+% Invariantes -------------------------------------------------------------------------------------------
+%-------------
+% ------------------------------------------------
 %  >>>>> Invariantes para operacao de adicao <<<<<
+% ------------------------------------------------
 %
 %   - utente:
 %        Invariante Estrutural:
@@ -68,7 +71,9 @@
   NServ==1
   ).
 
+% -------------------------------------------------
 %  >>>>> Invariantes para operacao de remocao <<<<<
+% -------------------------------------------------
 %   - utente:
 %        Invariante Estrutural:
 %           - nao pode existir o utente depois da operacao de remocao
@@ -97,7 +102,9 @@
   NCons==0
   ).
 
+% -----------------------------------
 % Base de Conhecimento sobre Utentes --------------------------------------------------------------------------------------------
+% -----------------------------------
 % Extensao do predicado utente: IdUt, Nome, Idade, Morada -> {V,F,D}
 
 -utente(IdUt, Nome, Idade, Morada) :- nao(utente(IdUt, Nome, Idade, Morada)),
@@ -110,9 +117,46 @@ utente(ut003,fernando_oliveira,55,rua_gen_humberto_delgado).
 utente(ut004,fernanda_oliveira,52,rua_gen_humberto_delgado).
 utente(ut005,ricardo_oliveira,27,rua_gen_humberto_delgado).
 
+% -------------------------------------
 % Explicitacao das situacoes de excecao
+% -------------------------------------
+%   Consideramos que apenas sao permitidas situacoes de conhecimento incerto/impreciso/interdito para os campos Idade e Morada
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Conhecimento imperfeito incerto
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      O utente filipe marques, de codigo ut006, residente na rua de santo ovideo, tem idade desconhecida no momento
+utente(ut006,filipe_marques,imperfeito_incerto1,rua_santo_ovideo).
 
+%      O utente sergio caldas, de codigo ut007, de idade 25 anos, tem residencia desconhecida no momento
+utente(ut007,sergio_caldas,25,imperfeito_incerto2).
+
+excecao(utente(IdUt, Nome, Idade, Morada)) :- utente(IdUt, Nome, imperfeito_incerto1, Morada).
+excecao(utente(IdUt, Nome, Idade, Morada)) :- utente(IdUt, Nome, Idade, imperfeito_incerto2).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Conhecimento imperfeito impreciso
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      Sabe-se que o utente luis mendes, de codigo ut008, tem idade entre 25 e 30 anos, e residencia na rua das margaridas
+excecao(utente(ut008, luis_mendes, IDADE, rua_das_margaridas)) :- IDADE =< 30, IDADE >=25.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Conhecimento imperfeito interdito
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      O utente carlos sa, de codigo ut009, mudo, sem documentos, e incapacitado foi encontrado na rua, passando a residir na fundacao abcd,
+%      pelo que se torna impossivel vir a saber a idade do mesmo 
+utente(ut009, carlos_sa, imperfeito_interdito1, fundacao_abcd).
+excecao(utente(IdUt, Nome, Idade, Morada)) :- utente(IdUt, Nome, imperfeito_interdito1, Morada).
+nulo(imperfeito_interdito1).
+
++utente(IdUt,Nome,Idade,Morada)::(
+  solucoes( (IdUt,Nome;Idade,Morada), ( utente(ut009,carlos_sa,Idade,fundacao_abcd),nao(nulo(Idade))),S),
+  comprimento(S,N),
+  N==0
+  ).
+
+% ------------------------------------
 % Base de Conhecimento sobre Serviços --------------------------------------------------------------------------------------------
+% ------------------------------------
 % Extensao do predicado serviço: IdServ, Descrição, Instituição, Cidade -> {V,F,D}
 
 -servico(IdServ, Descricao, Instituicao, Cidade) :- nao(servico(IdServ, Descricao, Instituicao, Cidade)),
@@ -130,7 +174,9 @@ servico(sv007,maternidade,maternidade_julio_dinis,porto).
 
 % Explicitacao das situacoes de excecao
 
-% Base de Conhecimento sobre Consultas --------------------------------------------------------------------------------
+% -------------------------------------
+% Base de Conhecimento sobre Consultas -------------------------------------------------------------------------------------------
+% -------------------------------------
 % Extensao do predicado consulta: Data, IdUt, IdServ, Custo -> {V,F,D}
 
 -consulta(Data, IdUt, IdServ, Custo) :- nao(consulta(Data, IdUt, IdServ, Custo)),
