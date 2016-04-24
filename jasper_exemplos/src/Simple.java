@@ -63,7 +63,7 @@ public class Simple
             sp.query("user", "connected", new SPTerm[] { from, to, way, way });
 	    */
 	    /* New style */
-	    if (!sp.query("connected('Stockholm','Stockholm',Way,Way).", varMap))
+	    if (!sp.query("connected('Stockholm','Orebro',Way,Way).", varMap))
                 {
                     System.out.println("ERROR: connected/4 failed"); // [PM] 3.10.1
                 }
@@ -85,7 +85,7 @@ public class Simple
   
     public static void main(String argv[])
     {
-	SPTerm result = train("simple");
+	SPTerm result = train("train");
         if (result != null) {
             System.out.println(result.toString());
         } else {
