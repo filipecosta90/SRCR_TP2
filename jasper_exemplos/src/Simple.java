@@ -8,7 +8,10 @@
 // 0xE5 == small a ring, 0xE4 == small a dieresis, 0xF6 == small o dieresis, 
 
 import se.sics.jasper.*;
+
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.stream.*;
 
 public class Simple
 {
@@ -83,11 +86,14 @@ public class Simple
         return train(null);
     }
   
-    public static void main(String argv[])
+    
+    
+    public static void main(String argv[]) throws ConversionFailedException, IllegalTermException
     {
 	SPTerm result = train("train");
         if (result != null) {
-            System.out.println(result.toString());
+        	SPTerm arrayDeTermos[] = result.toTermArray();
+        	System.out.println(Arrays.toString(arrayDeTermos)); //array de termos passa a array de strings
         } else {
             System.out.println("ERROR: Did not find any solutions"); // [PM] 3.10.1
         }
