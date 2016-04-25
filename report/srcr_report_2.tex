@@ -12,6 +12,8 @@
   cleardoublepage=empty
 ]{scrbook}
 
+
+
 \usepackage{dissertation}
 
 % ----------------------------------------------------------------
@@ -20,7 +22,7 @@
 \titleA{Sistemas de Representação}
 \titleB{de Conhecimento e Raciocínio}
 
-\subtitleA{Exercício 1} % (if any)
+\subtitleA{Exercício 2} % (if any)
 \subtitleB{Grupo 1}
 
 % Author
@@ -74,123 +76,515 @@
 	
 	% CHAPTER - Introduction -------------------------
 	\chapter{Introdução}
-		A componente prática da unidade curricular de Sistemas de Representação de Conhecimento e Raciocínio, inserida no 3º ano do plano curricular do Mestrado  Integrado em Engenharia Informática, pressupõem a realização de trabalhos de grupo na forma de um conjunto de exercícios. Este será portanto o primeiro dos exercícios práticos, tendo por principal tema a programação em lógica em PROLOG e o conceito de invariantes, no âmbito da representação de conhecimento e construção de mecanismos de raciocínio, por forma a caracterizar um universo de discurso com o qual se pretende abordar a temática do registo de eventos numa instituição de saúde. \par 
-Para o efeito, foi desenvolvido um exemplo prático elucidativo deste panorama, incluindo a identificação simplista das instituições, serviços, profissionais, utentes, e registos de eventos médicos. Foram ainda apresentadas um conjunto de funcionalidades mínimas, as quais foram devidamente cumpridas, ressalvando-se ainda a adição de funcionalidades extra que o grupo julgou serem relevantes para exemplo prático.
+		A componente prática da unidade curricular de Sistemas de Representação de Conhecimento e Raciocínio, inserida no 3º ano do plano curricular do Mestrado  Integrado em Engenharia Informática, pressupõem a realização de trabalhos de grupo na forma de um conjunto de exercícios. Este será portanto o segundo dos exercícios práticos, tendo por principal tema a programação em lógica estendida em PROLOG e o conceito de invariantes, no âmbito da representação de conhecimento imperfeito, recorrendo à utilização de valores nulos, e construção de mecanismos de raciocínio, por forma a caracterizar um universo de discurso com o qual se pretende abordar a temática do registo de eventos numa instituição de saúde. \par 
+Pretende-se \textbf{assumir a possibilidade da existência de informação válida que não está representada no sistema de representação de conhecimento}, baseando o sistema nos seguintes pressupostos\footnote{em "Representação de Informação Incompleta", por 
+Cesar Analide  e José Neves}:
+\begin{itemize}
+\item - \textbf{Pressuposto do Mundo Aberto} – podem existir outros factos ou conclusões verdadeiros para além daqueles representados na base de
+conhecimento;
+\item \textbf{Pressuposto dos Nomes Únicos} – duas constantes diferentes (que definam valores atómicos ou objectos) designam, necessariamente, duas
+entidades diferentes do universo de discurso;
+\item \textbf{Pressuposto do Domínio Aberto} – podem existir mais objectos do universo de discurso para além daqueles designados pelas constantes da base
+de conhecimento.
+\end{itemize}
+
+
+Todo o trabalho prático será realizado no sentido de dotar um sistema de representação de conhecimento de características capazes de o fazer raciocinar segundo estes três pressupostos.\par 
+
+Para o efeito, foi desenvolvido um exemplo prático elucidativo deste panorama, incluindo a identificação simplista dos serviços, utentes, e registos de consultas médicas. Foram ainda apresentadas um conjunto de funcionalidades mínimas, as quais foram devidamente cumpridas, ressalvando-se ainda a adição de funcionalidades extra que o grupo julgou serem relevantes para exemplo prático.\par 
+A interação com o sistema criado para a implementação do caso prático foi desenvolvida em JAVA, com recurso á biblioteca JASPER.
+
 
 	% CHAPTER - Problem and Challenges ---------------
 	\chapter{Caracterização do Problema}
 	         A elaboração do caso prático anteriormente descrito tinha como funcionalidades obrigatórias:
 \begin{itemize}
-\item 1) Identificar os serviços existentes numa instituição;
-\item 2) Identificar os utentes de uma instituição;
-\item 3) Identificar os utentes de um determinado serviço;
-\item 4) Identificar os utentes de um determinado serviço numa instituição;
-\item 5) Identificar as instituições onde seja prestado um dado serviço ou conjunto de serviços;
-\item 6) Identificar os serviços que não se podem encontrar numa instituição;
-\item 7) Determinar as instituições onde um profissional presta serviço;
-\item 8) Determinar todas as instituições (ou serviços, ou profissionais) a que um utente já recorreu;
-\item 9) Registar utentes, profissionais, serviços ou instituições;
-\item 10) Remover utentes (ou profissionais, ou serviços, ou instituições) dos registos.
+\item 1) Representar conhecimento positivo e negativo;
+\item 2) Representar casos de conhecimento imperfeito, pela utilização de valores nulos possibilitando assim representar conhecimento imperfeito incerto, conhecimento imperfeito impreciso, e conhecimento imperfeito interdito;
+\item 3 ) Manipular invariantes que designem restrições à inserção e à remoção de conhecimento do sistema;
+\item 4) Lidar com a problemática da evolução do conhecimento, criando os procedimentos adequados;
+\item 5) Desenvolver um sistema de inferência capaz de implementar os mecanismos de raciocínio inerentes a estes sistemas;
+\end{itemize}
+\vspace{1cm}
+
+Sabendo que o conhecimento é caracterizado da seguinte forma:
+\begin{itemize}
+\item{utente: \#IdUt, Nome, Idade, Morada \rightarrow $\{V,F,D\}$
+}
+
+\item{serviço: \#IdServ, Descrição, Instituição, Cidade \rightarrow $\{V,F,D\}$
+}
+
+\item consulta: Data, \#IdUt, \#IdServ, Custo \rightarrow $\{V,F,D\}$
+
+\end{itemize}
+\vspace{1cm}
+
+Por forma a demonstrar as funcionalidades anteriormente enumeradas será permitido no nosso caso prático:
+\begin{itemize}
+\item E1) Identificar todas as consultas médicas de um utente;
+\item E2) Calcular o custo de todas as consultas médicas de um utente;
+\item E3) Determinar todos os utentes que recorreram a um serviço;
+\item E4) Identificar os serviços que se podem encontrar numa instituição;
+\item E5) Registar utentes, serviços, ou consultas no sistema;
+\item E6) Remover utentes, ou serviços, ou consultas do sistema;
 \end{itemize}
 
+
 Ora, associando às funcionalidades descritas o tipo de conhecimento envolvido para a sua resolução obtemos:
+
 \begin{itemize}
-\item 1) Identificar os serviços existentes numa instituição: \textbf{\{Serviço, Instituição\}};
-\item 2) Identificar os utentes de uma instituição: \textbf{\{Utente, Instituição\}};
-\item 3) Identificar os utentes de um determinado serviço: \textbf{\{Utente, Serviço\}};
-\item 4) Identificar os utentes de um determinado serviço numa instituição: \textbf{\{Utente, Serviço, Instituição\}};
-\item 5) Identificar as instituições onde seja prestado um dado serviço ou conjunto de serviços: \textbf{\{Serviço, Instituição\}};
-\item 6) Identificar os serviços que não se podem encontrar numa instituição: \textbf{\{Utente, Serviço, Instituição\}};
-\item 7) Determinar as instituições onde um profissional presta serviço: \textbf{\{Profissional, Serviço, Instituição\}};
-\item 8) Determinar todas as instituições (ou serviços, ou profissionais) a que um utente já recorreu: \textbf{\{Utente, Serviço, Instituição, Profissional, Registo Evento Médico\}};
-\item 9) Registar utentes, profissionais, serviços ou instituições:  \textbf{\{Utente, Serviço, Instituição, Profissional\}};
-\item 10) Remover utentes (ou profissionais, ou serviços, ou instituições) dos registos: \textbf{\{Utente, Serviço, Instituição, Profissional\}};
+\item E1) Identificar todas as consultas médicas de um utente: \textbf{\{Consulta\}};
+\item E2) Calcular o custo de todas as consultas médicas de um utente: \textbf{\{Utente, Consulta\}};
+\item E3) Determinar todos os utentes que recorreram a um serviço: \textbf{\{Utente, Serviço\}};
+\item E4) Identificar os serviços que se podem encontrar numa instituição: \textbf{\{Serviço\}};
+\item E5) Registar utentes, serviços, ou consultas no sistema: \textbf{\{Utente, Serviço, Consulta\}};
+\item E6) Remover utentes, ou serviços, ou consultas do sistema: \textbf{\{Utente, Serviço, Consulta\}};
 \end{itemize}
+
+
 
 \chapter{Solução Proposta}
 
-Sabemos agora quais as entidades que teremos que relacionar para a resolução de cada funcionalidade. Resta-nos portanto indicar qual o conhecimento necessário a cada entidade (\textbf{Utente, Serviço, Instituição, Profissional, Registo Evento Médico}).
+Sabemos agora quais as entidades que teremos que relacionar para a resolução de cada funcionalidade. Resta-nos portanto indicar qual o conhecimento necessário a cada entidade (\textbf{Utente, Serviço, Consulta Médica}).\par 
+Denote que para todas as entidades do caso prático, foram criadas situações em que não existe informação completa acerca do problema em equação.
 
     \section{Entidades}
         \subsection{Utente}
-        A única informação lógica relevante relativa ao utente, para o nosso exemplo prático, é o nome do mesmo, sendo portanto considerado que cada utente tem um nome único, não sendo permitidos dois utentes com nomes iguais, como formularemos logicamente nas seções \ref{invariantes_adicao} e \ref{invariantes_remocao}.
-        Assim, os enunciados:
-\begin{itemize}
-\item i) Utente Filipe Oliveira.
-\item ii) Utente Filipe Marques.
-\item iii) Utente Luís Mendes.
-\end{itemize}
-seriam traduzidos logicamente  no nosso exemplo prático em:
+        A informação lógica relevante relativa ao utente, para o nosso exemplo prático, é o seu identificador único, o nome do utente, a idade, e morada. Denote que, tal com enumerado anteriormente, cada utente tem um identificador único, não sendo permitidos dois utentes com identificadores iguais, como formularemos logicamente nas secções \ref{invariantes_adicao} e \ref{invariantes_remocao}, que lidam com a problemática da evolução do conhecimento, manipulando invariantes para as operações de adição e remoção respetivamente.\par 
+        De seguida passaremos a especificar e justificar a extensão do predicado utente, enumerando situações que exemplificam conhecimento positivo e negativo, e casos de conhecimento imperfeito.\par 
+        
+        \subsubsection{\textbf{Extensão do predicado utente:}}
+        
+        A descrição informal do conhecimento sobre utentes pode ser representada através de Programação Lógica Estendida, pela introdução do predicado utente com quatro argumentos. O primeiro representa o identificador único do utente, o segundo representa o nome do utente, o terceiro representa a idade, e o quarto representa a morada.\par 
+        
+Para representar corretamente esta informação, \textbf{incluindo situações de exceção}, torna-se necessária uma formalização adequada  numa linguagem que permita tratar valores nulos. \par
+Precisamos ainda de fazer uso da \texbf{negação explícita (em conjunto com a implícita)}, para formalizar a descrição de informação.\par 
+Temos assim a possibilidade de representar situações de conhecimento perfeito positivo e negativo, incluindo ainda situações de exceção que iremos discutir posteriormente. Atente na transposição para PLE:\par 
+\subsubsection{\textbf{Situações de conhecimento perfeito positivo e negativo:}}
+\label{pred_utente}
 \begin{lstlisting}
-utente(filipe_oliveira).
-utente(filipe_marques).
-utente(luis_mendes).
+ % Extensao do predicado utente: IdUt, Nome, Idade, Morada -> {V,F,D}
+ 
+ -utente(IdUt, Nome, Idade, Morada) :- nao(utente(IdUt, Nome, Idade, Morada)),
+                                       nao(excecao(utente(IdUt, Nome, Idade, Morada))).
 \end{lstlisting}
 
-        \subsection{Instituição}
-  A única informação lógica relevante relativa à instituição, para o nosso exemplo prático, é o nome da mesma, sendo portanto considerado que cada instituição tem um nome único, não sendo permitidos duas instituições com nomes iguais, como formularemos logicamente nas seções \ref{invariantes_adicao} e \ref{invariantes_remocao}.
-        Assim, os enunciados:
+Assim, os enunciados: 
 \begin{itemize}
-\item i) Instituição Hospital da Luz.
-\item ii) Instituição Hospital da Boavista.
-\item iii) Instituição Hospital de São Marcos.
+\item i) Utente com identificador único ut001, nome António Sousa, idade 24 anos, e residente na Rua de Santo Ovídio.
+\item ii) Utente com identificador único ut002, nome Filipe Oliveira, idade 25 anos, e residente na Urbanização Quinta dos Órfãos.
+\item iii) Utente com identificador único ut003, nome Fernando Oliveira, idade 55 anos, e residente na rua General Humberto Delgado.
 \end{itemize}
+
 seriam traduzidos logicamente  no nosso exemplo prático em:
 \begin{lstlisting}
-instituicao(hospital_luz).
-instituicao(hospital_boavista).
-instituicao(hospital_sao_marcos).
-\end{lstlisting}
-        
-        \subsection{Serviço}
-Relativamente aos serviços disponibilizados por uma instituição a informação lógica relevante, para o nosso exemplo prático, é o nome dos mesmos e a instituição à qual o serviço está associado, sendo portanto considerado que cada serviço distinto numa instituição tem um nome único, não sendo permitidos dois serviços com nomes iguais na mesma instituição, como formularemos logicamente nas seções \ref{invariantes_adicao} e \ref{invariantes_remocao}.
-        Assim, os enunciados:
-\begin{itemize}
-\item i) Serviço de Ortopedia na Instituição Hospital da Luz.
-\item ii) Serviço de Geriatria na Instituição Hospital da Boavista.
-\item iii) Serviço de Cardiologia na Instituição Hospital de São Marcos.
-\end{itemize}
-seriam traduzidos logicamente  no nosso exemplo prático em:
-\begin{lstlisting}
-servico(ortopedia,hospital_luz).
-servico(geriatria,hospital_boavista).
-servico(cardiologia,hospital_sao_marcos).
-\end{lstlisting}
-        
-        
-        \subsection{Profissional}
-        Relativamente aos profissionais de saúde a informação lógica relevante, para o nosso exemplo prático, é o nome dos mesmos, assim como o serviço e instituição no qual executam os respectivos trabalhos, sendo portanto considerado que cada profissional distinto num serviço médico de uma instituição tem um nome único, não sendo permitidos dois profissionais com nomes iguais no mesmo serviço na mesma instituição, como formularemos logicamente nas seções \ref{invariantes_adicao} e \ref{invariantes_remocao}.
-        Assim, os enunciados:
-\begin{itemize}
-\item i) Profissional de Saúde Pedro Sanchez, no Serviço de Ortopedia na Instituição Hospital da Luz.
-\item ii) Profissional de Saúde Maria Carvalhais, no Serviço de Geriatria na Instituição Hospital da Boavista.
-\item iii) Profissional de Saúde Rui Perez, no Serviço de Cardiologia na Instituição Hospital de São Marcos.
-\end{itemize}
-seriam traduzidos logicamente  no nosso exemplo prático em:
-\begin{lstlisting}
-profissional(pedro_sanchez,ortopedia,hospital_luz).
-profissional(maria_carvalhais,geriatria,hospital_boavista).
-profissional(rui_perez,cardiologia,hospital_sao_marcos).
+utente(ut001,antonio_sousa,24,rua_de_santo_ovidio).
+utente(ut002,filipe_oliveira,25,urb_qta_orfaos).
+utente(ut003,fernando_oliveira,55,rua_gen_humberto_delgado).
 \end{lstlisting}
 
-        \subsection{Registo Evento Médico}
-Relativamente aos registos de eventos médicos a informação lógica relevante, para o nosso exemplo prático, é o nome do utente, o nome do profissional de saúde envolvido no evento médico, assim como o serviço e instituição no qual executam os respectivos serviços médicos, sendo considerado que pode existir mais do que uma ocorrência médica que relacione da mesma forma os 4 intervenientes (utente,profissional,serviço,instituição), considerando-se que cada ocorrência representa um evento médico distinto, p.e., o utente Carlos poderá necessitar de mais do que uma consulta médica de nutrição com o mesmo profissional de saúde, no mesmo serviço e instituição, considerando-se cada consulta um evento médico independente, existindo portanto para cada uma um registo de evento médico na base de conhecimento. 
-        Assim, os enunciados:
+%%%%%%%%%%%%
+% INCERTO
+%%%%%%%%%%%%
+
+\subsubsection{\textbf{Situações de conhecimento imperfeito incerto:}}
+
+Por forma a representarmos conhecimento \textbf{imperfeito incerto}, identificam-se situações anómalas à informação negativa via \textbf{exceções}.\par 
+Nestas expressões, considerando X como uma sequência de variáveis $X_{1}$,$X_{2}$, ...,$X_{n}$, em que n é o número de argumentos do predicado \textbf{utente}, então $v_{i}$ representa a mesma sequência , mas na qual se substitui $X_{j}$ pelo valor nulo específico v.\par No caso do predicado utente, foi incluído no corpo da formalização lógica a exceção, tal como visto anteriormente na secção \ref{pred_utente}.\par 
+
+Assim, os enunciados: 
 \begin{itemize}
-\item i) Evento Médico com o Utente António Sousa, Profissional de Saúde Pedro Sanchez, no Serviço de Ortopedia na Instituição Hospital da Luz.
-\item ii) Evento Médico com a Utente Maria Meireles, Profissional de Saúde Maria Carvalhais, no Serviço de Geriatria na Instituição Hospital da Boavista.
-\item iii) Evento Médico com o Utente Diamantino Marques, Profissional de Saúde Rui Perez, no Serviço de Cardiologia na Instituição Hospital de São Marcos.
+\item i) O utente Filipe Marques, de código ut006, residente na Rua de Santo Ovídio, tem idade desconhecida no momento.
+\item ii) O utente Sérgio Caldas, de código ut007, de idade 25 anos, tem residência desconhecida no momento.
 \end{itemize}
+
 seriam traduzidos logicamente  no nosso exemplo prático em:
 \begin{lstlisting}
-registo(antonio_sousa,hospital_luz,ortopedia,pedro_sanchez).
-registo(maria_meireles,hospital_boavista,geriatria,maria_carvalhais).
-registo(diamantino_marques,hospital_sao_marcos,cardiologia,rui_perez).
+ utente(ut006,filipe_marques,imperfeito_incerto1,rua_santo_ovidio).
+ utente(ut007,sergio_caldas,25,imperfeito_incerto2).
+ 
+ excecao(utente(IdUt, Nome, Idade, Morada)) :- utente(IdUt, Nome, imperfeito_incerto1, Morada).
+ excecao(utente(IdUt, Nome, Idade, Morada)) :- utente(IdUt, Nome, Idade, imperfeito_incerto2).
 \end{lstlisting}
 
-    \section{Funcionalidades Obrigatórias}
-Caracterizado logicamente o universo de discurso, resta-nos elaborar os predicados capazes de responder às funcionalidades obrigatórias propostas. As  seções seguintes descrevem a solução encontrada para cada uma das funcionalidades. \par Em algumas das extensões de predicados irá encontrar o recurso a predicados como \textbf{solucoes(...),removerduplicados(...),...}. Esses mesmos predicados foram desenvolvidos no decorrer das aulas práticas da unidade curricular sendo os mesmos descritos na secção:  \ref{predicados_aux}.\par 
-Denote que por forma a ilustrar correctamente todas as funcionalidades do sistema foi desenvolvida um exemplo de base de conhecimento que poderá ser consultado na seção \ref{base_conhecimento_anexo}. Todos os testes são portanto o resultado de cada extensão de predicado a essa mesma base de conhecimento.\par 
+\subsubsection{\textbf{Situações de conhecimento imperfeito impreciso:}}
+
+
+        
+        %%%%%%%%%%%%
+        % IMPRECISO
+        %%%%%%%%%%%%
+        
+Valores nulos do tipo imperfeito impreciso, representam-se, tal como para situações de conhecimento imperfeito incerto, via \textbf{exceções}. Contudo, neste caso os valores atómicos nulos específicos concretizam explicitamente todas as possibilidades de representação dos valores nulos. Neste caso restringimos as situações de desconhecimento de informação.\par 
+
+
+Assim, o enunciado: 
+\begin{itemize}
+\item i) Sabe-se que o utente Luís Mendes, de código ut008, tem idade entre 25 e 30 anos, e residência na Rua das Margaridas.
+\end{itemize}
+
+seria traduzido logicamente  no nosso exemplo prático em:
+\begin{lstlisting}
+ excecao(utente(ut008, luis_mendes, IDADE, rua_das_margaridas)) :- IDADE =< 30, IDADE >=25.
+\end{lstlisting}
+
+\subsubsection{\textbf{Situações de conhecimento imperfeito interdito:}}
+
+        %%%%%%%%%%%%
+        % INTERDITO
+        %%%%%%%%%%%%
+Tal como verificado nas subsecções anteriores, representa-se um valor nulo $n_{i}$ do tipo não permitido via \textbf{exceções}. Nestes casos temos ainda a necessidade de garantir a não permissão de qualquer atualização a este tipo de valores, explicitando o valor nulo,
+a confirmar pela aplicação de uma restrição adequadamente construída para o efeito, impedindo a posterior inclusão de valores atómicos que violem a condição imposta pelo valor nulo não permitido.
+
+
+Assim, o enunciado: 
+\begin{itemize}
+\item i) O utente Carlos Sá, de código ut009, mudo, sem documentos, e incapacitado foi encontrado na rua, passando a residir na fundação abcd, pelo que se torna impossível vir a saber a idade do mesmo.
+\end{itemize}
+
+seria traduzido logicamente  no nosso exemplo prático em:
+
+
+\begin{lstlisting}
+ utente(ut009, carlos_sa, imperfeito_interdito1, fundacao_abcd).
+ excecao(utente(IdUt, Nome, Idade, Morada)) :- utente(IdUt, Nome, imperfeito_interdito1, Morada).
+ 
+ nulo(imperfeito_interdito1).
+
++utente(IdUt,Nome,Idade,Morada)::(
+   solucoes( (IdUt,Nome,Idade,Morada), ( utente(ut009,carlos_sa,Idade,fundacao_abcd),nao(nulo(Idade))),S),
+   comprimento(S,N),
+   N==0
+ ).
+ \end{lstlisting}
+
+
+        
+         
+         
+         
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+           %%%%%%%%%%%%%%%%%
+         %%%%%%%%%%%%%%%%%%%
+        %%%%%%%%%%%%%%%%%%%%
+       %%%%%
+       %%%%%
+       %%%%%  SERVIÇO
+       %%%%%
+       %%%%%
+    %%%%%%%%%%%    
+    %%%%%%%%%%%    
+        %%%%
+        %%%%%%%%%%%%%%%%%%%%
+        %%%%%%%%%%%%%%%%%%%%
+        
+      \subsection{Serviço}
+        A informação lógica relevante relativa aos serviços médicos, para o nosso exemplo prático, é o seu identificador único, a descrição do mesmo, a instituição onde este está inserido, assim como a cidade. Denote que, tal com enumerado anteriormente, cada serviço tem um identificador único, não sendo permitidos dois serviços com identificadores iguais, como formularemos logicamente nas secções \ref{invariantes_adicao} e \ref{invariantes_remocao}, que lidam com a problemática da evolução do conhecimento, manipulando invariantes para as operações de adição e remoção respetivamente.\par 
+        De seguida passaremos a especificar e justificar a extensão do predicado serviço, enumerando situações que exemplificam conhecimento positivo e negativo, e casos de conhecimento imperfeito.\par 
+        
+        \subsubsection{\textbf{Extensão do predicado servico:}}
+        
+        A descrição informal do conhecimento sobre serviços médicos pode ser representada através de Programação Lógica Estendida, pela introdução do predicado servico com quatro argumentos. O primeiro representa o identificador único do serviço, o segundo representa a descrição do mesmo, o terceiro representa a instituição onde este se insere, e o quarto representa a cidade onde este se localiza.\par 
+        
+Para representar corretamente esta informação, \textbf{incluindo situações de exceção}, torna-se necessária uma formalização adequada  numa linguagem que permita tratar valores nulos. \par
+Precisamos ainda de fazer uso da \texbf{negação explícita (em conjunto com a implícita)}, para formalizar a descrição de informação.\par 
+Temos assim a possibilidade de representar situações de conhecimento perfeito positivo e negativo, incluindo ainda situações de exceção que iremos discutir posteriormente. Atente na transposição para PLE:\par 
+\subsubsection{\textbf{Situações de conhecimento perfeito positivo e negativo:}}
+\label{pred_servico}
+\begin{lstlisting}
+  % Extensao do predicado servico: IdServ, Descricao, Instituicao, Cidade -> {V,F,D}
+ 
+ -servico(IdServ, Descricao, Instituicao, Cidade) :- nao(servico(IdServ, Descricao, Instituicao, Cidade)),
+                                                     nao(excecao(servico(IdServ, Descricao, Instituicao, Cidade))).
+\end{lstlisting}
+
+Assim, os enunciados: 
+\begin{itemize}
+\item i) Serviço código sv001, descrição "Cardiologia", na instituição Hospital de Viana do Castelo, na cidade de Viana do Castelo.
+\item ii) Serviço código sv002, descrição "Maternidade", na instituição Hospital de Viana do Castelo, na cidade de Viana do Castelo.
+\item iii) Serviço código sv003, descrição "Urgência", na instituição Hospital de Matosinhos, na cidade de Matosinhos.
+\end{itemize}
+
+seriam traduzidos logicamente  no nosso exemplo prático em:
+\begin{lstlisting}
+ servico(sv001,cardiologia,hospital_viana_castelo,viana_castelo).
+ servico(sv002,maternidade,hospital_viana_castelo,viana_castelo).
+ servico(sv003,urgencia,hospital_matosinhos,matosinhos).
+\end{lstlisting}
+
+%%%%%%%%%%%%
+% INCERTO
+%%%%%%%%%%%%
+
+\subsubsection{\textbf{Situações de conhecimento imperfeito incerto:}}
+
+Por forma a representarmos conhecimento \textbf{imperfeito incerto}, identificam-se situações anómalas à informação negativa via \textbf{exceções}.\par 
+Nestas expressões, considerando X como uma sequência de variáveis $X_{1}$,$X_{2}$, ...,$X_{n}$, em que n é o número de argumentos do predicado \textbf{servico}, então $v_{i}$ representa a mesma sequência , mas na qual se substitui $X_{j}$ pelo valor nulo específico v.\par No caso do predicado utente, foi incluído no corpo da formalização lógica a exceção, tal como visto anteriormente na secção \ref{pred_servico}.\par 
+
+Assim, o enunciado: 
+\begin{itemize}
+\item i) Foi adicionada à instituição Hospital de Viana do Castelo , na cidade de Viana do Castelo, um novo serviço de código IdServ sv008. Contudo, a descrição do novo serviço é ainda desconhecida de momento.
+\end{itemize}
+
+seria traduzido logicamente  no nosso exemplo prático em:
+\begin{lstlisting}
+ servico(sv008,imperfeito_incerto_3,hospital_viana_castelo,viana_castelo).
+ 
+ excecao(servico(IdServ, Descricao, Instituicao, Cidade)) :- utente(IdServ, Descricao, imperfeito_incerto3, Cidade).
+\end{lstlisting}
+
+\subsubsection{\textbf{Situações de conhecimento imperfeito impreciso:}}
+
+
+        
+        %%%%%%%%%%%%
+        % IMPRECISO
+        %%%%%%%%%%%%
+        
+Valores nulos do tipo imperfeito impreciso, representam-se, tal como para situações de conhecimento imperfeito incerto, via \textbf{exceções}. Contudo, neste caso os valores atómicos nulos específicos concretizam explicitamente todas as possibilidades de representação dos valores nulos. Neste caso restringimos as situações de desconhecimento de informação.\par 
+
+
+Assim, o enunciado: 
+\begin{itemize}
+\item i) Sabe-se que o novo serviço, de código IdServ sv009, na Instituição Hospital de São Marcos, na cidade de Braga, é de Cardiologia ou Geriatria.
+\end{itemize}
+
+seria traduzido logicamente  no nosso exemplo prático em:
+\begin{lstlisting}
+ excecao(servico(sv009,cardiologia,hospital_sao_marcos,braga)).
+ excecao(servico(sv009,geriatria,hospital_sao_marcos,braga)).
+\end{lstlisting}
+
+\subsubsection{\textbf{Situações de conhecimento imperfeito interdito:}}
+
+        %%%%%%%%%%%%
+        % INTERDITO
+        %%%%%%%%%%%%
+Tal como verificado nas subsecções anteriores, representa-se um valor nulo $n_{i}$ do tipo não permitido via \textbf{exceções}. Nestes casos temos ainda a necessidade de garantir a não permissão de qualquer atualização a este tipo de valores, explicitando o valor nulo,
+a confirmar pela aplicação de uma restrição adequadamente construída para o efeito, impedindo a posterior inclusão de valores atómicos que violem a condição imposta pelo valor nulo não permitido.
+
+Assim, o enunciado: 
+\begin{itemize}
+\item i) Os registos hospitalares em papel, devido a um incêndio, foram perdidos. Sabia-se apenas que o serviço de código sv010, estava localizado no hospital de Matosinhos, na cidade de Matosinhos, pelo que se torna impossível vir a saber a descrição do mesmo.
+\end{itemize}
+
+seria traduzido logicamente  no nosso exemplo prático em:
+
+
+\begin{lstlisting}
+ servico(sv010,imperfeito_interdito_2,hospital_matosinhos,matosinhos).
+ excecao(servico(IdServ, Descricao, Instituicao, Cidade)) :- servico(IdServ, imperfeito_interdito2, Instituicao, Cidade).
+ nulo(imperfeito_interdito2).
+ 
+ +servico(IdServ, Descricao, Instituicao, Cidade)::(
+   solucoes( (IdServ,Descricao,Instituicao,Cidade), ( servico(sv010,Descricao,hospital_matosinhos,matosinhos),nao(nulo(Descricao))),S),
+   comprimento(S,N),
+   N==0
+ ).
+ \end{lstlisting}   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+              %%%%%%%%%%%%%%%%%
+         %%%%%%%%%%%%%%%%%%%
+        %%%%%%%%%%%%%%%%%%%%
+       %%%%%
+       %%%%%
+       %%%%%  CONSULTA
+       %%%%%
+       %%%%%
+    %%%%%%%%%%%    
+    %%%%%%%%%%%    
+        %%%%
+        %%%%%%%%%%%%%%%%%%%%
+        %%%%%%%%%%%%%%%%%%%%
+        
+      \subsection{Consulta}
+        A informação lógica relevante relativa a consultas médicas, para o nosso exemplo prático, é a sua data, o identificador único do utente envolvido na consulta, o identificador único do serviço onde foi realizada a consulta, assim como o valor pago pela consulta médica. \par 
+        De seguida passaremos a especificar e justificar a extensão do predicado consulta, enumerando situações que exemplificam conhecimento positivo e negativo, e casos de conhecimento imperfeito.\par 
+        
+        \subsubsection{\textbf{Extensão do predicado consulta:}}
+        
+        A descrição informal do conhecimento sobre consultas médicas pode ser representada através de Programação Lógica Estendida, pela introdução do predicado consulta com quatro argumentos. O primeiro representa a data na qual ocorreu a consulta, o segundo representa identificador único utente, o terceiro o identificador único do serviço, e o quarto representa o valor pago pelo utente.\par 
+        
+Para representar corretamente esta informação, \textbf{incluindo situações de exceção}, torna-se necessária uma formalização adequada  numa linguagem que permita tratar valores nulos. \par
+Precisamos ainda de fazer uso da \texbf{negação explícita (em conjunto com a implícita)}, para formalizar a descrição de informação.\par 
+Temos assim a possibilidade de representar situações de conhecimento perfeito positivo e negativo, incluindo ainda situações de exceção que iremos discutir posteriormente. Atente na transposição para PLE:\par 
+\subsubsection{\textbf{Situações de conhecimento perfeito positivo e negativo:}}
+\label{pred_consulta}
+\begin{lstlisting}
+ % Extensao do predicado consulta: Data, IdUt, IdServ, Custo -> {V,F,D}
+ 
+ -consulta(Data, IdUt, IdServ, Custo) :- nao(consulta(Data, IdUt, IdServ, Custo)),
+                                         nao(excecao(consulta(Data, IdUt, IdServ, Custo))).
+\end{lstlisting}
+
+Assim, os enunciados: 
+\begin{itemize}
+\item i) Consulta médica, com data de ocorrência 23-04-2016, envolveu o utente com identificador único ut001, no serviço com identificador único sv001, com um custo de 10 unidades monetárias para o utente.
+\item ii) Consulta médica, com data de ocorrência 19-12-1990, envolveu o utente com identificador único ut002, no serviço com identificador único sv003, com um custo de 0 unidades monetárias para o utente.
+\end{itemize}
+
+seriam traduzidos logicamente  no nosso exemplo prático em:
+\begin{lstlisting}
+ consulta(23-04-2016,ut001,sv001,10).
+ consulta(19-12-1990,ut002,sv003,0).
+\end{lstlisting}
+
+%%%%%%%%%%%%
+% INCERTO
+%%%%%%%%%%%%
+
+\subsubsection{\textbf{Situações de conhecimento imperfeito incerto:}}
+
+Por forma a representarmos conhecimento \textbf{imperfeito incerto}, identificam-se situações anómalas à informação negativa via \textbf{exceções}.\par 
+Nestas expressões, considerando X como uma sequência de variáveis $X_{1}$,$X_{2}$, ...,$X_{n}$, em que n é o número de argumentos do predicado \textbf{consulta}, então $v_{i}$ representa a mesma sequência , mas na qual se substitui $X_{j}$ pelo valor nulo específico v.\par No caso do predicado utente, foi incluído no corpo da formalização lógica a exceção, tal como visto anteriormente na secção \ref{pred_consulta}.\par 
+
+Assim, o enunciado: 
+\begin{itemize}
+\item i) Foi realizada uma intervenção médica urgente num utente que havia dado entrada acompanhado pela polícia, no dia 25-04-2016,
+no serviço hospitalar de código sv004. A consulta médica teve um custo de 200 unidades monetárias. A identificação do indivíduo é ainda desconhecida de momento.
+
+.
+\end{itemize}
+
+seria traduzido logicamente  no nosso exemplo prático em:
+\begin{lstlisting}
+ consulta(25-04-2016,imperfeito_incerto4,sv004,200).
+ 
+ excecao(consulta(Data,IdUt,IdServ,Custo)) :- consulta(Data, imperfeito_incerto4, IdServ,Custo).
+\end{lstlisting}
+
+\subsubsection{\textbf{Situações de conhecimento imperfeito impreciso:}}
+
+
+        
+        %%%%%%%%%%%%
+        % IMPRECISO
+        %%%%%%%%%%%%
+        
+Valores nulos do tipo imperfeito impreciso, representam-se, tal como para situações de conhecimento imperfeito incerto, via \textbf{exceções}. Contudo, neste caso os valores atómicos nulos específicos concretizam explicitamente todas as possibilidades de representação dos valores nulos. Neste caso restringimos as situações de desconhecimento de informação.\par 
+
+
+Assim, o enunciado: 
+\begin{itemize}
+\item i) Sabe-se que o utente de código ut001, no serviço sv009, teve uma consulta ou no dia 24-05-2016, ou no dia 25-05-2016, tendo a consulta tido um custo de 100 unidades monetárias.
+\end{itemize}
+
+seria traduzido logicamente  no nosso exemplo prático em:
+\begin{lstlisting}
+ excecao(consulta(24-05-2016,ut001,sv009,100)).
+ excecao(consulta(25-05-2016,ut001,sv009,100)).
+\end{lstlisting}
+
+\subsubsection{\textbf{Situações de conhecimento imperfeito interdito:}}
+
+        %%%%%%%%%%%%
+        % INTERDITO
+        %%%%%%%%%%%%
+Tal como verificado nas subsecções anteriores, representa-se um valor nulo $n_{i}$ do tipo não permitido via \textbf{exceções}. Nestes casos temos ainda a necessidade de garantir a não permissão de qualquer atualização a este tipo de valores, explicitando o valor nulo,
+a confirmar pela aplicação de uma restrição adequadamente construída para o efeito, impedindo a posterior inclusão de valores atómicos que violem a condição imposta pelo valor nulo não permitido.
+
+Assim, o enunciado: 
+\begin{itemize}
+\item i) No dia 31-12-2015, foi realizada uma consulta médica, no serviço de código sv010, ao utente ut005. Logo de seguida a secretaria do hospital foi assaltada tendo sido os computadores roubados e a caixa com o dinheiro, pelo que se torna impossível vir a saber o valor pago pela consulta.
+\end{itemize}
+
+seria traduzido logicamente  no nosso exemplo prático em:
+
+\begin{lstlisting}
+ consulta(31-12-2015,ut005,sv010,imperfeito_interdito_3).
+ excecao(consulta(Data,IdUt,IdServ,Custo)) :- consulta(Data,IdIt,IdServ,imperfeito_interdito_3).
+ nulo(imperfeito_interdito3).
+ 
+ +consulta(Data,IdUt,IdServ,Custo)::(
+   solucoes( (Data,IdUt,IdServ,Custo), ( consulta(31-12-2015,ut005,sv010,Custo),nao(nulo(Custo))),S),
+   comprimento(S,N),
+   N==0
+ ).
+ \end{lstlisting}   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
+        
+        
+        
+
+    \section{Funcionalidades Propostas}
+Caracterizado logicamente o universo de discurso, resta-nos elaborar os predicados capazes de responder às funcionalidades obrigatórias propostas. As  secções seguintes descrevem a solução encontrada para cada uma das funcionalidades. \par Em algumas das extensões de predicados irá encontrar o recurso a predicados como \textbf{solucoes(...),removerduplicados(...),...}. Esses mesmos predicados foram desenvolvidos no decorrer das aulas práticas da unidade curricular sendo os mesmos descritos na secção:  \ref{predicados_aux}.\par 
+Denote que por forma a ilustrar corretamente todas as funcionalidades do sistema foi desenvolvida um exemplo de base de conhecimento que poderá ser consultado na secção \ref{base_conhecimento_anexo}. Todos os testes são portanto o resultado de cada extensão de predicado a essa mesma base de conhecimento, e serão enumerados graficamente na secção \ref{exemplos_jasper} na página \pageref{exemplos_jasper}, através da componente implementada recorrendo a JAVA e JASPER. \par 
+\textbf{Por mera confirmação serão apresentados na secção atual os testes em Sicstus}.\par 
 
 
 
@@ -203,32 +597,29 @@ Denote que por forma a ilustrar correctamente todas as funcionalidades do sistem
 %%%%% 1 
 %%%
 %%%%%%
-\subsection{Identificar os serviços existentes numa instituição}
+\subsection{Identificar todas as consultas médicas de um utente}
 
-Foi construída a extensão do predicado \textbf{servicosInstituicao(Instituicao,Servicos)}, que dada uma instituição calcula os serviços existentes nela, sendo os mesmos demonstrados em \textbf{Serviços}.\par 
+Foi construída a extensão do predicado \textbf{consultasMedicasUtente(IdUt,ListaEventosMedicos)}, que dado um identificador único de utente, calcula a lista de consultas medicas onde o qual esteve envolvido, sendo as mesmas demonstradas em \textbf{ListaEventosMedicos}.\par 
 
 \begin{lstlisting}
-% 1) Extensao do predicado Identificar os servicos existentes numa instituicao
-% servicosInstituicao(Instituicao,Servicos) -> {V,F}
-servicosInstituicao(Instituicao,Servicos) :- solucoes(X, servico(X, Instituicao), Servicos).
+% E1) Extensao do predicado que permite identificar todos as consultas medicas de um utente
+ %consultasMedicasUtente(ItUt, ListaEventosMedicos) -> {V,F,D}
+ consultasMedicasUtente(IdUt,ListaEventosMedicos) :-
+ solucoes( (Data,IdUt,IdServ,Custo), ( consulta(Data,IdUt,IdServ,Custo) ), ListaEventosMedicos).
 \end{lstlisting}
 
 %%%
 %%%%%% TESTES 1
 %%%
-\subsubsection{Teste do predicado \textbf{servicosInstituicao(Instituicao,Servicos)}:}
+\subsubsection{Teste do predicado \textbf{consultasMedicasUtente(IdUt,ListaEventosMedicos)}:}
 
 \begin{lstlisting}
-| ?- servicosInstituicao(hospital_sao_marcos,ListaServicos).
-ListaServicos = [cardiologia,nutricionismo] ? 
+| ?- consultasMedicasUtente(ut001,L).
+L = [(23-4-2016,ut001,sv001,10)] ? 
 yes
 \end{lstlisting}
 
-\begin{lstlisting}
-| ?- servicosInstituicao(hospital_porto,ListaServicos).
-ListaServicos = [cardiologia,nutricionismo,geriatria,neurologia,oncologia,clinica_geral] ? 
-yes
-\end{lstlisting}
+
 
 
 
@@ -250,47 +641,50 @@ yes
 %%%%% 2
 %%%
 %%%%%%
-\subsection{Identificar os utentes de uma instituição}
+\subsection{Calcular o custo de todas as consultas médicas de um utente}
 
-Foi construída a extensão do predicado \textbf{utentesInstituicao(Instituicao,ListaUtentes)}, que dada uma instituição calcula os utentes da mesma, sendo os mesmos demonstrados em \textbf{ListaUtentes}.\par 
+
+
+
+
+Foi construída a extensão do predicado \textbf{custoConsultasMedicasUtente(IdUt,CustoTotal)}, que dado um identificador único de utente, calcula o custo monetário total das consultas medicas onde o qual esteve envolvido, sendo o mesmo demonstrado em \textbf{CustoTotal}.\par 
 \begin{lstlisting}
-% 2) Extensao do predicado Identificar os utentes de uma instituicao
-% utentesInstituicao(Instituicao,ListaUtentes) -> {V,F}
-utentesInstituicao(Instituicao,ListaUtentes) :-
-  solucoes( (Utente), ( recorreuInstituicao(Utente, Instituicao) ), ListaUtentesRep),
-  removerduplicados(ListaUtentesRep, ListaUtentes).
+% E2) Extensao do predicado que permite calcular o custo de todos as consultas medicas de um utente
+ %custoConsultasMedicasUtente(ItUt, CustoTotal) -> {V,F,D}
+ custoConsultasMedicasUtente(IdUt,CustoTotal) :-(
+ solucoes( (Custo), ( consulta(Data,IdUt,IdServ,Custo) ), ListaCustosMedicos),
+ somarElementos(ListaCustosMedicos,CustoTotal)
 \end{lstlisting}
 
-
-Denote que a extensão do predicado \textbf{utentesServico} recorre ao predicado  \textbf{recorreuInstituicao(Utente,Instituicao)} que será de seguida especificado:
-\begin{lstlisting}
-% Extensao do predicado recorreuInstituicao que determina as instituicoes aos quais o utente recorreu
-% recorreuInstituicao(Utente,Instituicao) -> {V,F}
-recorreuInstituicao(Utente, Instituicao) :- registo(Utente,Instituicao,_,_).
-\end{lstlisting}
 
 %%%
 %%%%%% TESTES 2
 %%%
-\subsubsection{Teste do predicado \textbf{utentesInstituicao(Instituicao,ListaUtentes)}:}
+\subsubsection{Teste do predicado \textbf{custoConsultasMedicasUtente(IdUt,CustoTotal)}:}
 
 \begin{lstlisting}
-| ?- utentesInstituicao(hospital_sao_marcos,ListaUtentes).
-ListaUtentes = [antonio_sousa] ?  
+| ?- custoConsultasMedicasUtente(ut001,C).
+C = 10 ? 
 yes
 \end{lstlisting}
 
 \begin{lstlisting}
-| ?- utentesInstituicao(hospital_porto,ListaUtentes).
-ListaUtentes = [antonio_marques,maria_meireles,diamantino_marques,rosa_sousa,jorge_marques] ? 
+| ?- custoConsultasMedicasUtente(ut002,C).
+C = 0 ? 
 yes
 \end{lstlisting}
 
-\begin{lstlisting}
-| ?- utentesInstituicao(hospital_lisboa,ListaUtentes).
-ListaUtentes = [] ? 
-yes
-\end{lstlisting}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -299,40 +693,36 @@ yes
 %%%%% 3
 %%%
 %%%%%%
-\subsection{Identificar os utentes de um determinado serviço}
+\subsection{Determinar todos os utentes que recorreram a um serviço}
 
-Foi construída a extensão do predicado \textbf{utentesServico(Servico,ListaUtentes)}, que dado um serviço calcula os utentes do mesmo, sendo os mesmos demonstrados em \textbf{ListaUtentes}.\par 
+Foi construída a extensão do predicado \textbf{utentesServico(IdServ,ListaUtentes)}, que dado um serviço calcula os utentes do mesmo, sendo os mesmos demonstrados em \textbf{ListaUtentes}.\par 
 \begin{lstlisting}
-% 3) Extensao do predicado Identificar os utentes de um determinado servico
-% utentesServico(Servico,ListaUtentes) -> {V,F}
-utentesServico(Servico,ListaUtentes) :-
-  solucoes(Utente, recorreuServico(Utente, Servico), ListaUtentesRep),
-  removerduplicados(ListaUtentesRep,ListaUtentes).
+ % E3) Extensao do predicado Identificar os utentes de um determinado servico
+ % utentesServico(Servico,ListaUtentes) -> {V,F,D}
+ utentesServico(IdServ,ListaUtentes) :-
+ solucoes(X, recorreuServico(X, Servico), ListaUtentesRep),
+ removerduplicados(ListaUtentesRep,ListaUtentes).
 \end{lstlisting}
 
-Denote que a extensão do predicado \textbf{utentesServico} recorre ao predicado  \textbf{recorreuServico(Utente, Servico)} que será de seguida especificado:
-\begin{lstlisting}
-% Extensao do predicado recorreuServico que determina os servicos aos quais o utente recorreu
-% recorreuServico(Utente,Servico) -> {V,F}
-recorreuServico(Utente, Servico) :- registo(Utente,_,Servico,_).
-\end{lstlisting}
+
 
 %%%
 %%%%%% TESTES 3
 %%%
-\subsubsection{Teste do predicado \textbf{utentesServico(Servico,ListaUtentes)}:}
+\subsubsection{Teste do predicado \textbf{utentesServico(IdServ,ListaUtentes)}:}
 
 \begin{lstlisting}
-| ?- utentesServico(geriatria,ListaUtentes).
-ListaUtentes = [maria_meireles,diamantino_marques,rosa_sousa,jorge_marques] ? 
+| ?- utentesServico(sv002,L).
+L = [ut003,ut004] ? 
 yes
 \end{lstlisting}
 
 \begin{lstlisting}
-| ?- utentesServico(oncologia,ListaUtentes).
-ListaUtentes = [] ? 
+| ?- utentesServico(sv005,L).
+L = [] ? 
 yes
 \end{lstlisting}
+
 
 
 
@@ -357,34 +747,26 @@ yes
 %%%%% 4
 %%%
 %%%%%%
-\subsection{Identificar os utentes de um determinado serviço numa instituição}
+\subsection{Identificar os serviços que se podem encontrar numa instituição}
 
 
 
-Foi construída a extensão do predicado \textbf{utentesServicoInstituicao(Servico,Instituicao,ListaUtentes) }, que dado um serviço e uma instituição calcula os utentes dos mesmos, sendo estes demonstrados em \textbf{ListaUtentes}.\par 
+Foi construída a extensão do predicado \textbf{servicosInstituicao(Instituicao,ListaServicos)}, que dada uma instituição  calcula os serviços médicos da mesma, sendo estes demonstrados em \textbf{ListaServicos}.\par 
 \begin{lstlisting}
-% 4) Extensao do predicado Identificar os utentes de um determinado servico numa instituicao
-% utentesServicoInstituicao(Servico,Instituicao,ListaUtentes) -> {V,F}
-utentesServicoInstituicao(Servico,Instituicao,ListaUtentes) :-
-  solucoes( (Utente) , (registo(Utente, Instituicao, Servico,_)), ListaUtentesRep),
-  removerduplicados(ListaUtentesRep,ListaUtentes).
+ % E4) Extensao do predicado Identificar os servicos existentes numa instituicao
+ % servicosInstituicao(Instituicao,ListaServicos) -> {V,F,D}
+ servicosInstituicao(Instituicao,ListaServicos) :- solucoes((IdServ,Descricao), servico(IdServ,Descricao,Instituicao,Cidade), ListaServicos).
 \end{lstlisting}
 
 
 %%%
 %%%%%% TESTES 4
 %%%
-\subsubsection{Teste do predicado \textbf{utentesServicoInstituicao(Servico,Instituicao,ListaUtentes) }:}
+\subsubsection{Teste do predicado \textbfservicosInstituicao(Instituicao,ListaServicos)}:}
 
 \begin{lstlisting}
-| ?- utentesServicoInstituicao(geriatria,hospital_porto,ListaUtentes).
-ListaUtentes = [maria_meireles,diamantino_marques,rosa_sousa,jorge_marques] ? 
-yes
-\end{lstlisting}
-
-\begin{lstlisting}
-| ?- utentesServicoInstituicao(clinica_geral,hospital_porto,ListaUtentes).
-ListaUtentes = [] ? 
+| ?- servicosInstituicao(hospital_sao_marcos,L).
+L = [(sv004,maternidade)] ? 
 yes
 \end{lstlisting}
 
@@ -402,236 +784,6 @@ yes
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%
-%%%%% 5
-%%%
-%%%%%%
-\subsection{Identificar as instituições onde seja prestado um dado serviço ou conjunto de serviços}
-
-
-Foi construída a extensão do predicado \textbf{instituicoesComServicos}, que dado um serviço ou uma lista de serviços determina a lista de instituições onde este seja prestado, sendo estas demonstradas em \textbf{ListaInstituicoes}.\par 
-\begin{lstlisting}
-% 5) Extensao do predicado Identificar as instituicoes onde seja prestado um servico ou um conjunto de servicos
-% instituicoesComServicos(Servico,Instituicao) -> {V,F}
-% instituicoesComServicos([Servicos],Instituicao) -> {V,F}
-instituicoesComServicos([ ],_).
-instituicoesComServicos(Servico,ListaInstituicoes) :- solucoes((Instituicao), (servico(Servico,Instituicao)), ListaInstituicoes).
-instituicoesComServicos([Servico | TailServicos], ListaInstituicoes) :-
-  solucoes( (Instituicao),(servico(Servico,Instituicao)), ListaInst1),
-  instituicoesComServicos(TailServicos, ListaInst2),
-  concatenar(ListaInst1, ListaInst2, ListaInstituicoes).
-\end{lstlisting}
-
-
-%%%
-%%%%%% TESTES 5
-%%%
-\subsubsection{Teste do predicado \textbf{utentesServicoInstituicao(Servico,Instituicao,ListaUtentes) }:}
-
-\begin{lstlisting}
-| ?- instituicoesComServicos(clinica_geral,ListaInstituicoes).
-ListaInstituicoes = [hospital_braga,hospital_porto] ? 
-yes
-\end{lstlisting}
-
-\begin{lstlisting}
-| ?- instituicoesComServicos([cirurgia,nutricionismo],ListaInstituicoes).
-ListaInstituicoes = [hospital_braga,hospital_lisboa] ?
-yes
-\end{lstlisting}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%
-%%%%% 6
-%%%
-%%%%%%
-\subsection{Identificar os serviços que não se podem encontrar numa instituição}
-
-
-
-
-Foi construída a extensão do predicado \textbf{servicosNaoEncontrados(Instituicao, Servicos)}, que dada uma instituição determina a lista dos serviços médicos que não se podem encontrar nesta, sendo os serviços médicos demonstrados em \textbf{ListaServicosNaoEncontrados}.\par 
-\begin{lstlisting}
-% 6) Extensao do predicado Identificar os servicos que nao se podem encontrar numa instituicao
-% servicosNaoEncontrados(Instituicao,[Servicos]) -> {V,F}
-servicosNaoEncontrados(Instituicao, ListaServicosNaoEncontrados) :-
-  solucoes(Servico, servico(Servico, _), L1),
-  removerduplicados(L1, ListaServicosTotal),
-  solucoes(Servico, servico(Servico, Instituicao), ListaServicosInst),
-  intercepcao(ListaServicosInst, ListaServicosTotal, R2),
-  removerduplicados(R2, ListaServicosNaoEncontrados).
-\end{lstlisting}
-
-
-%%%
-%%%%%% TESTES 6
-%%%
-\subsubsection{Teste do predicado \textbf{servicosNaoEncontrados(Instituicao, Servicos)}:}
-
-\begin{lstlisting}
-| ?- servicosNaoEncontrados(hospital_porto,ListaServicosNao).
-ListaServicosNao = [cirurgia,psiquiatria] ? 
-yes
-\end{lstlisting}
-
-\begin{lstlisting}
-| ?- servicosNaoEncontrados(hospital_sao_marcos,ListaServicosNao).
-ListaServicosNao = [geriatria,neurologia,oncologia,cirurgia,clinica_geral,psiquiatria] ? 
-yes
-\end{lstlisting}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%
-%%%%% 7
-%%%
-%%%%%%
-\subsection{Determinar as instituições onde um profissional presta serviço}
-
-
-
-
-
-
-
-Foi construída a extensão do predicado \textbf{instituicoesProfissionalPrestaServico(Profissional,ListaInstituicoes)}, que dada um profissional de saúde determina a lista de instituições onde este presta serviço, sendo as instituições demonstradas em \textbf{ListaInstituicoes}.\par 
-\begin{lstlisting}
-% 7) Extensao do predicado Determinar as instituicoes onde um profissional presta servico
-% instituicoesProfissionalPrestaServico(Professional, [Instituicoes] ) -> {V,F}
-instituicoesProfissionalPrestaServico(Profissional,ListaInstituicoes) :-
-  solucoes((Instituicao),profissional(Profissional,_,Instituicao),ListaInstituicoesDupl),
-  removerduplicados(ListaInstituicoesDupl,ListaInstituicoes).
-\end{lstlisting}
-
-
-%%%
-%%%%%% TESTES 7
-%%%
-\subsubsection{Teste do predicado \textbf{servicosNaoEncontrados(Instituicao, Servicos)}:}
-
-\begin{lstlisting}
-| ?- instituicoesProfissionalPrestaServico(filipe_oliveira,ListaInst).
-ListaInst = [hospital_porto,hospital_braga] ? 
-yes
-\end{lstlisting}
-
-\begin{lstlisting}
-| ?- instituicoesProfissionalPrestaServico(tiago_sousa,ListaInst).
-ListaInst = [hospital_lisboa] ? 
-yes
-\end{lstlisting}
-
-
-
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%
-%%%%% 8
-%%%
-%%%%%%
-\subsection{Determinar todas as instituições (ou serviços, ou profissionais) a que um utente já recorreu}
-
-
-
-Para responder logicamente a esta funcionalidade foram construídas as extensões de predicados \textbf{utenteRecorreuInstituicao(Utente,Instituicoes)}, \textbf{utenteRecorreuServico(Utente,Servicos)}, \textbf{utenteRecorreuProfissional(Utente,Profissionais)}, \textbf{utenteRecorreu(Utente,Lista)}. Os 3 primeiros predicados dado um utente determinam respectivamente as listas de instituições, serviços e profissionais de saúde a que o utente já recorreu. O último predicado aglomera a informação dos 3 primeiros predicados numa única lista. Passamos de seguida a especificar os 4 predicados:\par 
-
-\begin{lstlisting}
-% 8.0.1) Extensao do predicado Determinar todas as instituicoes a que um utente ja recorreu
-% utenteRecorreuInstituicao(Utente,[Instituicoes]) -> {V,F}
-utenteRecorreuInstituicao(Utente,Instituicoes) :-.
-  solucoes(X, recorreuInstituicao(Utente,X), InstituicoesComDupl),
-  removerduplicados(InstituicoesComDupl, Instituicoes).
-
-% 8.0.2) Extensao do predicado Determinar todos os servicos a que um utente ja recorreu
-% utenteRecorreuServico(Utente,[Servicos]) -> {V,F}
-utenteRecorreuServico(Utente,Servicos) :-.
-  solucoes(X, recorreuServico(Utente,X), ServicosComDupl),
-  removerduplicados(ServicosComDupl, Servicos).
-
-% 8.0.3) Extensao do predicado Determinar todos os profissionais a que um utente ja recorreu
-%utenteRecorreuProfissional(Utente,[Profissionais]) -> {V,F}
-utenteRecorreuProfissional(Utente,Profissionais) :-.
-  solucoes(X, recorreuProfissional(Utente,X), ProfissionaisComDupl),
-  removerduplicados(ProfissionaisComDupl, Profissionais).
-
-% 8) Extensao do predicado Determinar todas as instituicoes (ou servicos, ou profissionais) a que um utente ja recorreu
-% utenteRecorreu(Utente,Lista) -> {V,F}
-utenteRecorreu(Utente,Lista) :-
-  utenteRecorreuInstituicao(Utente,LInst),
-  utenteRecorreuServico(Utente,LServ),
-  utenteRecorreuProfissional(Utente,LProf),
-  concatenar(LInst, LServ, LInstServ),
-  concatenar(LInstServ,LProf,Lista).
-\end{lstlisting}
-
-
-%%%
-%%%%%% TESTES 8
-%%%
-\subsubsection{Teste dos predicados \textbf{utenteRecorreuInstituicao(Utente,Instituicoes)}, \textbf{utenteRecorreuServico(Utente,Servicos)}, \textbf{utenteRecorreuProfissional(Utente,Profissionais)}, \textbf{utenteRecorreu(Utente,Lista)}:}
-
-\begin{lstlisting}
-| ?- utenteRecorreuInstituicao(antonio_sousa,Lista).
-Lista = [hospital_sao_marcos] ? 
-yes
-\end{lstlisting}
-
-\begin{lstlisting}
-| ?- utenteRecorreuServico(antonio_sousa,Lista).
-Lista = [cardiologia,nutricionismo] ? 
-yes
-\end{lstlisting}
-
-\begin{lstlisting}
-| ?- utenteRecorreuProfissional(antonio_sousa,Lista).
-Lista = [vanessa_goncalves,filipe_oliveira] ? 
-yes
-\end{lstlisting}
-
-\begin{lstlisting}
-| ?- utenteRecorreu(antonio_sousa,Lista).
-Lista = [hospital_sao_marcos,cardiologia,nutricionismo,vanessa_goncalves,filipe_oliveira] ? 
-yes
-\end{lstlisting}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -642,27 +794,25 @@ yes
 
 \subsection{Alterações à base de conhecimento}
 \label{base_conhecimento}
-De forma a ser possível mudar a base de conhecimento, utilizando os predicados evolucao (seção \ref{evolucao}) e remocao (seção \ref{remocao}), foi necessário adicionar as seguintes definições iniciais ao prolog:
+De forma a ser possível mudar a base de conhecimento, utilizando os predicados evolucao (secção \ref{evolucao}) e remocao (secção \ref{remocao}), foi necessário adicionar as seguintes definições iniciais ao prolog:
 \begin{lstlisting}
 % SICStus PROLOG: Definicoes iniciais
-% permitida a evolucao sobre utentes, profissionais, servicos, instituicoes, registos de actividade medica
 
 :- op(900,xfy,'::').
-:- dynamic utente/1.
-:- dynamic profissional/3.
-:- dynamic servico/2.
-:- dynamic instituicao/1.
-:- dynamic registo/4.
+
+:- dynamic utente/4.
+:- dynamic servico/4.
+:- dynamic consulta/4.
 \end{lstlisting}
 
-Contudo, necessitamos ainda de garantir a preservação da correção da base conhecimento em todas as operações de alteração à mesma. Assim, como veremos nas seções seguintes, todas as operações de remoção e adição respeitam os respectivos invariantes estruturais e referenciais definidos.
+Contudo, necessitamos ainda de garantir a preservação da correção da base conhecimento em todas as operações de alteração à mesma. Assim, como veremos nas secções seguintes, todas as operações de remoção e adição respeitam os respetivos invariantes estruturais e referenciais definidos.
 
-\subsection{Registar utentes, profissionais, serviços ou instituições}
+\subsection{Registar utentes, serviços, ou consultas no sistema}
 \label{evolucao}
 
 \subsubsection{Invariantes para operações de adição}
 \label{invariantes_adicao}
-Tal como referido na seção \ref{base_conhecimento} é necessário preservar a correção da base de conhecimento. Ora, para as operações de adição de conhecimento necessitamos de garantir:
+Tal como referido na secção \ref{base_conhecimento} é necessário preservar a correção da base de conhecimento. Ora, para as operações de adição de conhecimento necessitamos de garantir:
 \begin{itemize}
 
 %%%%%%%%% UTENTE
@@ -670,151 +820,89 @@ Tal como referido na seção \ref{base_conhecimento} é necessário preservar a 
 \begin{itemize}
 \item        Invariante Estrutural:
 \begin{itemize}
-\item           utentes distintos não têm o mesmo nome;
+\item           utentes distintos não têm o mesmo IdUt;
 \end{itemize}
 \end{itemize}
 
 traduzido logicamente para:
 \begin{lstlisting}
-+utente(Utente)::(
-  solucoes( (Utente), ( utente(Utente) ), Lista),
-  comprimento(Lista,N),
-  N==1
-  ).
+ +utente(IdUt,Nome,Idade,Morada)::(
+   solucoes( (IdUt), ( utente(IdUt,_,_,_) ), Lista),
+   comprimento(Lista,N),
+   N==1
+ ).
 \end{lstlisting}
 
-%%%%%%%%% INSTITUICAO
-\item   instituição:
-\begin{itemize}
-\item        Invariante Estrutural:
-\begin{itemize}
-\item         instituições distintas não têm o mesmo nome;
-\end{itemize}
-\end{itemize}
-traduzido logicamente para:
-\begin{lstlisting}
-+instituicao(Instituicao)::(
-  solucoes( (Instituicao), ( instituicao(Instituicao) ), Lista),
-  comprimento(Lista,N),
-  N==1
-  ).
-\end{lstlisting}
+
 
 %%%%%%%%% SERVIÇO
 \item   serviço:
 \begin{itemize}
 \item        Invariante Estrutural:
 \begin{itemize}
-\item         serviços distintos da mesma instituição não têm o mesmo nome;
-\end{itemize}
-\item        Invariante Referencial:
-\begin{itemize}
-\item         a instituição associada ao serviço existe;
+\item         serviços distintos não têm o mesmo IdServ;
 \end{itemize}
 \end{itemize}
 traduzido logicamente para:
 \begin{lstlisting}
-+servico(Servico,Instituicao)::(
-  solucoes( (Servico,Instituicao) , ( servico(Servico,Instituicao) ), Lista),
-  comprimento(Lista,N),
-  N==1,
-  solucoes( (Instituicao) , ( instituicao(Instituicao) ), ListaInst),
-  comprimento(ListaInst,NInst),
-  NInst==1
-  ).
+ +servico(Servico,Descricao,Instituicao,Cidade)::(
+   solucoes( (Servico) , ( servico(Servico,_,_,_) ), Lista),
+   comprimento(Lista,N),
+   N==1
+ ).
 \end{lstlisting}
 
-%%%%%%%%% PROFISSIONAL
-\item   profissional:
-\begin{itemize}
-\item        Invariante Estrutural:
-\begin{itemize}
-\item         profissionais distintos do mesmo serviço e instituição não têm o mesmo nome;
-\end{itemize}
-\item        Invariante Referencial:
-\begin{itemize}
-\item         a instituição associada ao profissional existe;
-\item         o serviço associado ao profissional existe na instituição;
-\end{itemize}
-\end{itemize}
-traduzido logicamente para:
-\begin{lstlisting}
-+profissional(Profissional,Servico,Instituicao)::(
-  solucoes( (Profissional), ( profissional(Profissional,Servico,Instituicao) ), Lista),
-  comprimento(Lista,N),
-  N==1,
-  solucoes( (Instituicao) , ( instituicao(Instituicao) ), ListaInst),
-  comprimento(ListaInst,NInst),
-  NInst==1,
-  solucoes( (Servico,Instituicao) , ( servico(Servico,Instituicao) ), ListaServ),
-  comprimento(ListaServ,NServ),
-  NServ==1
-  ).
-\end{lstlisting}
 
-%%%%%%%%% REGISTO
+%%%%%%%%% CONSULTA
 \item   registo:
 \begin{itemize}
 \item        Invariante Estrutural:
 \begin{itemize}
-\item         tem que existir pelo menos um registo com essas características depois da inserção;
+\item         tem que existir pelo menos uma consulta com essas características depois da inserção;
 \end{itemize}
 \item        Invariante Referencial:
 \begin{itemize}
-\item         o utente associado ao registo existe;
-\item 	a instituição associada ao registo existe;
-\item         o serviço associado ao registo existe na instituição;
+\item         o utente associado à consulta existe;
+\item         o serviço associado à consulta existe;
 \item 	o profissional associado ao registo está associado ao serviço e instituição;
 \end{itemize}
 \end{itemize}
 traduzido logicamente para:
 \begin{lstlisting}
-+registo(Utente,Instituicao,Servico,Profissional)::(
-  solucoes( (Utente,Instituicao,Servico,Profissional), ( registo(Utente,Instituicao,Servico,Profissional) ), Lista),
-  comprimento(Lista,N),
-  N>=1,
-  solucoes( (Utente), ( utente(Utente) ), ListaUten),
-  comprimento(ListaUten,NUten),
-  NUten==1,
-  solucoes( (Instituicao) , ( instituicao(Instituicao) ), ListaInst),
-  comprimento(ListaInst,NInst),
-  NInst==1,
-  solucoes( (Servico,Instituicao) , ( servico(Servico,Instituicao) ), ListaServ),
-  comprimento(ListaServ,NServ),
-  NServ==1,
-  solucoes( (Profissional,Servico,Instituicao), ( profissional(Profissional,Servico,Instituicao) ), ListaProf),
-  comprimento(ListaProf,NProf),
-  NProf==1
-  ).
+ +consulta(Data,IdUtente,IdServico,Custo)::(
+   solucoes( (Data,IdUtente,IdServico,Custo), ( consulta(Data,IdUtente,IdServico,Custo) ), Lista),
+   comprimento(Lista,N),
+   N>=1,
+   solucoes( (IdUtente), ( utente(IdUtente,_,_,_) ), ListaUten),
+   comprimento(ListaUten,NUten),
+   NUten==1,
+   solucoes( (IdServico) , ( servico(IdServico,_,_,_ ) ), ListaServ),
+   comprimento(ListaServ,NServ),
+   NServ==1
+ ).
 \end{lstlisting}
 
 \end{itemize}
 \subsubsection{Predicados para operações de adição}
-Definidos os invariantes para as operações de adição à base de conhecimento, resta-nos definir as extensões de predicados que permitem registar utentes, profissionais, serviços, instituições, registos de eventos médicos.\par
-Denote que as extensões de predicados seguidamente definidas recorrem ao predicado \textbf{evolucao(Termo)}, definido durante as aulas práticas da unidade curricular e possível de ser consultado na seção \ref{evolucao_anexo}.
+Definidos os invariantes para as operações de adição à base de conhecimento, resta-nos definir as extensões de predicados que permitem registar utentes, serviços, e consultas médicas.\par
+Denote que as extensões de predicados seguidamente definidas recorrem ao predicado \textbf{evolucao(Termo)}, definido durante as aulas práticas da unidade curricular e possível de ser consultado na secção \ref{evolucao_anexo}.
 
 \begin{lstlisting}
-% 9) Extensao do predicado Registar utentes, profissionais, servicos ou instituicoes
-
-% Extensao do predicado que pemite registar utentes
-% registarUtente(Nome) -> {V,F}
-registarUtente(Nome) :- evolucao(utente(Nome)).
-
-% Extensao do predicado que pemite registar instituicoes
-% registarInstituicao(Instituicao) -> {V,F}
-registarInstituicao(Instituicao) :- evolucao(instituicao(Instituicao)).
-
-% Extensao do predicado que pemite registar servicos numa instituicao
-% registarServico(Servico,Instituicao) -> {V,F}
-registarServico(Servico,Instituicao) :- evolucao(servico(Servico,Instituicao)).
-
-% Extensao do predicado que pemite registar profissionais num determinado servico de numa instituicao
-% registarProfissional(Profissional,Servico,Instituicao) -> {V,F}
-registarProfissional(Profissional,Servico,Instituicao) :- evolucao(profissional(Profissional,Servico,Instituicao)).
-
-% Extensao do predicado que pemite registar eventos medicos numa instituicao indicando o utente, o profissional, o servico e a instituicao
-% registarEvento(Utente,Profissional,Servico,Instituicao) -> {V,F}
-registarEvento(Utente,Profissional,Servico,Instituicao) :- evolucao(registo(Utente,Profissional,Servico,Instituicao)).
+ % E5) Extensao do predicado Registar utentes, servicos, ou consultas
+ 
+ % Extensao do predicado que pemite registar utentes
+ % registarUtente(IdUt,Nome,Idade,Morada) -> {V,F,D}
+ registarUtente(IdUt,Nome,Idade,Morada) :- evolucao(utente(IdUt,Nome,Idade,Morada)).
+ 
+ % Extensao do predicado que pemite registar servicos numa instituicao
+ % registarServico(IdServ,Descricao, Instituicao, Cidade ) -> {V,F,D}
+ registarServico(IdServ,Descricao,Instituicao,Cidade) :- evolucao(servico(IdServ,Descricao,Instituicao,Cidade)).
+ 
+ % Extensao do predicado que pemite registar consultas medicas, indicando a data, a identificacao do utente, do servico,
+ % numa instituicao indicando o utente, o profissional, o servico e a instituicao
+ % registarConsulta(Data,IdUt,IdServ,Custo) -> {V,F,D}
+ registarConsulta(Data,IdUt,IdServ,Custo) :- evolucao(consulta(Data,IdUt,IdServ,Custo)).
+ 
 \end{lstlisting}
 
 
@@ -823,13 +911,13 @@ registarEvento(Utente,Profissional,Servico,Instituicao) :- evolucao(registo(Uten
 %%%%% 10
 %%%
 %%%%%%
-\subsection{Remover utentes (ou profissionais, ou serviços, ou instituições) dos registos}
+\subsection{Remover utentes, ou serviços, ou consultas do sistema}
 \label{remocao}
 
 \subsubsection{Invariantes para operações de remoção}
 \label{invariantes_remocao}
 
-Tal como referido na seção \ref{base_conhecimento} é necessário preservar a correção da base de conhecimento. Ora, para as operações de remoção de conhecimento necessitamos de garantir:
+Tal como referido na secção \ref{base_conhecimento} é necessário preservar a correção da base de conhecimento. Ora, para as operações de remoção de conhecimento necessitamos de garantir:
 \begin{itemize}
 
 %%%%%%%%% UTENTE
@@ -841,55 +929,24 @@ Tal como referido na seção \ref{base_conhecimento} é necessário preservar a 
 \end{itemize}
 \item        Invariante Referencial:
 \begin{itemize}
-\item         utentes apenas podem ser eliminado se não existirem registos de eventos médicos a ele associado;
+\item         utentes apenas podem ser eliminado se não existirem consultas a ele associado;
 \end{itemize}
 
 \end{itemize}
 
 traduzido logicamente para:
 \begin{lstlisting}
--utente(Utente)::(
-  solucoes( (Utente), ( utente(Utente) ), Lista),
-  comprimento(Lista,N),
-  N==0,
-  solucoes( (Utente,_,_,_), ( registo(Utente,_,_,_) ), ListaReg),
-  comprimento(ListaReg,NReg),
-  NReg==0
-  ).
+ -utente(IdUtente,Nome,Idade,Morada)::(
+   solucoes( (IdUtente), ( utente(IdUtente,Nome,Idade,Morada) ), Lista),
+   comprimento(Lista,N),
+   N==0,
+   solucoes( (_,IdUtente,_,_), ( consulta(Data,IdUtente,_,_) ), ListaCons),
+   comprimento(ListaCons,NCons),
+   NCons==0
+ ).
 \end{lstlisting}
 
-%%%%%%%%% INSTITUICAO
 
-\item   instituição:
-\begin{itemize}
-\item        Invariante Estrutural:
-\begin{itemize}
-\item         não pode existir a instituição depois da operação de remoção;
-\end{itemize}
-\item        Invariante Referencial:
-\begin{itemize}
-\item         instituições apenas podem ser eliminadas se não existirem registos de eventos médicos a elas associadas;
-\item         instituições apenas podem ser eliminadas se não existirem serviços a elas associadas;
-\item         instituições apenas podem ser eliminadas se não existirem profissionais de saúde a elas associadas;
-\end{itemize}
-\end{itemize}
-traduzido logicamente para:
-\begin{lstlisting}
--instituicao(Instituicao)::(
-  solucoes( (Instituicao), ( instituicao(Instituicao) ), Lista),
-  comprimento(Lista,N),
-  N==0,
-  solucoes( (_,Instituicao,_,_), ( registo(_,Instituicao,_,_) ), ListaReg),
-  comprimento(ListaReg,NReg),
-  NReg==0,
-  solucoes( (_,Instituicao) , ( servico(_,Instituicao) ), ListaServ),
-  comprimento(ListaServ,NServ),
-  NServ==0,
-  solucoes( (_,_,Instituicao), ( profissional(_,_,Instituicao) ), ListaProf),
-  comprimento(ListaProf,NProf),
-  NProf==0
-  ).
-\end{lstlisting}
 
 %%%%%%%%% SERVIÇO
 
@@ -908,77 +965,43 @@ traduzido logicamente para:
 \end{itemize}
 \item        Invariante Referencial:
 \begin{itemize}
-\item         serviços apenas podem ser eliminados se não existirem registos de eventos médicos a eles associados;
-\item         serviços apenas podem ser eliminados se não existirem profissionais de saúde a eles associados;
+\item         serviços apenas podem ser eliminados se não existirem consultas médicas a eles associados;
 \end{itemize}
 \end{itemize}
 traduzido logicamente para:
 \begin{lstlisting}
--servico(Servico,Instituicao)::(
-  solucoes( (Servico,Instituicao) , ( servico(Servico,Instituicao) ), Lista),
-  comprimento(Lista,N),
-  N==0,
-  solucoes( (_,Instituicao,Servico,_), ( registo(_,Instituicao,Servico,_) ), ListaReg),
-  comprimento(ListaReg,NReg),
-  NReg==0,
-  solucoes( (_,Servico,Instituicao), ( profissional(_,Servico,Instituicao) ), ListaProf),
-  comprimento(ListaProf,NProf),
-  NProf==0
-  ).
-\end{lstlisting}
-
-%%%%%%%%% PROFISSIONAL
-\item   profissional:
-\begin{itemize}
-\item        Invariante Estrutural:
-\begin{itemize}
-\item         não pode existir o profissional depois da operação de remoção;
-\end{itemize}
-\item        Invariante Referencial:
-\begin{itemize}
-\item         profissionais apenas podem ser eliminados se não existirem registos de eventos médicos a eles associados;
-\end{itemize}
-\end{itemize}
-traduzido logicamente para:
-\begin{lstlisting}
--profissional(Profissional,Servico,Instituicao)::(
-  solucoes( (Profissional), ( profissional(Profissional,Servico,Instituicao) ), Lista),
-  comprimento(Lista,N),
-  N==0,
-  solucoes( (_,Instituicao,Servico,Profissional), ( registo(_,Instituicao,Servico,Profissional) ), ListaReg),
-  comprimento(ListaReg,NReg),
-  NReg==0
-  ).
+ -servico(IdServico,Descricao,Instituicao,Cidade)::(
+   solucoes( (IdServico) , ( servico(IdServico,_,_,_) ), Lista),
+   comprimento(Lista,N),
+   N==0,
+   solucoes( (Dat,IdUtente,IdServico,Custo), ( consulta(Data,IdUtente,IdServico,Custo) ), ListaCons),
+   comprimento(ListaCons,NCons),
+   NCons==0
+ ).
 \end{lstlisting}
 
 
 \end{itemize}
 \subsubsection{Predicados para operações de remoção}
-Definidos os invariantes para as operações de remoção à base de conhecimento, resta-nos definir as extensões de predicados que permitem remover utentes, profissionais, serviços e instituições.\par
+Definidos os invariantes para as operações de remoção à base de conhecimento, resta-nos definir as extensões de predicados que permitem remover utentes, serviços e consultas.\par
 Denote que as extensões de predicados seguidamente definidas recorrem ao predicado \textbf{remocao(Termo)}, analogamente inverso ao predicado  \textbf{evolucao(Termo)} e possível de ser consultado na seção \ref{remocao_anexo}.
 
 \begin{lstlisting}
-% 10) Remover utentes (ou profissionais ou servicos ou instituicoes) dos registos
-
-% Extensao do predicado que pemite remover utentes
-% removerUtente(Nome) -> {V,F}
-removerUtente(Nome) :- remocao(utente(Nome)).
-
-% Extensao do predicado que pemite remover instituicoes
-% removerInstituicao(Instituicao) -> {V,F}
-removerInstituicao(Instituicao) :- remocao(instituicao(Instituicao)).
-
-% Extensao do predicado que pemite remover servicos numa instituicao
-% registarServico(Servico,Instituicao) -> {V,F}
-removerServico(Servico,Instituicao) :- remocao(servico(Servico,Instituicao)).
-
-% Extensao do predicado que pemite remover profissionais num determinado servico de numa instituicao
-% removerProfissional(Profissional,Servico,Instituicao) -> {V,F}
-removerProfissional(Profissional,Servico,Instituicao) :- remocao(profissional(Profissional,Servico,Instituicao)).
-
-% Extensao do predicado que pemite remover eventos medicos numa instituicao indicando o utente, o profissional, o servico e a instituicao
-% removerEvento(Utente,Profissional,Servico,Instituicao) -> {V,F}
-removerEvento(Utente,Profissional,Servico,Instituicao) :- remocao(registo(Utente,Profissional,Servico,Instituicao)).
+ % E5) Remover utentes, ou serviços,  ou consultas do sistema de reprensentacao
+ 
+ % Extensao do predicado que pemite remover utentes
+ % removerUtente(IdUt,Nome,Idade,Morada) -> {V,F,D}
+ removerUtente(IdUt,Nome,Idade,Morada) :- remocao(utente(IdUt,Nome,Idade,Morada)).
+ 
+ % Extensao do predicado que pemite remover servicos
+ % removerServico(IdServ,Descricao, Instituicao, Cidade ) -> {V,F,D}
+ removerServico(IdServ,Descricao,Instituicao,Cidade) :- evolucao(servico(IdServ,Descricao,Instituicao,Cidade)).
+ 
+ % Extensao do predicado que pemite remover consultas medicas, indicando a data, a identificacao do utente, do servico,
+ % numa instituicao indicando o utente, o profissional, o servico e a instituicao
+ % removerConsulta(Data,IdUt,IdServ,Custo) -> {V,F,D}
+ removerConsulta(Data,IdUt,IdServ,Custo) :- remocao(consulta(Data,IdUt,IdServ,Custo)).
+ 
 \end{lstlisting}
 
 
@@ -995,134 +1018,8 @@ removerEvento(Utente,Profissional,Servico,Instituicao) :- remocao(registo(Utente
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Funcionalidades Adicionais}
-Em adição às funcionalidades obrigatórias foram incluídas novas funcionalidades no sistema que permitem:
+\section{Componente JAVA e JASPER}
 
-\begin{itemize}
-\item E1) determinar o número de utentes de uma instituição;
-\item E2.0.1) dada uma lista de instituições determinar a lista de utilização em número de utentes para cada instituição;
-\item E2) determinar a lista de utilização em número de utentes de todas as instituições na base de conhecimento;
-\item E3.0.1) determinar o número de eventos médicos de um utente;
-\item E3) determinar todos os eventos médicos de um utente;
-\item E4.0.1) dada uma lista de utentes determinar a lista do número de eventos médicos para cada utente;
-\item E4) determinar a lista de número de eventos médicos por utente de todos os utentes na base de conhecimento;
-\item E5.0.1) determinar todos os eventos médicos de um profissional de saúde;
-\item E5) determinar o número de eventos médicos em que um profissional esteve envolvido;
-\item E6.0.1) dada uma lista de profissionais determinar a lista do número de eventos médicos em que cada um esteve envolvido;
-\item E6) determinar a lista de número de eventos médicos por utente de todos os profissionais na base de conhecimento;
-\item E7.0.1) determinar todos os eventos médicos de um serviço;
-\item E7) determinar o número de eventos médicos em que um serviço esteve envolvido;
-\item E8.0.1) dada uma lista de serviços determinar a lista do número de eventos médicos em que cada um esteve envolvido;
-\item E8) determinar a lista de número de eventos médicos por serviço de todos os serviços na base de conhecimento;
-\end{itemize}
-
-Dado que as restantes extensões de predicados são invocadas pelos predicados com as funcionalidades E2, E4, E6, E8, iremos dedicar especial atenção a estes, incluindo para cada um a sua extensão e respectivos testes. Os restantes predicados poderão ser consultados integralmente na seção \ref{extra_anexo}.
-
-\subsection{Determinar a lista de utilização em número de utentes de todas as instituições na base de conhecimento}
-
-\begin{lstlisting}
-% E2) Extensao do predicado que permite determinar a lista de utilizacao em numero de utentes de todas as instituicoes na base de conhecimento.
-%mapaUtilizacaoInstituicoes(ListaUtilizacao) -> {V,F}.
-mapaUtilizacaoInstituicoes(ListaUtilizacao) :-.
-  solucoes( (Instituicao),( instituicao(Instituicao) ), ListaInstituicoes),
-  listaUtilizacaoInstituicoes(ListaInstituicoes,ListaUtilizacao).
-\end{lstlisting}
-
-%%%
-%%%%%% TESTES E2
-%%%
-\subsubsection{Teste do predicado \textbf{mapaUtilizacaoInstituicoes(ListaUtilizacao)}:}
-
-\begin{lstlisting}
-| ?- mapaUtilizacaoInstituicoes(Mapa).
-Mapa = [[hospital_sao_marcos,1],[hospital_braga,0],[hospital_lisboa,0],[hospital_porto,5],[hospital_leiria,0]] ? 
-yes
-\end{lstlisting}
-
-
-
-
-
-
-
-
-
-\subsection{Determinar  a lista de número de eventos médicos por utente de todos os utentes na base de conhecimento}
-
-\begin{lstlisting}
-% E4) Extensao do predicado que permite determinar a lista de numero de eventos medicos por utente de todos os utentes na base de conhecimento.
-%mapaEventosMedicosPorUtente(ListaEventosUtente) -> {V,F}.
-mapaEventosMedicosPorUtente(ListaEventosUtente) :-.
-  solucoes( (Utente),( utente(Utente) ), ListaUtentes),
-  listaEventosMedicosUtente(ListaUtentes,ListaEventosUtente).
-\end{lstlisting}
-
-%%%
-%%%%%% TESTES E4
-%%%
-\subsubsection{Teste do predicado \textbf{mapaEventosMedicosPorUtente(ListaEventosUtente)}:}
-
-\begin{lstlisting}
-| ?- mapaUtilizacaoInstituicoes(Mapa).
-| ?- mapaEventosMedicosPorUtente(Mapa).
-Mapa = [[antonio_sousa,3],[antonio_marques,1],[maria_meireles,2],[diamantino_marques,2],[delfina_araujo,0],[jorge_marques,1],[rosa_sousa,1]] ? 
-yes
-\end{lstlisting}
-
-
-
-
-
-
-
-
-\subsection{Determinar a lista de número de eventos médicos por utente de todos os profissionais na base de conhecimento}
-
-\begin{lstlisting}
-% E6) Extensao do predicado que permite determinar a lista de numero de eventos medicos por utente de todos os profissionais na base de conhecimento.
-%mapaEventosMedicosPorProfissional(ListaEventosProfissional) -> {V,F}.
-mapaEventosMedicosPorProfissional(ListaEventosProfissional) :-.
-  solucoes( (Profissional),( profissional(Profissional,_,_) ), ListaProfissionaisRep),
-  removerduplicados(ListaProfissionaisRep, ListaProfissionais),
-  listaEventosMedicosProfissional(ListaProfissionais,ListaEventosProfissional).
-\end{lstlisting}
-
-%%%
-%%%%%% TESTES E6
-%%%
-\subsubsection{Teste do predicado \textbf{mapaEventosMedicosPorProfissional(ListaEventosProfissional)}:}
-
-\begin{lstlisting}
-| ?- mapaEventosMedicosPorProfissional(Mapa).
-Mapa = [[salvador_sousa,0],[andre_santos,6],[tiago_sousa,0],[vanessa_goncalves,2],[marta_caetano,0],[filipe_oliveira,1],[filipe_marques,1],[luis_mendes,0],[luis_sousa,0],[...|...]] ? 
-yes
-\end{lstlisting}
-
-
-
-
-
-\subsection{Determinar a lista de número de eventos médicos por serviço de todos os serviços na base de conhecimento}
-
-\begin{lstlisting}
-% E8) Extensao do predicado que permite determinar a lista de numero de eventos medicos por servico de todos os servicos na base de conhecimento.
-%mapaEventosMedicosPorServico(ListaEventosServico) -> {V,F}.
-mapaEventosMedicosPorServico(ListaEventosServico) :-.
-  solucoes( (Servico),( servico(Servico,_) ), ListaServicosRep),
-  removerduplicados(ListaServicosRep, ListaServicos),
-  listaEventosMedicosServico(ListaServicos,ListaEventosServico).
-  \end{lstlisting}
-
-%%%
-%%%%%% TESTES E2
-%%%
-\subsubsection{Teste do predicado \textbf{mapaEventosMedicosPorServico(ListaEventosServico)}:}
-
-\begin{lstlisting}
-| ?- mapaEventosMedicosPorServico(Mapa).
-Mapa = [[cardiologia,2],[nutricionismo,2],[geriatria,6],[neurologia,0],[oncologia,0],[cirurgia,0],[clinica_geral,0],[psiquiatria,0]] ? 
-yes
-\end{lstlisting}
 
 
 
@@ -1132,14 +1029,16 @@ yes
 	
 	
 	
-	O presente trabalho de grupo, em todas as suas fases teve como principal propósito a familiarização da utilização da linguagem de programação em lógica PROLOG, como forma de conhecimento e construção demecanismos de raciocínio para a resolução de problemas. Tal objectivo foi cumprido.\par 
-		Apesar do modelo apresentado possuir limitações dada a sua simplicidade, pode concluir-se que garante a correcta evolução da base de conhecimento, possibilitando um suporte base sólido para o desenvolvimento de funcionalidades adicionais. 
-		O modelo proposto pode servir como um ponto de partida para odesenvolvimento de um sistema mais completo, capaz de verdadeiramente auxiliar os gestores de unidades de cuidados de saúde profissionais, assim como na prática clínica por parte dos profissionais.
+	O presente trabalho de grupo, em todas as suas fases teve como principal propósito a familiarização da utilização da linguagem de programação em lógica PROLOG, como forma de conhecimento e construção de
+mecanismos de raciocínio para a resolução de problemas. Tal objetivo foi cumprido.\par 
+		Apesar do modelo apresentado possuir limitações dada a sua simplicidade, pode concluir-se que garante a correta evolução da base de conhecimento, possibilitando um suporte base sólido para o desenvolvimento de funcionalidades adicionais. 
+		O modelo proposto pode servir como um ponto de partida para o 
+desenvolvimento de um sistema mais completo, capaz de verdadeiramente auxiliar os gestores de unidades de cuidados de saúde profissionais, assim como na prática clínica por parte dos profissionais.
 			
-	
-
+			
 	%- Bibliography (needs bibtex) -%
-	\bibliography{dissertation}
+%	\bibliography{dissertation}
+
 
 	% Index of terms (needs  makeindex) -------------
 	%\printindex
@@ -1153,94 +1052,172 @@ yes
 \section{Exemplo Prático de Base de Conhecimento}
 	\label{base_conhecimento_anexo}
 	\begin{lstlisting}	
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Base de Conhecimento sobre Utentes
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% -----------------------------------
+% Base de Conhecimento sobre Utentes --------------------------------------------------------------------------------------------
+% -----------------------------------
+% Extensao do predicado utente: IdUt, Nome, Idade, Morada -> {V,F,D}
 
-utente(antonio_sousa).
-utente(antonio_marques).
-utente(maria_meireles).
-utente(diamantino_marques).
-utente(delfina_araujo).
-utente(jorge_marques).
-utente(rosa_sousa).
+-utente(IdUt, Nome, Idade, Morada) :- nao(utente(IdUt, Nome, Idade, Morada)),
+                                      nao(excecao(utente(IdUt, Nome, Idade, Morada))).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Base de Conhecimento sobre Instituicoes 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% -------------------------------------------------
+% conhecimento perfeito positivo relativo a utentes
+% -------------------------------------------------
 
-instituicao(hospital_sao_marcos).
-instituicao(hospital_braga).
-instituicao(hospital_lisboa).
-instituicao(hospital_porto).
-instituicao(hospital_leiria).
+utente(ut001,antonio_sousa,24,rua_de_santo_ovideo).
+utente(ut002,filipe_oliveira,25,urb_qta_orfaos).
+utente(ut003,fernando_oliveira,55,rua_gen_humberto_delgado).
+utente(ut004,fernanda_oliveira,52,rua_gen_humberto_delgado).
+utente(ut005,ricardo_oliveira,27,rua_gen_humberto_delgado).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Base de Conhecimento sobre Servicos 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% -------------------------------------
 
-servico(cardiologia,hospital_sao_marcos).
-servico(cardiologia,hospital_braga).
-servico(cardiologia,hospital_leiria).
-servico(cardiologia,hospital_porto).
+%   Consideramos que apenas sao permitidas situacoes de conhecimento incerto/impreciso/interdito para os campos Idade e Morada
 
-servico(nutricionismo,hospital_sao_marcos).
-servico(nutricionismo,hospital_braga).
-servico(nutricionismo,hospital_leiria).
-servico(nutricionismo,hospital_porto).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Conhecimento imperfeito incerto
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      O utente filipe marques, de codigo ut006, residente na rua de santo ovideo, tem idade desconhecida no momento
+utente(ut006,filipe_marques,imperfeito_incerto1,rua_santo_ovideo).
 
-servico(geriatria,hospital_porto).
+%      O utente sergio caldas, de codigo ut007, de idade 25 anos, tem residencia desconhecida no momento
+utente(ut007,sergio_caldas,25,imperfeito_incerto2).
 
-servico(neurologia,hospital_porto).
+excecao(utente(IdUt, Nome, Idade, Morada)) :- utente(IdUt, Nome, imperfeito_incerto1, Morada).
+excecao(utente(IdUt, Nome, Idade, Morada)) :- utente(IdUt, Nome, Idade, imperfeito_incerto2).
 
-servico(oncologia,hospital_porto).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Conhecimento imperfeito impreciso
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      Sabe-se que o utente luis mendes, de codigo ut008, tem idade entre 25 e 30 anos, e residencia na rua das margaridas
+excecao(utente(ut008, luis_mendes, IDADE, rua_das_margaridas)) :- IDADE =< 30, IDADE >=25.
 
-servico(cirurgia,hospital_braga).
-servico(cirurgia,hospital_lisboa).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Conhecimento imperfeito interdito
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      O utente carlos sa, de codigo ut009, mudo, sem documentos, e incapacitado foi encontrado na rua, passando a residir na fundacao abcd,
+%      pelo que se torna impossivel vir a saber a idade do mesmo 
+utente(ut009, carlos_sa, imperfeito_interdito1, fundacao_abcd).
+excecao(utente(IdUt, Nome, Idade, Morada)) :- utente(IdUt, Nome, imperfeito_interdito1, Morada).
+nulo(imperfeito_interdito1).
 
-servico(clinica_geral,hospital_braga).
-servico(clinica_geral,hospital_porto).
++utente(IdUt,Nome,Idade,Morada)::(
+  solucoes( (IdUt,Nome,Idade,Morada), ( utente(ut009,carlos_sa,Idade,fundacao_abcd),nao(nulo(Idade))),S),
+  comprimento(S,N),
+  N==0
+).
 
-servico(psiquiatria,hospital_braga).
+% ------------------------------------
+% Base de Conhecimento sobre Serviços --------------------------------------------------------------------------------------------
+% ------------------------------------
+% Extensao do predicado serviço: IdServ, Descrição, Instituição, Cidade -> {V,F,D}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Base de Conhecimento sobre Profissionais 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-servico(IdServ, Descricao, Instituicao, Cidade) :- nao(servico(IdServ, Descricao, Instituicao, Cidade)),
+                                                    nao(excecao(servico(IdServ, Descricao, Instituicao, Cidade))).
 
-profissional(salvador_sousa, oncologia, hospital_porto).
-profissional(filipe_oliveira, nutricionismo, hospital_porto).
-profissional(filipe_marques, nutricionismo, hospital_porto).
-profissional(filipe_oliveira, clinical_geral, hospital_porto).
-profissional(filipe_marques, clinical_geral, hospital_porto).
-profissional(luis_mendes, clinica_geral, hospital_porto).
-profissional(andre_santos, geriatria, hospital_porto).
+% --------------------------------------------------
+% conhecimento perfeito positivo relativo a servicos
+% --------------------------------------------------
 
-profissional(tiago_sousa, cirurgia, hospital_lisboa).
+servico(sv001,cardiologia,hospital_viana_castelo,viana_castelo).
+servico(sv002,maternidade,hospital_viana_castelo,viana_castelo).
+servico(sv003,maternidade,hospital_matosinhos,matosinhos).
+servico(sv004,maternidade,hospital_sao_marcos,braga).
+servico(sv005,maternidade,hospital_da_prelada,porto).
+servico(sv006,maternidade,hospital_de_sao_joao,porto).
+servico(sv007,maternidade,maternidade_julio_dinis,porto).
 
-profissional(vanessa_goncalves, cardiologia, hospital_sao_marcos).
-profissional(marta_caetano, nutricionismo, hospital_sao_marcos).
+% -------------------------------------
+% Explicitacao das situacoes de excecao
+% -------------------------------------
+%   Consideramos que apenas sao permitidas situacoes de conhecimento incerto/impreciso/interdito para os campos IdServ, Descricao, Instituicao, Cidade
 
-profissional(filipe_oliveira, nutricionismo, hospital_braga).
-profissional(filipe_marques, nutricionismo, hospital_braga).
-profissional(luis_mendes, nutricionismo, hospital_braga).
-profissional(luis_mendes, clinical_geral, hospital_braga).
-profissional(luis_sousa, clinica_geral, hospital_braga).
-profissional(andreia_goncalves, cirurgia, hospital_braga).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Conhecimento imperfeito incerto
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     Foi adicionada a instituicao hospital de viana do castelo , na cidade de viana do castelo, um novo servico de codigo IdServ sv008,
+%     contudo, a descricao do novo servico e ainda desconhecida de momento
+servico(sv008,imperfeito_incerto_3,hospital_viana_castelo,viana_castelo).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Base de Conhecimento sobre Registo de entradas 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+excecao(servico(IdServ, Descricao, Instituicao, Cidade)) :- utente(IdServ, Descricao, imperfeito_incerto3, Cidade).
 
-registo(antonio_sousa, hospital_sao_marcos, cardiologia, vanessa_goncalves).
-registo(antonio_sousa, hospital_sao_marcos, cardiologia, vanessa_goncalves).
-registo(antonio_sousa, hospital_sao_marcos, nutricionismo, filipe_oliveira).
-registo(antonio_marques, hospital_porto, nutricionismo, filipe_marques).
-registo(maria_meireles, hospital_porto, geriatria, andre_santos).
-registo(maria_meireles, hospital_porto, geriatria, andre_santos).
-registo(diamantino_marques, hospital_porto, geriatria, andre_santos).
-registo(diamantino_marques, hospital_porto, geriatria, andre_santos).
-registo(rosa_sousa, hospital_porto, geriatria, andre_santos).
-registo(jorge_marques, hospital_porto, geriatria, andre_santos).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Conhecimento imperfeito impreciso
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      Sabe-se que o novo servico, de codigo IdServ sv009, na Instituicao hospital de sao marcos, na cidade de braga, e de cardiologia ou geriatria 
+excecao(servico(sv009,cardiologia,hospital_sao_marcos,braga)).
+excecao(servico(sv009,geriatria,hospital_sao_marcos,braga)).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Conhecimento imperfeito interdito
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      Os registos hospitalares em papel, devido a um incendio, foram perdidos. sabia-se apenas que o servico de codigo sv010, estava localizado 
+%      no hospital de matosinhos, na cidade de matosinhos, pelo que se torna impossivel vir a saber a descricao do mesmo 
+
+servico(sv010,imperfeito_interdito_2,hospital_matosinhos,matosinhos).
+excecao(servico(IdServ, Descricao, Instituicao, Cidade)) :- servico(IdServ, imperfeito_interdito2, Instituicao, Cidade).
+nulo(imperfeito_interdito2).
+
++servico(IdServ, Descricao, Instituicao, Cidade)::(
+  solucoes( (IdServ,Descricao,Instituicao,Cidade), ( servico(sv010,Descricao,hospital_matosinhos,matosinhos),nao(nulo(Descricao))),S),
+  comprimento(S,N),
+  N==0
+).
+
+% -------------------------------------
+% Base de Conhecimento sobre Consultas -------------------------------------------------------------------------------------------
+% -------------------------------------
+% Extensao do predicado consulta: Data, IdUt, IdServ, Custo -> {V,F,D}
+
+-consulta(Data, IdUt, IdServ, Custo) :- nao(consulta(Data, IdUt, IdServ, Custo)),
+                                        nao(excecao(consulta(Data, IdUt, IdServ, Custo))).
+
+% ---------------------------------------------------
+% conhecimento perfeito positivo relativo a consultas
+% ---------------------------------------------------
+
+consulta(23-04-2016,ut001,sv001,10).
+consulta(19-12-1990,ut002,sv003,0).
+consulta(18-12-1960,ut003,sv002,0).
+consulta(08-08-1963,ut004,sv002,0).
+consulta(17-06-1988,ut005,sv006,0).
+
+% -------------------------------------
+% Explicitacao das situacoes de excecao
+% -------------------------------------
+%   Consideramos que apenas sao permitidas situacoes de conhecimento incerto/impreciso/interdito para os campos Data, IdUt, IdServ, Custo 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Conhecimento imperfeito incerto
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     Foi realizada uma intervencao medica urgente num utente que havia dado entrada acompanhado pela policia, no dia 25-04-2016,
+%     no servico hospitalar de codigo sv004. a consulta medica teve um custo de 200euros. A identificacao do individuo e ainda desconhecida de momento
+consulta(25-04-2016,imperfeito_incerto4,sv004,200).
+
+excecao(consulta(Data,IdUt,IdServ,Custo)) :- consulta(Data, imperfeito_incerto4, IdServ,Custo).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Conhecimento imperfeito impreciso
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      Sabe-se que o utente de codigo ut001, no servico sv009, teve uma consulta ou no dia 24-05-2016, ou no dia 25-05-2016, tendo a consulta tido um custo de 100euros
+excecao(consulta(24-05-2016,ut001,sv009,100)).
+excecao(consulta(25-05-2016,ut001,sv009,100)).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Conhecimento imperfeito interdito
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%      No dia 31-12-2015, foi realizada uma consulta medica, no servico de codigo sv010, ao utente ut005. Logo de seguida a secretaria do hospital foi assaltada
+%      tendo sido os computadores roubados e a caixa com o dinheiro, pelo que se torna impossivel vir a saber o valor pago pela consulta 
+
+consulta(31-12-2015,ut005,sv010,imperfeito_interdito_3).
+excecao(consulta(Data,IdUt,IdServ,Custo)) :- consulta(Data,IdIt,IdServ,imperfeito_interdito_3).
+nulo(imperfeito_interdito3).
+
++consulta(Data,IdUt,IdServ,Custo)::(
+  solucoes( (Data,IdUt,IdServ,Custo), ( consulta(31-12-2015,ut005,sv010,Custo),nao(nulo(Custo))),S),
+  comprimento(S,N),
+  N==0
+).
 	\end{lstlisting}	
 
 
@@ -1302,6 +1279,8 @@ intercepcao([H | Tail], L2, L3) :- apagar(H, L2, R), intercepcao(Tail, R, L3).
 	\label{evolucao_anexo}
 
 \begin{lstlisting}	
+% Predicados que permitem evolucao do conhecimento ------------------------------------------------------------------------------
+
 % Extensao do predicado que permite a evolucao do conhecimento
 % disponibilizada pelo professor na aula pratica da semana5
 evolucao( Termo ):-solucoes(Invariante,+Termo::Invariante,Lista),
@@ -1331,6 +1310,24 @@ remover(Termo):-assert(Termo),!,fail.
 % predicado disponibilizado pelo professor na semana5
 % solucoes X,Y,Z -> {V,F}
 solucoes(X,Y,Z):-findall(X,Y,Z).
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do meta-predicado demo: Questao,Resposta -> {V,F}
+
+demo( Questao,verdadeiro ) :-
+Questao.
+demo( Questao, falso ) :-
+-Questao.
+demo( Questao,desconhecido ) :-
+nao( Questao ),
+nao( -Questao ).
+
+%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Extensao do meta-predicado nao: Questao -> {V,F}
+
+nao( Questao ) :-
+Questao, !, fail.
+nao( Questao ).
 \end{lstlisting}
 
 	
@@ -1347,107 +1344,6 @@ testar(Lista).
 remover(Termo):-retract(Termo).
 remover(Termo):-assert(Termo),!,fail.
 \end{lstlisting}
-
-	\section{Extensão de Predicados de Funcionalidades Adicionais}
-	\label{extra_anexo}
-	
-	\begin{lstlisting}
-% E1) Extensao do predicado que permite determinar o numero de utentes de uma instituicao 
-% quantosUtentesInstituicao(Instituicao,NumeroUtentes) -> {V,F}
-quantosUtentesInstituicao(Instituicao,NumeroUtentes) :- 
-  utentesInstituicao(Instituicao,ListaUtentes),
-  comprimento(ListaUtentes,NumeroUtentes).
-
-% E2.0.1) Extensao do predicado dada uma lista de instituicoes determina a lista de utilizacao em numero de utentes para cada instituicao 
-%listaUtilizacaoInstituicoes( [I],  [[I,N]]) -> {V,F}
-listaUtilizacaoInstituicoes( [I],  [[I,N]]) :- 
-  quantosUtentesInstituicao(I,N).
-listaUtilizacaoInstituicoes( [I|TAIL_INST],  [[I,N] | XS]) :- 
-  quantosUtentesInstituicao(I,N),
-  listaUtilizacaoInstituicoes(TAIL_INST,XS).
-
-% E2) Extensao do predicado que permite determinar a lista de utilizacao em numero de utentes de todas as instituicoes na base de conhecimento 
-%utilizacaoInstituicoes(ListaUtilizacao) -> {V,F} 
-mapaUtilizacaoInstituicoes(ListaUtilizacao) :- 
-  solucoes( (Instituicao),( instituicao(Instituicao) ), ListaInstituicoes),
-  listaUtilizacaoInstituicoes(ListaInstituicoes,ListaUtilizacao).
-
-% E3) Extensao do predicado que permite determinar o numero de eventos medicos de um utente 
-% quantosEventosUtente(Utente,NumeroEventos) -> {V,F}
-quantosEventosMedicosUtente(Utente,NumeroEventos) :-
-  eventosMedicosUtente(Utente,ListaEventosMedicos),
-  comprimento(ListaEventosMedicos,NumeroEventos).
-
-% E3.0.1) Extensao do predicado que permite identificar todos os eventos medicos de um utente 
-eventosMedicosUtente(Utente,ListaEventosMedicos) :-
-  solucoes( (Utente), ( registo(Utente,_,_,_) ), ListaEventosMedicos).
-
-% E4.0.1) Extensao do predicado dada uma lista de utentes determina a lista do numero de eventos medicos para cada utentes 
-%listaEventosMedicosUtente( [Utentes],  [[Utente,N]]) -> {V,F}
-listaEventosMedicosUtente( [Utente],  [[Utente,N]]) :- 
-  quantosEventosMedicosUtente(Utente,N).
-listaEventosMedicosUtente( [Utente|TAIL_UT],  [[Utente,N] | XS]) :- 
-  quantosEventosMedicosUtente(Utente,N),
-  listaEventosMedicosUtente(TAIL_UT,XS).
-
-% E4) Extensao do predicado que permite determinar a lista de numero de eventos medicos por utente de todos os utentes na base de conhecimento 
-%mapaEventosMedicosUtentes(ListaEventos) -> {V,F} 
-mapaEventosMedicosPorUtente(ListaEventosUtente) :- 
-  solucoes( (Utente),( utente(Utente) ), ListaUtentes),
-  listaEventosMedicosUtente(ListaUtentes,ListaEventosUtente).
-
-% E5) Extensao do predicado que permite determinar o numero de eventos medicos em que um profissional esteve envolvido 
-% quantosEventosMedicosProfissional(Profissional,NumeroEventos) -> {V,F}
-quantosEventosMedicosProfissional(Profissional,NumeroEventos) :-
-  eventosMedicosProfissional(Profissional,ListaEventosMedicos),
-  comprimento(ListaEventosMedicos,NumeroEventos).
-
-% E5.0.1) Extensao do predicado que permite identificar todos os eventos medicos de um profissional 
-eventosMedicosProfissional(Profissional,ListaEventosMedicos) :-
-  solucoes( (Profissional), ( registo(_,_,_,Profissional) ), ListaEventosMedicos).
-
-% E6.0.1) Extensao do predicado dada uma lista de profissionais determina a lista do numero de eventos medicos em que cada um esteve envolvido 
-%listaEventosMedicosProfissional( [Profissionais],  [[Profissional,N]]) -> {V,F}
-listaEventosMedicosProfissional( [Profissional],  [[Profissional,N]]) :- 
-  quantosEventosMedicosProfissional(Profissional,N).
-listaEventosMedicosProfissional( [Profissional|TAIL_PF],  [[Profissional,N] | XS]) :- 
-  quantosEventosMedicosProfissional(Profissional,N),
-  listaEventosMedicosProfissional(TAIL_PF,XS).
-
-% E6) Extensao do predicado que permite determinar a lista de numero de eventos medicos por utente de todos os profissionais na base de conhecimento 
-%mapaEventosMedicosPorProfissional(ListaEventosProfissional) -> {V,F} 
-mapaEventosMedicosPorProfissional(ListaEventosProfissional) :- 
-  solucoes( (Profissional),( profissional(Profissional,_,_) ), ListaProfissionaisRep),
-  removerduplicados(ListaProfissionaisRep, ListaProfissionais),
-  listaEventosMedicosProfissional(ListaProfissionais,ListaEventosProfissional).
-
-% E7) Extensao do predicado que permite determinar o numero de eventos medicos em que um servico esteve envolvido 
-% quantosEventosMedicosServico(Servico,NumeroEventos) -> {V,F}
-quantosEventosMedicosServico(Servico,NumeroEventos) :-
-  eventosMedicosServico(Servico,ListaEventosMedicos),
-  comprimento(ListaEventosMedicos,NumeroEventos).
-
-% E7.0.1) Extensao do predicado que permite identificar todos os eventos medicos de um servico
-eventosMedicosServico(Servico,ListaEventosMedicos) :-
-  solucoes( (Servico), ( registo(_,_,Servico,_) ), ListaEventosMedicos).
-
-% E8.0.1) Extensao do predicado dada uma lista de servicos determina a lista do numero de eventos medicos em que cada um esteve envolvido 
-%listaEventosMedicosServico( [Servicos],  [[Servico,N]]) -> {V,F}
-listaEventosMedicosServico( [Servico],  [[Servico,N]]) :- 
-  quantosEventosMedicosServico(Servico,N).
-listaEventosMedicosServico( [Servico|TAIL_SERV],  [[Servico,N] | XS]) :- 
-  quantosEventosMedicosServico(Servico,N),
-  listaEventosMedicosServico(TAIL_SERV,XS).
-
-% E8) Extensao do predicado que permite determinar a lista de numero de eventos medicos por servico de todos os servicos na base de conhecimento 
-%mapaEventosMedicosPorServico(ListaEventosServico) -> {V,F} 
-mapaEventosMedicosPorServico(ListaEventosServico) :- 
-  solucoes( (Servico),( servico(Servico,_) ), ListaServicosRep),
-  removerduplicados(ListaServicosRep, ListaServicos),
-  listaEventosMedicosServico(ListaServicos,ListaEventosServico).
-\end{lstlisting}
-
-	
 
 
 \end{document}
