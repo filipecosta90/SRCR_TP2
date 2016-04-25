@@ -1,23 +1,18 @@
 /*
- * Simple.java: a couple of simple Prolog-Java examples
+ * trabalho2.java: Prolog-Java
  */
-
-// [PM] 3.10.1 Not all platforms use Latin 1 as default. Always use only the 7-bit ASCII range.
-
-// 0xC5 == capital A ring, 0xC4 == capital A diaresis, 0xD6 == capital O diaresis
-// 0xE5 == small a ring, 0xE4 == small a dieresis, 0xF6 == small o dieresis, 
 
 import se.sics.jasper.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.stream.*; //nao esta a ser usado
 
-public class Simple
+public class trabalho2
 {
     private String a;
     private int x;
 	
-    public Simple(String a, int b) {
+    public trabalho2(String a, int b) {
     	this.a = a + " " + b;
     }
 
@@ -41,12 +36,9 @@ public class Simple
      * @param filename
      * @return
      */
-    public static SPTerm train(String filename)
+    public static SPTerm fazerquery(String filename)
     {
 		SICStus sp;
-		/* Necessary for old style, see below
-		SPTerm from, to, way = null;
-		*/
 	    SPTerm way = null;
 		HashMap varMap = new HashMap();
 		SPQuery query;
@@ -58,20 +50,12 @@ public class Simple
 	            }
 	
 		    if (filename != null) {
-	                // You probably want to use sp.restore() instead
 	                sp.load(filename);
 	            }
 		    
-		    /* Old style
-		    to = new SPTerm(sp, "\u00D6rebro");
-		    from = new SPTerm(sp, "Stockholm");
-		    way = new SPTerm(sp).putVariable();	    
-	            sp.query("user", "connected", new SPTerm[] { from, to, way, way });
-		    */
-		    /* New style */
-		    if (!sp.query("connected('Hallsberg','Vasteras',Way,Way).", varMap))
+		    if (!sp.query("utentesServico(sv001,Way).", varMap))
 	                {
-	                    System.out.println("ERROR: connected/4 failed"); // [PM] 3.10.1
+	                    System.out.println("ERROR: connected/4 failed");
 	                }
 	            else
 	                {
@@ -83,22 +67,21 @@ public class Simple
 		return way;
     }
     
-    // [PM] 3.8.5 train when called from prolog and thus the prolog code is already loaded.
-    public static SPTerm train()
+    public static SPTerm fazerquery()
     {
-        return train(null);
+        return fazerquery(null);
     }
   
     
     public static void main(String argv[]) throws ConversionFailedException, IllegalTermException
     {
-	SPTerm result = train("train");
+	SPTerm result = fazerquery("trabalho2");
         if (result != null) {
         	SPTerm arrayDeTermos[] = result.toTermArray();
         	System.out.println(Arrays.toString(arrayDeTermos)); //array de termos passa a array de strings
 //        	System.out.println(arrayDeTermos[0].getString()); //para imprimir um dos elementos do array
         } else {
-            System.out.println("ERROR: Did not find any solutions"); // [PM] 3.10.1
+            System.out.println("ERROR: Did not find any solutions");
         }
     }
 }
