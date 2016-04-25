@@ -45,7 +45,7 @@
 
 %   - servico:
 %        Invariante Estrutural:
-%           - servicos distintos da mesma instituicao nao teem o mesmo IdServ
+%           - servicos distintos da mesma nao teem o mesmo IdServ
 
 +servico(Servico,Descricao,Instituicao,Cidade)::(
   solucoes( (Servico) , ( servico(Servico,_,_,_) ), Lista),
@@ -108,7 +108,7 @@
 % Extensao do predicado utente: IdUt, Nome, Idade, Morada -> {V,F,D}
 
 -utente(IdUt, Nome, Idade, Morada) :- nao(utente(IdUt, Nome, Idade, Morada)),
-nao(excecao(utente(IdUt, Nome, Idade, Morada))).
+                                      nao(excecao(utente(IdUt, Nome, Idade, Morada))).
 
 % -------------------------------------------------
 % conhecimento perfeito positivo relativo a utentes
@@ -121,8 +121,7 @@ utente(ut004,fernanda_oliveira,52,rua_gen_humberto_delgado).
 utente(ut005,ricardo_oliveira,27,rua_gen_humberto_delgado).
 
 % -------------------------------------
-% Explicitacao das situacoes de excecao
-% -------------------------------------
+
 %   Consideramos que apenas sao permitidas situacoes de conhecimento incerto/impreciso/interdito para os campos Idade e Morada
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -164,7 +163,7 @@ nulo(imperfeito_interdito1).
 % Extensao do predicado serviço: IdServ, Descrição, Instituição, Cidade -> {V,F,D}
 
 -servico(IdServ, Descricao, Instituicao, Cidade) :- nao(servico(IdServ, Descricao, Instituicao, Cidade)),
-nao(excecao(servico(IdServ, Descricao, Instituicao, Cidade))).
+                                                    nao(excecao(servico(IdServ, Descricao, Instituicao, Cidade))).
 
 % --------------------------------------------------
 % conhecimento perfeito positivo relativo a servicos
@@ -221,7 +220,7 @@ nulo(imperfeito_interdito2).
 % Extensao do predicado consulta: Data, IdUt, IdServ, Custo -> {V,F,D}
 
 -consulta(Data, IdUt, IdServ, Custo) :- nao(consulta(Data, IdUt, IdServ, Custo)),
-nao(excecao(consulta(Data, IdUt, IdServ, Custo))).
+                                        nao(excecao(consulta(Data, IdUt, IdServ, Custo))).
 
 % ---------------------------------------------------
 % conhecimento perfeito positivo relativo a consultas
@@ -242,7 +241,7 @@ consulta(17-06-1988,ut005,sv006,0).
 %   Conhecimento imperfeito incerto
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     Foi realizada uma intervencao medica urgente num utente que havia dado entrada acompanhado pela policia, no dia 25-04-2016,
-%     no servico hospitalar de codigo sv004. o servico medico teve um custo de 200euros. A identificacao do individuo e ainda desconhecida de momento
+%     no servico hospitalar de codigo sv004. a consulta medica teve um custo de 200euros. A identificacao do individuo e ainda desconhecida de momento
 consulta(25-04-2016,imperfeito_incerto4,sv004,200).
 
 excecao(consulta(Data,IdUt,IdServ,Custo)) :- consulta(Data, imperfeito_incerto4, IdServ,Custo).
@@ -284,21 +283,21 @@ solucoes( (Custo), ( consulta(Data,IdUt,IdServ,Custo) ), ListaCustosMedicos),
 somarElementos(ListaCustosMedicos,CustoTotal)
 ).
 
-% E3) Extensao do predicado que permite calcular os utentes que recorreram a um determinado servico
+% E3.1) Extensao do predicado que permite calcular os utentes que recorreram a um determinado servico
 % recorreuServico(IdUt,IdServ) -> {V,F,D}
 recorreuServico(IdUt,IdServ) :- consulta(_,IdUt,IdServ,_).
 
-% 1) Extensao do predicado Identificar os servicos existentes numa instituicao
+% E4) Extensao do predicado Identificar os servicos existentes numa instituicao
 % servicosInstituicao(Instituicao,ListaServicos) -> {V,F,D}
 servicosInstituicao(Instituicao,ListaServicos) :- solucoes((IdServ,Descricao), servico(IdServ,Descricao,Instituicao,Cidade), ListaServicos).
 
-% 3) Extensao do predicado Identificar os utentes de um determinado servico
+% E3) Extensao do predicado Identificar os utentes de um determinado servico
 % utentesServico(Servico,ListaUtentes) -> {V,F,D}
 utentesServico(IdServ,ListaUtentes) :-
-solucoes(X, recorreuServico(X, Servico), ListaUtentesRep),
+solucoes(X, recorreuServico(X, IdServ), ListaUtentesRep),
 removerduplicados(ListaUtentesRep,ListaUtentes).
 
-% 9) Extensao do predicado Registar utentes, serviços, ou consultas
+% E5) Extensao do predicado Registar utentes, serviços, ou consultas
 
 % Extensao do predicado que pemite registar utentes
 % registarUtente(IdUt,Nome,Idade,Morada) -> {V,F,D}
@@ -313,7 +312,7 @@ registarServico(IdServ,Descricao,Instituicao,Cidade) :- evolucao(servico(IdServ,
 % registarConsulta(Data,IdUt,IdServ,Custo) -> {V,F,D}
 registarConsulta(Data,IdUt,IdServ,Custo) :- evolucao(consulta(Data,IdUt,IdServ,Custo)).
 
-% 10) Remover utentes (ou profissionais ou serviços ou instituições) dos registos
+% E5) Remover utentes, ou serviços,  ou consultas do sistema de reprensentacao
 
 % Extensao do predicado que pemite remover utentes
 % removerUtente(IdUt,Nome,Idade,Morada) -> {V,F,D}
