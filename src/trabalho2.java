@@ -6,20 +6,14 @@ import se.sics.jasper.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.stream.*; //nao esta a ser usado
 
 public class trabalho2
 {
-  // private String IdUt;
-  //private String IdServ;
-  //private String Data;
-  //private String Descricao;
 
   public static HashMap utente(String IdUt, String Nome, String Idade, String Morada)
   {
     SICStus sp;
     HashMap varMap = new HashMap();
-    SPQuery query;
 
     try {
       if (null == (sp = SICStus.getInitializedSICStus())) {
@@ -41,7 +35,6 @@ public class trabalho2
   {
     SICStus sp;
     HashMap varMap = new HashMap();
-    SPQuery query;
 
     try {
       if (null == (sp = SICStus.getInitializedSICStus())) {
@@ -63,7 +56,6 @@ public class trabalho2
   {
     SICStus sp;
     HashMap varMap = new HashMap();
-    SPQuery query;
 
     try {
       if (null == (sp = SICStus.getInitializedSICStus())) {
@@ -85,7 +77,6 @@ public class trabalho2
   {
     SICStus sp;
     HashMap varMap = new HashMap();
-    SPQuery query;
 
     try {
       if (null == (sp = SICStus.getInitializedSICStus())) {
@@ -107,7 +98,6 @@ public class trabalho2
   {
     SICStus sp;
     HashMap varMap = new HashMap();
-    SPQuery query;
 
     try {
       if (null == (sp = SICStus.getInitializedSICStus())) {
@@ -125,11 +115,52 @@ public class trabalho2
     return varMap;
   }
 
+  public static HashMap registarServico(String IdServ, String Descricao, String Instituicao, String Cidade)
+  {
+    SICStus sp;
+    HashMap varMap = new HashMap();
+
+    try {
+      if (null == (sp = SICStus.getInitializedSICStus())) {
+        sp = new SICStus();
+        sp.load("trabalho2");
+      }
+
+      if (!sp.query("demo(registarServico("+IdServ+","+Descricao+","+Instituicao+","+Cidade+"),Resposta).", varMap))
+      {
+        System.out.println("ERRO: falha na conexão SICSTUS");
+      }
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+    return varMap;
+  }
+
+  public static HashMap removerServico(String IdServ, String Descricao, String Instituicao, String Cidade)
+  {
+    SICStus sp;
+    HashMap varMap = new HashMap();
+
+    try {
+      if (null == (sp = SICStus.getInitializedSICStus())) {
+        sp = new SICStus();
+        sp.load("trabalho2");
+      }
+
+      if (!sp.query("demo(removerServico("+IdServ+","+Descricao+","+Instituicao+","+Cidade+"),Resposta).", varMap))
+      {
+        System.out.println("ERRO: falha na conexão SICSTUS");
+      }
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+    return varMap;
+  }
+
   public static HashMap registarConsulta(String Data, String IdUt, String IdServ, String Custo)
   {
     SICStus sp;
     HashMap varMap = new HashMap();
-    SPQuery query;
 
     try {
       if (null == (sp = SICStus.getInitializedSICStus())) {
@@ -151,7 +182,6 @@ public class trabalho2
   {
     SICStus sp;
     HashMap varMap = new HashMap();
-    SPQuery query;
 
     try {
       if (null == (sp = SICStus.getInitializedSICStus())) {
@@ -184,7 +214,7 @@ public class trabalho2
         sp.load("trabalho2");
       }
 
-      if (!sp.query("consultasMedicasUtente("+IdUt+",ListaEventosMedicos).", varMap))
+      if (!sp.query("demo(consultasMedicasUtente("+IdUt+",ListaEventosMedicos),Resultado).", varMap))
       {
         System.out.println("ERRO: falha na conexão SICSTUS");
       }
@@ -214,7 +244,7 @@ public class trabalho2
         sp.load("trabalho2");
       }
 
-      if (!sp.query("custoConsultasMedicasUtente("+IdUt+",CustoTotal).", varMap))
+      if (!sp.query("demo(custoConsultasMedicasUtente("+IdUt+",CustoTotal),Resultado).", varMap))
       {
         System.out.println("ERRO: falha na conexão SICSTUS");
       }
@@ -239,8 +269,6 @@ public class trabalho2
     SPTerm Resposta = null;
 
     HashMap varMap = new HashMap();
-    SPQuery query;
-    int i;
 
     try {
       if (null == (sp = SICStus.getInitializedSICStus())) {
@@ -274,7 +302,7 @@ public class trabalho2
         sp.load("trabalho2");
       }
 
-      if (!sp.query("servicosInstituicao("+Instituicao+",ListaServicos).", varMap))
+      if (!sp.query("demo(servicosInstituicao("+Instituicao+",ListaServicos),Resultado).", varMap))
       {
         System.out.println("ERRO: falha na conexão SICSTUS");
       }
@@ -301,6 +329,7 @@ public class trabalho2
 
   public static void main(String argv[]) throws ConversionFailedException, IllegalTermException
   {
+
     System.out.println("###### CONHECIMENTO PERFEITO POSITIVO ######");
     HashMap utente_perfeito_positivo = utente("ut001","antonio_sousa","24","rua_de_santo_ovideo");
     SPTerm resultado_utente_perfeito_positivo =   (SPTerm) utente_perfeito_positivo.get("Resposta");
@@ -359,19 +388,55 @@ public class trabalho2
     SPTerm resultado_registarUtente_1 = (SPTerm) registarUtente_1.get("Resposta");
     System.out.println("Teste 6.1(voltar registar): \tregistarUtente(\"ut100\",\"manuel_alves\",\"40\",\"universidade_minho\");");
     System.out.println(" \tEsperado (falso) : " + resultado_registarUtente_1.toString());
-    /*
-       System.out.println("\n###### REMOCAO DO CONHECIMENTO E RESTRIÇÕES ######");
-       HashMap removerUtente_1 = removerUtente("ut005" ,"ricardo_oliveira" , "27", "rua_gen_humberto_delgado" );
-       SPTerm resultado_removerUtente_1 = (SPTerm) removerUtente_1.get("Resposta");
-       System.out.println("Teste 7: \tremoverUtente(\"17-6-1988\",\"ut005\",\"sv006\",\"0\");");
-    /*System.out.println(" \tEsperado (verdadeiro) : " + resultado_removerConsulta.toString());
 
-    HashMap removerConsulta = removerConsulta("17-6-1988" ,"ut005" , "sv006", "0" );
+
+    System.out.println("\n###### REMOCAO DO CONHECIMENTO E RESTRIÇÕES ######");
+    HashMap removerUtente_1 = removerUtente("ut002" ,"filipe_oliveira" , "25", "urb_qta_orfaos" );
+    SPTerm resultado_removerUtente_1 = (SPTerm) removerUtente_1.get("Resposta");
+    System.out.println("Teste 7: \tremoverUtente(\"ut002\",\"filipe_oliveira\",\"25\",\"urb_qta_orfaos\");");
+    System.out.println(" \tEsperado (falso) : " + resultado_removerUtente_1.toString());
+
+
+    HashMap removerConsulta = removerConsulta("19-12-1990" ,"ut002" , "sv003", "0" );
     SPTerm resultado_removerConsulta = (SPTerm) removerConsulta.get("Resposta");
+    System.out.println("Teste 7: \tremoverConsulta(\"19-12-1990\",\"ut002\",\"sv003\",\"0\");");
+    System.out.println(" \tEsperado (verdadeiro) : " + resultado_removerConsulta.toString());
 
 
-    System.out.println("Teste 7: \tremoverConsulta(\"17-6-1988\",\"ut005\",\"sv006\",\"0\");");
-    System.out.println(" \tEsperado (verdadeiro) : " + resultado_removerConsulta.toString());*/
+    HashMap removerUtente_2 = removerUtente("ut002" ,"filipe_oliveira" , "25", "urb_qta_orfaos" );
+    SPTerm resultado_removerUtente_2 = (SPTerm) removerUtente_2.get("Resposta");
+    System.out.println("Teste 7(tentar remover novamente):  \tremoverUtente(\"ut002\",\"filipe_oliveira\",\"25\",\"urb_qta_orfaos\");");
+    System.out.println(" \tEsperado (verdadeiro) : " + resultado_removerUtente_2.toString());
+
+    System.out.println("\n###### FUNCIONALIDADES PROPOSTAS ######");
+    System.out.println("\n###### QUERIE 1");
+    System.out.println("Teste 8: \tconsultasMedicasUtente(ut001,ListaEventosMedicos);");
+    HashMap consultasMedicasUtente = querie1("ut001");
+    SPTerm resultado_consultasMedicasUtente = (SPTerm) consultasMedicasUtente.get("ListaEventosMedicos");
+    SPTerm arrayDeTermos[] = resultado_consultasMedicasUtente.toTermArray();
+    System.out.println(" \tListaEventosMedicos : " + preparaExcecoes(Arrays.toString(arrayDeTermos)));
+
+    System.out.println("\n###### QUERIE 2");
+    System.out.println("Teste 9: \tcustoConsultasMedicasUtente(ut001,CustoTotal);");
+    HashMap custoConsultasMedicasUtente = querie2("ut001");
+    SPTerm resultado_custoConsultasMedicasUtente = (SPTerm) custoConsultasMedicasUtente.get("CustoTotal");
+    System.out.println(" \tCusto Total : " + resultado_custoConsultasMedicasUtente.toString() + " Unidades Monetárias");
+
+
+    System.out.println("\n###### QUERIE 3");
+    System.out.println("Teste 10: \tutentesServico(sv001,ListaUtentes);");	
+    HashMap utentesServico = querie3("sv001");
+    SPTerm resultado_utentesServico = (SPTerm) utentesServico.get("ListaUtentes");
+    SPTerm arrayDeTermos_1[] = resultado_utentesServico.toTermArray();
+    System.out.println(" \tListaUtentes : " + preparaExcecoes(Arrays.toString(arrayDeTermos_1)));
+
+    System.out.println("\n###### QUERIE 4");
+    System.out.println("Teste 11: \tservicosInstituicao(hospital_viana_castelo,ListaServicos);");
+
+    HashMap servicosInstituicao = querie4("hospital_viana_castelo");
+    SPTerm resultado_servicosInstituicao = (SPTerm) servicosInstituicao.get("ListaServicos");
+    SPTerm arrayDeTermos_2[] = resultado_servicosInstituicao.toTermArray();
+    System.out.println(" \tListaServicos : " + preparaExcecoes(Arrays.toString(arrayDeTermos_2)));
 
   }
 
