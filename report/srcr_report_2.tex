@@ -98,6 +98,8 @@ A interação com o sistema criado para a implementação do caso prático foi d
 	% CHAPTER - Problem and Challenges ---------------
 	\chapter{Caracterização do Problema}
 	         A elaboração do caso prático anteriormente descrito tinha como funcionalidades obrigatórias:
+	         
+\label{objectivos}
 \begin{itemize}
 \item 1) Representar conhecimento positivo e negativo;
 \item 2) Representar casos de conhecimento imperfeito, pela utilização de valores nulos possibilitando assim representar conhecimento imperfeito incerto, conhecimento imperfeito impreciso, e conhecimento imperfeito interdito;
@@ -888,21 +890,23 @@ Definidos os invariantes para as operações de adição à base de conhecimento
 Denote que as extensões de predicados seguidamente definidas recorrem ao predicado \textbf{evolucao(Termo)}, definido durante as aulas práticas da unidade curricular e possível de ser consultado na secção \ref{evolucao_anexo}.
 
 \begin{lstlisting}
- % E5) Extensao do predicado Registar utentes, servicos, ou consultas
- 
- % Extensao do predicado que pemite registar utentes
- % registarUtente(IdUt,Nome,Idade,Morada) -> {V,F,D}
- registarUtente(IdUt,Nome,Idade,Morada) :- evolucao(utente(IdUt,Nome,Idade,Morada)).
- 
- % Extensao do predicado que pemite registar servicos numa instituicao
- % registarServico(IdServ,Descricao, Instituicao, Cidade ) -> {V,F,D}
- registarServico(IdServ,Descricao,Instituicao,Cidade) :- evolucao(servico(IdServ,Descricao,Instituicao,Cidade)).
- 
- % Extensao do predicado que pemite registar consultas medicas, indicando a data, a identificacao do utente, do servico,
- % numa instituicao indicando o utente, o profissional, o servico e a instituicao
- % registarConsulta(Data,IdUt,IdServ,Custo) -> {V,F,D}
- registarConsulta(Data,IdUt,IdServ,Custo) :- evolucao(consulta(Data,IdUt,IdServ,Custo)).
- 
+% E5) Extensao do predicado Registar utentes, serviços, ou consultas
+
+% Extensao do predicado que pemite registar utentes
+% registarUtente(IdUt,Nome,Idade,Morada) -> {V,F,D}
+registarUtente(IdUt,Nome,Idade,Morada) :- evolucao(utente(IdUt,Nome,Idade,Morada)).
+-registarUtente(IdUt,Nome,Idade,Morada) :- nao(evolucao(utente(IdUt,Nome,Idade,Morada))).
+
+% Extensao do predicado que pemite registar servicos numa instituicao
+% registarServico(IdServ,Descricao, Instituicao, Cidade ) -> {V,F,D}
+registarServico(IdServ,Descricao,Instituicao,Cidade) :- (evolucao(servico(IdServ,Descricao,Instituicao,Cidade))).
+-registarServico(IdServ,Descricao,Instituicao,Cidade) :- nao(evolucao(servico(IdServ,Descricao,Instituicao,Cidade))).
+
+% Extensao do predicado que pemite registar consultas medicas, indicando a data, a identificacao do utente, do servico,
+% numa instituicao indicando o utente, o profissional, o servico e a instituicao
+% registarConsulta(Data,IdUt,IdServ,Custo) -> {V,F,D}
+registarConsulta(Data,IdUt,IdServ,Custo) :- evolucao(consulta(Data,IdUt,IdServ,Custo)).
+-registarConsulta(Data,IdUt,IdServ,Custo) :- nao(evolucao(consulta(Data,IdUt,IdServ,Custo))).
 \end{lstlisting}
 
 
@@ -987,21 +991,23 @@ Definidos os invariantes para as operações de remoção à base de conheciment
 Denote que as extensões de predicados seguidamente definidas recorrem ao predicado \textbf{remocao(Termo)}, analogamente inverso ao predicado  \textbf{evolucao(Termo)} e possível de ser consultado na seção \ref{remocao_anexo}.
 
 \begin{lstlisting}
- % E5) Remover utentes, ou serviços,  ou consultas do sistema de reprensentacao
- 
- % Extensao do predicado que pemite remover utentes
- % removerUtente(IdUt,Nome,Idade,Morada) -> {V,F,D}
- removerUtente(IdUt,Nome,Idade,Morada) :- remocao(utente(IdUt,Nome,Idade,Morada)).
- 
- % Extensao do predicado que pemite remover servicos
- % removerServico(IdServ,Descricao, Instituicao, Cidade ) -> {V,F,D}
- removerServico(IdServ,Descricao,Instituicao,Cidade) :- evolucao(servico(IdServ,Descricao,Instituicao,Cidade)).
- 
- % Extensao do predicado que pemite remover consultas medicas, indicando a data, a identificacao do utente, do servico,
- % numa instituicao indicando o utente, o profissional, o servico e a instituicao
- % removerConsulta(Data,IdUt,IdServ,Custo) -> {V,F,D}
- removerConsulta(Data,IdUt,IdServ,Custo) :- remocao(consulta(Data,IdUt,IdServ,Custo)).
- 
+ % E6) Remover utentes, ou servicos,  ou consultas do sistema de reprensentacao
+
+% Extensao do predicado que pemite remover utentes
+% removerUtente(IdUt,Nome,Idade,Morada) -> {V,F,D}
+removerUtente(IdUt,Nome,Idade,Morada) :- remocao(utente(IdUt,Nome,Idade,Morada)).
+-removerUtente(IdUt,Nome,Idade,Morada) :- nao(remocao(utente(IdUt,Nome,Idade,Morada))).
+
+% Extensao do predicado que pemite remover servicos
+% removerServico(IdServ,Descricao, Instituicao, Cidade ) -> {V,F,D}
+removerServico(IdServ,Descricao,Instituicao,Cidade) :- evolucao(servico(IdServ,Descricao,Instituicao,Cidade)).
+-removerServico(IdServ,Descricao,Instituicao,Cidade) :- nao(evolucao(servico(IdServ,Descricao,Instituicao,Cidade))).
+
+% Extensao do predicado que pemite remover consultas medicas, indicando a data, a identificacao do utente, do servico,
+% numa instituicao indicando o utente, o profissional, o servico e a instituicao
+% removerConsulta(Data,IdUt,IdServ,Custo) -> {V,F,D}
+removerConsulta(Data,IdUt,IdServ,Custo) :- remocao(consulta(Data,IdUt,IdServ,Custo)).
+-removerConsulta(Data,IdUt,IdServ,Custo) :- nao(remocao(consulta(Data,IdUt,IdServ,Custo))).
 \end{lstlisting}
 
 
@@ -1019,11 +1025,122 @@ Denote que as extensões de predicados seguidamente definidas recorrem ao predic
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Componente JAVA e JASPER}
+A interação do utilizador com toda a estrutura criada em PROLOG e subjacente ao motor SICStus será feita com recurso ao JAVA. O elo de comunicação é aqui assegurado pela biblioteca JASPER que se encarrega de converter os sinais enviados pelo JAVA para uma linguagem compreendida pelo SICStus.\par
+Existem alternativas para a interoperabilidade com outras linguagens de programação, contudo Jasper é o recomendado para o caso de Java.\par
+De facto, a utilização do Jasper revela-se bastante simples. Com uma pequena declaração é possível carregar toda a base de conhecimento sobre serviços, hospitais e utentes para JAVA. Da seguinte forma:\par
+
+\begin{lstlisting}
+        SICStus sp;
+        sp = new SICStus();
+        sp.load("trabalho2");
+\end{lstlisting}
+
+\par
+Apesar da simplicidade, tal não implica uma menor robustez. Todo o poderio disposto pelo SICStus, está agora disponível para o programar à distância de uma simples query. Basta para tal:
+\par
+
+\begin{lstlisting}
+    //declaracoes
+    SPTerm ListaEventosMedicos;
+    HashMap varMap = new HashMap();
+    SPQuery query;
+
+    //query
+    sp.query("utentesServico(IdUt,ListaEventosMedicos).",varMap);
+    ListaEventosMedicos=((SPTerm)varMap.get("ListaEventosMedicos"));
+    return ListaEventosMedicos;
+\end{lstlisting}
+
+
+\par
+Por forma a comprovar a correção da aplicação a nível lógico, foi criado um conjunto de testes, que verificam todos os pontos enumerados na secção \ref{objectivos} na página \pageref{objectivos}. Em anexo, na secção \ref{java} poderá consultar todo o código necessário para a realização dos mesmos.\par  Enumeram-se de seguida os testes e respetivos outputs esperados e obtidos:
+
+\begin{lstlisting}
+###### CONHECIMENTO PERFEITO POSITIVO ######
+Teste 1: 	utente("ut001","antonio_sousa","24","rua_de_santo_ovideo");
+ 	Esperado (verdadeiro) : verdadeiro
+
+###### CONHECIMENTO PERFEITO NEGATIVO ######
+Teste 2: 	utente("ut001000","antonio_sousa","24","rua_de_santo_ovideo");
+ 	Esperado (falso) : falso
+
+###### CONHECIMENTO IMPERFEITO INCERTO ######
+Teste 3: 	utente("ut007","sergio_caldas","25","rua_de_santo_ovideo");
+ 	Esperado (desconhecido) : desconhecido
+
+###### CONHECIMENTO IMPERFEITO IMRECISO ######
+Teste 4: 	utente("ut008","luis_mendes","25","rua_das_margaridas");
+Teste 4: 	utente("ut008","luis_mendes","20","rua_das_margaridas");
+Teste 4: 	utente("ut008","luis_mendes","30","rua_das_margaridas");
+ 	Esperado (desconhecido) : desconhecido
+ 	Esperado (falso) : falso
+ 	Esperado (desconhecido) : desconhecido
+
+###### CONHECIMENTO IMPERFEITO INTERDITO ######
+Teste 5: 	utente("ut009","carlos_sa","40","fundacao_abcd");
+ 	Esperado (desconhecido) : desconhecido
+>>>>> Teste 5: 	registarUtente("ut009","carlos_sa","40","fundacao_abcd");
+ 	Esperado (falso) : falso
+
+###### EVOLUCAO DO CONHECIMENTO E RESTRICOES ######
+Teste 6: 	registarUtente("ut100","manuel_alves","40","universidade_minho");
+ 	Esperado (verdadeiro) : verdadeiro
+Teste 6.1(voltar registar): 	registarUtente("ut100","manuel_alves","40","universidade_minho");
+ 	Esperado (falso) : falso
+
+###### REMOCAO DO CONHECIMENTO E RESTRICOES ######
+Teste 7: 	removerUtente("ut002","filipe_oliveira","25","urb_qta_orfaos");
+ 	Esperado (falso) : falso
+Teste 7: 	removerConsulta("19-12-1990","ut002","sv003","0");
+ 	Esperado (verdadeiro) : verdadeiro
+Teste 7(tentar remover novamente):  	removerUtente("ut002","filipe_oliveira","25","urb_qta_orfaos");
+ 	Esperado (verdadeiro) : verdadeiro
+
+###### FUNCIONALIDADES PROPOSTAS ######
+
+###### QUERIE 1
+Teste 8: 	consultasMedicasUtente(ut001,ListaEventosMedicos);
+ 	ListaEventosMedicos : [,(-(-(23,4),2016),,(ut001,,(sv001,10)))]
+
+###### QUERIE 2
+Teste 9: 	custoConsultasMedicasUtente(ut001,CustoTotal);
+ 	Custo Total : 10 Unidades Monetarias
+
+###### QUERIE 3
+Teste 10: 	utentesServico(sv001,ListaUtentes);
+ 	ListaUtentes : [ut001]
+
+###### QUERIE 4
+Teste 11: 	servicosInstituicao(hospital_viana_castelo,ListaServicos);
+ 	ListaServicos : [,(sv001,cardiologia), ,(sv002,maternidade), ,(sv008,INCERTO)]
+\end{lstlisting}
 
 
 
 
+Em adição, do outro lado do plano, do ponto de vista do utilizador final, este poderá ainda interagir com a aplicação em JAVA  mediante a utilização do terminal. Tal abordagem permitirá grande flexibilidade do ponto de vista funcional, o que se traduz num leque alargado de formas de input (questões) e respetivas formas de output (respostas). Tendo em vista um público alvo mais técnico, achou-se por bem seguir esta metodologia.
+\par
+Passando então à prática, o utilizador pode facilmente "bisbilhotar" a base de conhecimento fazendo uso do seguinte comando:\par
 
+\begin{lstlisting}
+trabalho.java <base de conhecimento> <query>
+\end{lstlisting}
+Alguns exemplos de input possível:
+\par
+Output esperado:
+\par
+Como se pode verificar, tal implementação oferecerá um grande grau de liberdade ao utilizador.
+\par
+Mais exemplos:
+\par
+\begin{lstlisting}
+//Identificar todos as consultas medicas de um utente
+trabalho.java ... ... ..
+\end{lstlisting}
+
+Ficam assim efetivamente demonstradas as várias potencialidades desta biblioteca JASPER. A partir daqui o céu é o limite. Poderia-se, por exemplo, colocar o PROLOG a correr num servidor distinto, com uma aplicação web em JAVA a funcionar como uma espécie de mediador, o "software glue". O utilizador final, munido de uma simples interface web em bootstrap (por exemplo), teria acesso fácil a toda a informação relativa aos hospitais, serviços e utentes.
+
+\par
 	% CHAPTER - Conclusion/Future Work --------------
 	\chapter{Conclusão}
 	
@@ -1344,6 +1461,455 @@ testar(Lista).
 remover(Termo):-retract(Termo).
 remover(Termo):-assert(Termo),!,fail.
 \end{lstlisting}
+
+\newpage
+
+\section{Código Java da Aplicação}
+	\label{java}
+\begin{lstlisting}	
+/*
+ * trabalho2.java: Prolog-Java
+ */
+
+import se.sics.jasper.*;
+
+import java.util.Arrays;
+import java.util.HashMap;
+
+public class trabalho2
+{
+
+  public static HashMap utente(String IdUt, String Nome, String Idade, String Morada)
+  {
+    SICStus sp;
+    HashMap varMap = new HashMap();
+
+    try {
+      if (null == (sp = SICStus.getInitializedSICStus())) {
+        sp = new SICStus();
+        sp.load("trabalho2");
+      }
+
+      if (!sp.query("demo(utente("+IdUt+","+Nome+","+Idade+","+Morada+"),Resposta).", varMap))
+      {
+        System.out.println("ERRO: falha na conexão SICSTUS");
+      }
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+    return varMap;
+  }
+
+  public static HashMap servico(String IdServ, String Descricao, String Instituicao, String Cidade)
+  {
+    SICStus sp;
+    HashMap varMap = new HashMap();
+
+    try {
+      if (null == (sp = SICStus.getInitializedSICStus())) {
+        sp = new SICStus();
+        sp.load("trabalho2");
+      }
+
+      if (!sp.query("demo(servico("+IdServ+","+Descricao+","+Instituicao+","+Cidade+"),Resposta).", varMap))
+      {
+        System.out.println("ERRO: falha na conexão SICSTUS");
+      }
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+    return varMap;
+  }
+
+  public static HashMap consulta(String Data, String IdUt, String IdServ, String Custo)
+  {
+    SICStus sp;
+    HashMap varMap = new HashMap();
+
+    try {
+      if (null == (sp = SICStus.getInitializedSICStus())) {
+        sp = new SICStus();
+        sp.load("trabalho2");
+      }
+
+      if (!sp.query("demo(consulta("+Data+","+IdUt+","+IdServ+","+Custo+"),Resposta).", varMap))
+      {
+        System.out.println("ERRO: falha na conexão SICSTUS");
+      }
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+    return varMap;
+  }
+
+  public static HashMap registarUtente(String IdUt, String Nome, String Idade, String Morada)
+  {
+    SICStus sp;
+    HashMap varMap = new HashMap();
+
+    try {
+      if (null == (sp = SICStus.getInitializedSICStus())) {
+        sp = new SICStus();
+        sp.load("trabalho2");
+      }
+
+      if (!sp.query("demo(registarUtente("+IdUt+","+Nome+","+Idade+","+Morada+"),Resposta).", varMap))
+      {
+        System.out.println("ERRO: falha na conexão SICSTUS");
+      }
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+    return varMap;
+  }
+
+  public static HashMap removerUtente(String IdUt, String Nome, String Idade, String Morada)
+  {
+    SICStus sp;
+    HashMap varMap = new HashMap();
+
+    try {
+      if (null == (sp = SICStus.getInitializedSICStus())) {
+        sp = new SICStus();
+        sp.load("trabalho2");
+      }
+
+      if (!sp.query("demo(removerUtente("+IdUt+","+Nome+","+Idade+","+Morada+"),Resposta).", varMap))
+      {
+        System.out.println("ERRO: falha na conexão SICSTUS");
+      }
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+    return varMap;
+  }
+
+  public static HashMap registarServico(String IdServ, String Descricao, String Instituicao, String Cidade)
+  {
+    SICStus sp;
+    HashMap varMap = new HashMap();
+
+    try {
+      if (null == (sp = SICStus.getInitializedSICStus())) {
+        sp = new SICStus();
+        sp.load("trabalho2");
+      }
+
+      if (!sp.query("demo(registarServico("+IdServ+","+Descricao+","+Instituicao+","+Cidade+"),Resposta).", varMap))
+      {
+        System.out.println("ERRO: falha na conexão SICSTUS");
+      }
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+    return varMap;
+  }
+
+  public static HashMap removerServico(String IdServ, String Descricao, String Instituicao, String Cidade)
+  {
+    SICStus sp;
+    HashMap varMap = new HashMap();
+
+    try {
+      if (null == (sp = SICStus.getInitializedSICStus())) {
+        sp = new SICStus();
+        sp.load("trabalho2");
+      }
+
+      if (!sp.query("demo(removerServico("+IdServ+","+Descricao+","+Instituicao+","+Cidade+"),Resposta).", varMap))
+      {
+        System.out.println("ERRO: falha na conexão SICSTUS");
+      }
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+    return varMap;
+  }
+
+  public static HashMap registarConsulta(String Data, String IdUt, String IdServ, String Custo)
+  {
+    SICStus sp;
+    HashMap varMap = new HashMap();
+
+    try {
+      if (null == (sp = SICStus.getInitializedSICStus())) {
+        sp = new SICStus();
+        sp.load("trabalho2");
+      }
+
+      if (!sp.query("demo(registarConsulta("+Data+","+IdUt+","+IdServ+","+Custo+"),Resposta).", varMap))
+      {
+        System.out.println("ERRO: falha na conexão SICSTUS");
+      }
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+    return varMap;
+  }
+
+  public static HashMap removerConsulta(String Data, String IdUt, String IdServ, String Custo)
+  {
+    SICStus sp;
+    HashMap varMap = new HashMap();
+
+    try {
+      if (null == (sp = SICStus.getInitializedSICStus())) {
+        sp = new SICStus();
+        sp.load("trabalho2");
+      }
+
+      if (!sp.query("demo(removerConsulta("+Data+","+IdUt+","+IdServ+","+Custo+"),Resposta).", varMap))
+      {
+        System.out.println("ERRO: falha na conexão SICSTUS");
+      }
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+    return varMap;
+  }
+
+
+  /* 
+   * E1) Extensao do predicado que permite identificar todos as consultas medicas de um utente
+   * %consultasMedicasUtente(ItUt, ListaEventosMedicos)
+   */
+  public static HashMap querie1(String IdUt)
+  {
+    SICStus sp;
+    HashMap varMap = new HashMap();
+    try {
+      if (null == (sp = SICStus.getInitializedSICStus())) {
+        sp = new SICStus();
+        sp.load("trabalho2");
+      }
+
+      if (!sp.query("demo(consultasMedicasUtente("+IdUt+",ListaEventosMedicos),Resultado).", varMap))
+      {
+        System.out.println("ERRO: falha na conexão SICSTUS");
+      }
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+    return varMap;
+  }
+
+  /* 
+   *  % E2) Extensao do predicado que permite calcular o custo de todos as consultas medicas de um utente
+   *  %custoConsultasMedicasUtente(ItUt, CustoTotal) -> {V,F,D}
+   *  custoConsultasMedicasUtente(IdUt,CustoTotal) :-(
+   *   solucoes( (Custo), ( consulta(Data,IdUt,IdServ,Custo) ), ListaCustosMedicos),
+   *   somarElementos(ListaCustosMedicos,CustoTotal) 
+   *   ).
+   */
+
+  public static HashMap querie2(String IdUt)
+  {
+    SICStus sp;
+    HashMap varMap = new HashMap();
+
+    try {
+      if (null == (sp = SICStus.getInitializedSICStus())) {
+        sp = new SICStus();
+        sp.load("trabalho2");
+      }
+
+      if (!sp.query("demo(custoConsultasMedicasUtente("+IdUt+",CustoTotal),Resultado).", varMap))
+      {
+        System.out.println("ERRO: falha na conexão SICSTUS");
+      }
+
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+    return varMap;
+  }
+
+  /* 
+   *  % E3) Extensao do predicado Identificar os utentes de um determinado servico
+   *  % utentesServico(IdServ,ListaUtentes) -> {V,F,D}
+   *  utentesServico(IdServ,ListaUtentes) :-
+   *  solucoes(X, recorreuServico(X, IdServ), ListaUtentesRep),
+   *  removerduplicados(ListaUtentesRep,ListaUtentes).
+   */
+
+  public  static HashMap querie3(String IdServ)
+  {
+    SICStus sp;
+    SPTerm Resposta = null;
+
+    HashMap varMap = new HashMap();
+
+    try {
+      if (null == (sp = SICStus.getInitializedSICStus())) {
+        sp = new SICStus();
+        sp.load("trabalho2");
+      }
+
+      if (!sp.query("demo(utentesServico("+IdServ+",ListaUtentes),Resposta).", varMap)){
+        System.out.println("ERRO: falha na conexão SICSTUS");
+      }
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+    return varMap;
+  }
+
+  /* 
+   *  % E4) Extensao do predicado Identificar os servicos existentes numa instituicao
+   *  % servicosInstituicao(Instituicao,ListaServicos) -> {V,F,D}
+   *  servicosInstituicao(Instituicao,ListaServicos) :- solucoes((IdServ,Descricao), servico(IdServ,Descricao,Instituicao,Cidade), ListaServicos).
+   */
+
+  public static HashMap querie4(String Instituicao)
+  {
+    SICStus sp;
+    HashMap varMap = new HashMap();
+
+    try {
+      if (null == (sp = SICStus.getInitializedSICStus())) {
+        sp = new SICStus();
+        sp.load("trabalho2");
+      }
+
+      if (!sp.query("demo(servicosInstituicao("+Instituicao+",ListaServicos),Resultado).", varMap))
+      {
+        System.out.println("ERRO: falha na conexão SICSTUS");
+      }
+
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
+    return varMap;
+  }
+
+  public static String preparaExcecoes(String entrada){
+    String saida = entrada;
+    saida = saida.replace("imperfeito_interdito_1", "INTERDITO");
+    saida = saida.replace("imperfeito_interdito_2", "INTERDITO");
+    saida = saida.replace("imperfeito_interdito_3", "INTERDITO");
+    saida = saida.replace("imperfeito_incerto_1", "INCERTO");
+    saida = saida.replace("imperfeito_incerto_2", "INCERTO");
+    saida = saida.replace("imperfeito_incerto_3", "INCERTO");
+    saida = saida.replace("imperfeito_incerto_4", "INCERTO");
+    return saida;
+  }
+
+
+
+  public static void main(String argv[]) throws ConversionFailedException, IllegalTermException
+  {
+
+    System.out.println("###### CONHECIMENTO PERFEITO POSITIVO ######");
+    HashMap utente_perfeito_positivo = utente("ut001","antonio_sousa","24","rua_de_santo_ovideo");
+    SPTerm resultado_utente_perfeito_positivo =   (SPTerm) utente_perfeito_positivo.get("Resposta");
+    System.out.println("Teste 1: \tutente(\"ut001\",\"antonio_sousa\",\"24\",\"rua_de_santo_ovideo\");");
+    System.out.println(" \tEsperado (verdadeiro) : " + resultado_utente_perfeito_positivo.toString());
+
+
+    System.out.println("\n###### CONHECIMENTO PERFEITO NEGATIVO ######");
+    HashMap utente_perfeito_negativo = utente("ut001000","antonio_sousa","24","rua_de_santo_ovideo");
+    SPTerm resultado_utente_perfeito_negativo =   (SPTerm) utente_perfeito_negativo.get("Resposta");
+    System.out.println("Teste 2: \tutente(\"ut001000\",\"antonio_sousa\",\"24\",\"rua_de_santo_ovideo\");");
+    System.out.println(" \tEsperado (falso) : " + resultado_utente_perfeito_negativo.toString());
+
+
+    System.out.println("\n###### CONHECIMENTO IMPERFEITO INCERTO ######");
+    HashMap utente_incerto = utente("ut007","sergio_caldas","25","rua_de_santo_ovideo");
+    SPTerm resultado_utente_incerto =   (SPTerm) utente_incerto.get("Resposta");
+    System.out.println("Teste 3: \tutente(\"ut007\",\"sergio_caldas\",\"25\",\"rua_de_santo_ovideo\");");
+    System.out.println(" \tEsperado (desconhecido) : " + resultado_utente_incerto.toString());
+
+
+    System.out.println("\n###### CONHECIMENTO IMPERFEITO IMRECISO ######");
+    HashMap utente_impreciso_1 = utente("ut008","luis_mendes","25","rua_das_margaridas");
+    HashMap utente_impreciso_2 = utente("ut008","luis_mendes","20","rua_das_margaridas");
+    HashMap utente_impreciso_3 = utente("ut008","luis_mendes","30","rua_das_margaridas");
+
+    SPTerm resultado_utente_impreciso_1 = (SPTerm) utente_impreciso_1.get("Resposta");
+    SPTerm resultado_utente_impreciso_2 = (SPTerm) utente_impreciso_2.get("Resposta");
+    SPTerm resultado_utente_impreciso_3 = (SPTerm) utente_impreciso_3.get("Resposta");
+
+    System.out.println("Teste 4: \tutente(\"ut008\",\"luis_mendes\",\"25\",\"rua_das_margaridas\");");
+    System.out.println("Teste 4: \tutente(\"ut008\",\"luis_mendes\",\"20\",\"rua_das_margaridas\");");
+    System.out.println("Teste 4: \tutente(\"ut008\",\"luis_mendes\",\"30\",\"rua_das_margaridas\");");
+
+    System.out.println(" \tEsperado (desconhecido) : " + resultado_utente_impreciso_1.toString());
+    System.out.println(" \tEsperado (falso) : " + resultado_utente_impreciso_2.toString());
+    System.out.println(" \tEsperado (desconhecido) : " + resultado_utente_impreciso_3.toString());
+
+    System.out.println("\n###### CONHECIMENTO IMPERFEITO INTERDITO ######");
+    HashMap utente_interdito_1 = utente("ut009" ,"carlos_sa" , "40", "fundacao_abcd" );
+    SPTerm resultado_utente_interdito_1 = (SPTerm) utente_interdito_1.get("Resposta");
+    System.out.println("Teste 5: \tutente(\"ut009\",\"carlos_sa\",\"40\",\"fundacao_abcd\");");
+    System.out.println(" \tEsperado (desconhecido) : " + resultado_utente_interdito_1.toString());
+    HashMap utente_interdito_2 = registarUtente("ut009" ,"carlos_sa" , "40", "fundacao_abcd" );
+    SPTerm resultado_utente_interdito_2 = (SPTerm) utente_interdito_2.get("Resposta");
+    System.out.println(">>>>> Teste 5: \tregistarUtente(\"ut009\",\"carlos_sa\",\"40\",\"fundacao_abcd\");");
+    System.out.println(" \tEsperado (falso) : " + resultado_utente_interdito_2.toString());
+
+
+    System.out.println("\n###### EVOLUÇÃO DO CONHECIMENTO E RESTRIÇÕES ######");
+    HashMap registarUtente = registarUtente("ut100" ,"manuel_alves" , "40", "universidade_minho" );
+    SPTerm resultado_registarUtente = (SPTerm) registarUtente.get("Resposta");
+    System.out.println("Teste 6: \tregistarUtente(\"ut100\",\"manuel_alves\",\"40\",\"universidade_minho\");");
+    System.out.println(" \tEsperado (verdadeiro) : " + resultado_registarUtente.toString());
+    HashMap registarUtente_1 = registarUtente("ut100" ,"manuel_alves" , "40", "universidade_minho" );
+    SPTerm resultado_registarUtente_1 = (SPTerm) registarUtente_1.get("Resposta");
+    System.out.println("Teste 6.1(voltar registar): \tregistarUtente(\"ut100\",\"manuel_alves\",\"40\",\"universidade_minho\");");
+    System.out.println(" \tEsperado (falso) : " + resultado_registarUtente_1.toString());
+
+
+    System.out.println("\n###### REMOCAO DO CONHECIMENTO E RESTRIÇÕES ######");
+    HashMap removerUtente_1 = removerUtente("ut002" ,"filipe_oliveira" , "25", "urb_qta_orfaos" );
+    SPTerm resultado_removerUtente_1 = (SPTerm) removerUtente_1.get("Resposta");
+    System.out.println("Teste 7: \tremoverUtente(\"ut002\",\"filipe_oliveira\",\"25\",\"urb_qta_orfaos\");");
+    System.out.println(" \tEsperado (falso) : " + resultado_removerUtente_1.toString());
+
+
+    HashMap removerConsulta = removerConsulta("19-12-1990" ,"ut002" , "sv003", "0" );
+    SPTerm resultado_removerConsulta = (SPTerm) removerConsulta.get("Resposta");
+    System.out.println("Teste 7: \tremoverConsulta(\"19-12-1990\",\"ut002\",\"sv003\",\"0\");");
+    System.out.println(" \tEsperado (verdadeiro) : " + resultado_removerConsulta.toString());
+
+
+    HashMap removerUtente_2 = removerUtente("ut002" ,"filipe_oliveira" , "25", "urb_qta_orfaos" );
+    SPTerm resultado_removerUtente_2 = (SPTerm) removerUtente_2.get("Resposta");
+    System.out.println("Teste 7(tentar remover novamente):  \tremoverUtente(\"ut002\",\"filipe_oliveira\",\"25\",\"urb_qta_orfaos\");");
+    System.out.println(" \tEsperado (verdadeiro) : " + resultado_removerUtente_2.toString());
+
+    System.out.println("\n###### FUNCIONALIDADES PROPOSTAS ######");
+    System.out.println("\n###### QUERIE 1");
+    System.out.println("Teste 8: \tconsultasMedicasUtente(ut001,ListaEventosMedicos);");
+    HashMap consultasMedicasUtente = querie1("ut001");
+    SPTerm resultado_consultasMedicasUtente = (SPTerm) consultasMedicasUtente.get("ListaEventosMedicos");
+    SPTerm arrayDeTermos[] = resultado_consultasMedicasUtente.toTermArray();
+    System.out.println(" \tListaEventosMedicos : " + preparaExcecoes(Arrays.toString(arrayDeTermos)));
+
+    System.out.println("\n###### QUERIE 2");
+    System.out.println("Teste 9: \tcustoConsultasMedicasUtente(ut001,CustoTotal);");
+    HashMap custoConsultasMedicasUtente = querie2("ut001");
+    SPTerm resultado_custoConsultasMedicasUtente = (SPTerm) custoConsultasMedicasUtente.get("CustoTotal");
+    System.out.println(" \tCusto Total : " + resultado_custoConsultasMedicasUtente.toString() + " Unidades Monetárias");
+
+
+    System.out.println("\n###### QUERIE 3");
+    System.out.println("Teste 10: \tutentesServico(sv001,ListaUtentes);");	
+    HashMap utentesServico = querie3("sv001");
+    SPTerm resultado_utentesServico = (SPTerm) utentesServico.get("ListaUtentes");
+    SPTerm arrayDeTermos_1[] = resultado_utentesServico.toTermArray();
+    System.out.println(" \tListaUtentes : " + preparaExcecoes(Arrays.toString(arrayDeTermos_1)));
+
+    System.out.println("\n###### QUERIE 4");
+    System.out.println("Teste 11: \tservicosInstituicao(hospital_viana_castelo,ListaServicos);");
+
+    HashMap servicosInstituicao = querie4("hospital_viana_castelo");
+    SPTerm resultado_servicosInstituicao = (SPTerm) servicosInstituicao.get("ListaServicos");
+    SPTerm arrayDeTermos_2[] = resultado_servicosInstituicao.toTermArray();
+    System.out.println(" \tListaServicos : " + preparaExcecoes(Arrays.toString(arrayDeTermos_2)));
+  }
+}
+\end{lstlisting}
+
 
 
 \end{document}
