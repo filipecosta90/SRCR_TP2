@@ -330,114 +330,164 @@ public class trabalho2
   public static void main(String argv[]) throws ConversionFailedException, IllegalTermException
   {
 
-    System.out.println("###### CONHECIMENTO PERFEITO POSITIVO ######");
-    HashMap utente_perfeito_positivo = utente("ut001","antonio_sousa","24","rua_de_santo_ovideo");
-    SPTerm resultado_utente_perfeito_positivo =   (SPTerm) utente_perfeito_positivo.get("Resposta");
-    System.out.println("Teste 1: \tutente(\"ut001\",\"antonio_sousa\",\"24\",\"rua_de_santo_ovideo\");");
-    System.out.println(" \tEsperado (verdadeiro) : " + resultado_utente_perfeito_positivo.toString());
+    if(argv.length == 0){
+      System.out.println("###### CONHECIMENTO PERFEITO POSITIVO ######");
+      HashMap utente_perfeito_positivo = utente("ut001","antonio_sousa","24","rua_de_santo_ovideo");
+      SPTerm resultado_utente_perfeito_positivo =   (SPTerm) utente_perfeito_positivo.get("Resposta");
+      System.out.println("Teste 1: \tutente(\"ut001\",\"antonio_sousa\",\"24\",\"rua_de_santo_ovideo\");");
+      System.out.println(" \tEsperado (verdadeiro) : " + resultado_utente_perfeito_positivo.toString());
 
 
-    System.out.println("\n###### CONHECIMENTO PERFEITO NEGATIVO ######");
-    HashMap utente_perfeito_negativo = utente("ut001000","antonio_sousa","24","rua_de_santo_ovideo");
-    SPTerm resultado_utente_perfeito_negativo =   (SPTerm) utente_perfeito_negativo.get("Resposta");
-    System.out.println("Teste 2: \tutente(\"ut001000\",\"antonio_sousa\",\"24\",\"rua_de_santo_ovideo\");");
-    System.out.println(" \tEsperado (falso) : " + resultado_utente_perfeito_negativo.toString());
+      System.out.println("\n###### CONHECIMENTO PERFEITO NEGATIVO ######");
+      HashMap utente_perfeito_negativo = utente("ut001000","antonio_sousa","24","rua_de_santo_ovideo");
+      SPTerm resultado_utente_perfeito_negativo =   (SPTerm) utente_perfeito_negativo.get("Resposta");
+      System.out.println("Teste 2: \tutente(\"ut001000\",\"antonio_sousa\",\"24\",\"rua_de_santo_ovideo\");");
+      System.out.println(" \tEsperado (falso) : " + resultado_utente_perfeito_negativo.toString());
 
 
-    System.out.println("\n###### CONHECIMENTO IMPERFEITO INCERTO ######");
-    HashMap utente_incerto = utente("ut007","sergio_caldas","25","rua_de_santo_ovideo");
-    SPTerm resultado_utente_incerto =   (SPTerm) utente_incerto.get("Resposta");
-    System.out.println("Teste 3: \tutente(\"ut007\",\"sergio_caldas\",\"25\",\"rua_de_santo_ovideo\");");
-    System.out.println(" \tEsperado (desconhecido) : " + resultado_utente_incerto.toString());
+      System.out.println("\n###### CONHECIMENTO IMPERFEITO INCERTO ######");
+      HashMap utente_incerto = utente("ut007","sergio_caldas","25","rua_de_santo_ovideo");
+      SPTerm resultado_utente_incerto =   (SPTerm) utente_incerto.get("Resposta");
+      System.out.println("Teste 3: \tutente(\"ut007\",\"sergio_caldas\",\"25\",\"rua_de_santo_ovideo\");");
+      System.out.println(" \tEsperado (desconhecido) : " + resultado_utente_incerto.toString());
 
 
-    System.out.println("\n###### CONHECIMENTO IMPERFEITO IMRECISO ######");
-    HashMap utente_impreciso_1 = utente("ut008","luis_mendes","25","rua_das_margaridas");
-    HashMap utente_impreciso_2 = utente("ut008","luis_mendes","20","rua_das_margaridas");
-    HashMap utente_impreciso_3 = utente("ut008","luis_mendes","30","rua_das_margaridas");
+      System.out.println("\n###### CONHECIMENTO IMPERFEITO IMRECISO ######");
+      HashMap utente_impreciso_1 = utente("ut008","luis_mendes","25","rua_das_margaridas");
+      HashMap utente_impreciso_2 = utente("ut008","luis_mendes","20","rua_das_margaridas");
+      HashMap utente_impreciso_3 = utente("ut008","luis_mendes","30","rua_das_margaridas");
 
-    SPTerm resultado_utente_impreciso_1 = (SPTerm) utente_impreciso_1.get("Resposta");
-    SPTerm resultado_utente_impreciso_2 = (SPTerm) utente_impreciso_2.get("Resposta");
-    SPTerm resultado_utente_impreciso_3 = (SPTerm) utente_impreciso_3.get("Resposta");
+      SPTerm resultado_utente_impreciso_1 = (SPTerm) utente_impreciso_1.get("Resposta");
+      SPTerm resultado_utente_impreciso_2 = (SPTerm) utente_impreciso_2.get("Resposta");
+      SPTerm resultado_utente_impreciso_3 = (SPTerm) utente_impreciso_3.get("Resposta");
 
-    System.out.println("Teste 4: \tutente(\"ut008\",\"luis_mendes\",\"25\",\"rua_das_margaridas\");");
-    System.out.println("Teste 4: \tutente(\"ut008\",\"luis_mendes\",\"20\",\"rua_das_margaridas\");");
-    System.out.println("Teste 4: \tutente(\"ut008\",\"luis_mendes\",\"30\",\"rua_das_margaridas\");");
+      System.out.println("Teste 4: \tutente(\"ut008\",\"luis_mendes\",\"25\",\"rua_das_margaridas\");");
+      System.out.println("Teste 4: \tutente(\"ut008\",\"luis_mendes\",\"20\",\"rua_das_margaridas\");");
+      System.out.println("Teste 4: \tutente(\"ut008\",\"luis_mendes\",\"30\",\"rua_das_margaridas\");");
 
-    System.out.println(" \tEsperado (desconhecido) : " + resultado_utente_impreciso_1.toString());
-    System.out.println(" \tEsperado (falso) : " + resultado_utente_impreciso_2.toString());
-    System.out.println(" \tEsperado (desconhecido) : " + resultado_utente_impreciso_3.toString());
+      System.out.println(" \tEsperado (desconhecido) : " + resultado_utente_impreciso_1.toString());
+      System.out.println(" \tEsperado (falso) : " + resultado_utente_impreciso_2.toString());
+      System.out.println(" \tEsperado (desconhecido) : " + resultado_utente_impreciso_3.toString());
 
-    System.out.println("\n###### CONHECIMENTO IMPERFEITO INTERDITO ######");
-    HashMap utente_interdito_1 = utente("ut009" ,"carlos_sa" , "40", "fundacao_abcd" );
-    SPTerm resultado_utente_interdito_1 = (SPTerm) utente_interdito_1.get("Resposta");
-    System.out.println("Teste 5: \tutente(\"ut009\",\"carlos_sa\",\"40\",\"fundacao_abcd\");");
-    System.out.println(" \tEsperado (desconhecido) : " + resultado_utente_interdito_1.toString());
-    HashMap utente_interdito_2 = registarUtente("ut009" ,"carlos_sa" , "40", "fundacao_abcd" );
-    SPTerm resultado_utente_interdito_2 = (SPTerm) utente_interdito_2.get("Resposta");
-    System.out.println(">>>>> Teste 5: \tregistarUtente(\"ut009\",\"carlos_sa\",\"40\",\"fundacao_abcd\");");
-    System.out.println(" \tEsperado (falso) : " + resultado_utente_interdito_2.toString());
-
-
-    System.out.println("\n###### EVOLUÇÃO DO CONHECIMENTO E RESTRIÇÕES ######");
-    HashMap registarUtente = registarUtente("ut100" ,"manuel_alves" , "40", "universidade_minho" );
-    SPTerm resultado_registarUtente = (SPTerm) registarUtente.get("Resposta");
-    System.out.println("Teste 6: \tregistarUtente(\"ut100\",\"manuel_alves\",\"40\",\"universidade_minho\");");
-    System.out.println(" \tEsperado (verdadeiro) : " + resultado_registarUtente.toString());
-    HashMap registarUtente_1 = registarUtente("ut100" ,"manuel_alves" , "40", "universidade_minho" );
-    SPTerm resultado_registarUtente_1 = (SPTerm) registarUtente_1.get("Resposta");
-    System.out.println("Teste 6.1(voltar registar): \tregistarUtente(\"ut100\",\"manuel_alves\",\"40\",\"universidade_minho\");");
-    System.out.println(" \tEsperado (falso) : " + resultado_registarUtente_1.toString());
+      System.out.println("\n###### CONHECIMENTO IMPERFEITO INTERDITO ######");
+      HashMap utente_interdito_1 = utente("ut009" ,"carlos_sa" , "40", "fundacao_abcd" );
+      SPTerm resultado_utente_interdito_1 = (SPTerm) utente_interdito_1.get("Resposta");
+      System.out.println("Teste 5: \tutente(\"ut009\",\"carlos_sa\",\"40\",\"fundacao_abcd\");");
+      System.out.println(" \tEsperado (desconhecido) : " + resultado_utente_interdito_1.toString());
+      HashMap utente_interdito_2 = registarUtente("ut009" ,"carlos_sa" , "40", "fundacao_abcd" );
+      SPTerm resultado_utente_interdito_2 = (SPTerm) utente_interdito_2.get("Resposta");
+      System.out.println(">>>>> Teste 5: \tregistarUtente(\"ut009\",\"carlos_sa\",\"40\",\"fundacao_abcd\");");
+      System.out.println(" \tEsperado (falso) : " + resultado_utente_interdito_2.toString());
 
 
-    System.out.println("\n###### REMOCAO DO CONHECIMENTO E RESTRIÇÕES ######");
-    HashMap removerUtente_1 = removerUtente("ut002" ,"filipe_oliveira" , "25", "urb_qta_orfaos" );
-    SPTerm resultado_removerUtente_1 = (SPTerm) removerUtente_1.get("Resposta");
-    System.out.println("Teste 7: \tremoverUtente(\"ut002\",\"filipe_oliveira\",\"25\",\"urb_qta_orfaos\");");
-    System.out.println(" \tEsperado (falso) : " + resultado_removerUtente_1.toString());
+      System.out.println("\n###### EVOLUÇÃO DO CONHECIMENTO E RESTRIÇÕES ######");
+      HashMap registarUtente = registarUtente("ut100" ,"manuel_alves" , "40", "universidade_minho" );
+      SPTerm resultado_registarUtente = (SPTerm) registarUtente.get("Resposta");
+      System.out.println("Teste 6: \tregistarUtente(\"ut100\",\"manuel_alves\",\"40\",\"universidade_minho\");");
+      System.out.println(" \tEsperado (verdadeiro) : " + resultado_registarUtente.toString());
+      HashMap registarUtente_1 = registarUtente("ut100" ,"manuel_alves" , "40", "universidade_minho" );
+      SPTerm resultado_registarUtente_1 = (SPTerm) registarUtente_1.get("Resposta");
+      System.out.println("Teste 6.1(voltar registar): \tregistarUtente(\"ut100\",\"manuel_alves\",\"40\",\"universidade_minho\");");
+      System.out.println(" \tEsperado (falso) : " + resultado_registarUtente_1.toString());
 
 
-    HashMap removerConsulta = removerConsulta("19-12-1990" ,"ut002" , "sv003", "0" );
-    SPTerm resultado_removerConsulta = (SPTerm) removerConsulta.get("Resposta");
-    System.out.println("Teste 7: \tremoverConsulta(\"19-12-1990\",\"ut002\",\"sv003\",\"0\");");
-    System.out.println(" \tEsperado (verdadeiro) : " + resultado_removerConsulta.toString());
+      System.out.println("\n###### REMOCAO DO CONHECIMENTO E RESTRIÇÕES ######");
+      HashMap removerUtente_1 = removerUtente("ut002" ,"filipe_oliveira" , "25", "urb_qta_orfaos" );
+      SPTerm resultado_removerUtente_1 = (SPTerm) removerUtente_1.get("Resposta");
+      System.out.println("Teste 7: \tremoverUtente(\"ut002\",\"filipe_oliveira\",\"25\",\"urb_qta_orfaos\");");
+      System.out.println(" \tEsperado (falso) : " + resultado_removerUtente_1.toString());
 
 
-    HashMap removerUtente_2 = removerUtente("ut002" ,"filipe_oliveira" , "25", "urb_qta_orfaos" );
-    SPTerm resultado_removerUtente_2 = (SPTerm) removerUtente_2.get("Resposta");
-    System.out.println("Teste 7(tentar remover novamente):  \tremoverUtente(\"ut002\",\"filipe_oliveira\",\"25\",\"urb_qta_orfaos\");");
-    System.out.println(" \tEsperado (verdadeiro) : " + resultado_removerUtente_2.toString());
-
-    System.out.println("\n###### FUNCIONALIDADES PROPOSTAS ######");
-    System.out.println("\n###### QUERIE 1");
-    System.out.println("Teste 8: \tconsultasMedicasUtente(ut001,ListaEventosMedicos);");
-    HashMap consultasMedicasUtente = querie1("ut001");
-    SPTerm resultado_consultasMedicasUtente = (SPTerm) consultasMedicasUtente.get("ListaEventosMedicos");
-    SPTerm arrayDeTermos[] = resultado_consultasMedicasUtente.toTermArray();
-    System.out.println(" \tListaEventosMedicos : " + preparaExcecoes(Arrays.toString(arrayDeTermos)));
-
-    System.out.println("\n###### QUERIE 2");
-    System.out.println("Teste 9: \tcustoConsultasMedicasUtente(ut001,CustoTotal);");
-    HashMap custoConsultasMedicasUtente = querie2("ut001");
-    SPTerm resultado_custoConsultasMedicasUtente = (SPTerm) custoConsultasMedicasUtente.get("CustoTotal");
-    System.out.println(" \tCusto Total : " + resultado_custoConsultasMedicasUtente.toString() + " Unidades Monetárias");
+      HashMap removerConsulta = removerConsulta("19-12-1990" ,"ut002" , "sv003", "0" );
+      SPTerm resultado_removerConsulta = (SPTerm) removerConsulta.get("Resposta");
+      System.out.println("Teste 7: \tremoverConsulta(\"19-12-1990\",\"ut002\",\"sv003\",\"0\");");
+      System.out.println(" \tEsperado (verdadeiro) : " + resultado_removerConsulta.toString());
 
 
-    System.out.println("\n###### QUERIE 3");
-    System.out.println("Teste 10: \tutentesServico(sv001,ListaUtentes);");	
-    HashMap utentesServico = querie3("sv001");
-    SPTerm resultado_utentesServico = (SPTerm) utentesServico.get("ListaUtentes");
-    SPTerm arrayDeTermos_1[] = resultado_utentesServico.toTermArray();
-    System.out.println(" \tListaUtentes : " + preparaExcecoes(Arrays.toString(arrayDeTermos_1)));
+      HashMap removerUtente_2 = removerUtente("ut002" ,"filipe_oliveira" , "25", "urb_qta_orfaos" );
+      SPTerm resultado_removerUtente_2 = (SPTerm) removerUtente_2.get("Resposta");
+      System.out.println("Teste 7(tentar remover novamente):  \tremoverUtente(\"ut002\",\"filipe_oliveira\",\"25\",\"urb_qta_orfaos\");");
+      System.out.println(" \tEsperado (verdadeiro) : " + resultado_removerUtente_2.toString());
 
-    System.out.println("\n###### QUERIE 4");
-    System.out.println("Teste 11: \tservicosInstituicao(hospital_viana_castelo,ListaServicos);");
+      System.out.println("\n###### FUNCIONALIDADES PROPOSTAS ######");
+      System.out.println("\n###### QUERIE 1");
+      System.out.println("Teste 8: \tconsultasMedicasUtente(ut001,ListaEventosMedicos);");
+      HashMap consultasMedicasUtente = querie1("ut001");
+      SPTerm resultado_consultasMedicasUtente = (SPTerm) consultasMedicasUtente.get("ListaEventosMedicos");
+      SPTerm arrayDeTermos[] = resultado_consultasMedicasUtente.toTermArray();
+      System.out.println(" \tListaEventosMedicos : " + preparaExcecoes(Arrays.toString(arrayDeTermos)));
 
-    HashMap servicosInstituicao = querie4("hospital_viana_castelo");
-    SPTerm resultado_servicosInstituicao = (SPTerm) servicosInstituicao.get("ListaServicos");
-    SPTerm arrayDeTermos_2[] = resultado_servicosInstituicao.toTermArray();
-    System.out.println(" \tListaServicos : " + preparaExcecoes(Arrays.toString(arrayDeTermos_2)));
+      System.out.println("\n###### QUERIE 2");
+      System.out.println("Teste 9: \tcustoConsultasMedicasUtente(ut001,CustoTotal);");
+      HashMap custoConsultasMedicasUtente = querie2("ut001");
+      SPTerm resultado_custoConsultasMedicasUtente = (SPTerm) custoConsultasMedicasUtente.get("CustoTotal");
+      System.out.println(" \tCusto Total : " + resultado_custoConsultasMedicasUtente.toString() + " Unidades Monetárias");
 
+
+      System.out.println("\n###### QUERIE 3");
+      System.out.println("Teste 10: \tutentesServico(sv001,ListaUtentes);");	
+      HashMap utentesServico = querie3("sv001");
+      SPTerm resultado_utentesServico = (SPTerm) utentesServico.get("ListaUtentes");
+      SPTerm arrayDeTermos_1[] = resultado_utentesServico.toTermArray();
+      System.out.println(" \tListaUtentes : " + preparaExcecoes(Arrays.toString(arrayDeTermos_1)));
+
+      System.out.println("\n###### QUERIE 4");
+      System.out.println("Teste 11: \tservicosInstituicao(hospital_viana_castelo,ListaServicos);");
+
+      HashMap servicosInstituicao = querie4("hospital_viana_castelo");
+      SPTerm resultado_servicosInstituicao = (SPTerm) servicosInstituicao.get("ListaServicos");
+      SPTerm arrayDeTermos_2[] = resultado_servicosInstituicao.toTermArray();
+      System.out.println(" \tListaServicos : " + preparaExcecoes(Arrays.toString(arrayDeTermos_2)));
+    }else{
+      switch (argv[0]) {
+      case "query1":
+        System.out.println("\n###### QUERIE 1");
+        System.out.println("Lista consultas medicas de um utente: \tconsultasMedicasUtente(" + argv[1] + ",ListaEventosMedicos);");
+        HashMap consultasMedicasUtente = querie1(argv[1]);
+        if(((SPTerm) consultasMedicasUtente.get("ListaEventosMedicos")).isEmptyList()  ) 
+          System.out.println("Nao existem resultados para o input " + argv[1]);
+        else{
+          SPTerm resultado_consultasMedicasUtente = (SPTerm) consultasMedicasUtente.get("ListaEventosMedicos");
+          SPTerm arrayDeTermos[] = resultado_consultasMedicasUtente.toTermArray();
+          System.out.println(" \tLista Eventos Medicos : " + preparaExcecoes(Arrays.toString(arrayDeTermos))); 
+        }
+        break;
+      case "query2":
+        System.out.println("\n###### QUERIE 2");
+        System.out.println("Custo consultas medicas de um utente: \tcustoConsultasMedicasUtente(" + argv[1] + ",CustoTotal);");
+        HashMap custoConsultasMedicasUtente = querie2(argv[1]);
+        SPTerm resultado_custoConsultasMedicasUtente = (SPTerm) custoConsultasMedicasUtente.get("CustoTotal");
+        System.out.println(" \tCusto Total : " + resultado_custoConsultasMedicasUtente.toString() + " Unidades Monetárias");
+      break;
+      case "query3":
+        System.out.println("\n###### QUERIE 3");
+        System.out.println("Lista utentes de um servico: \tutentesServico(sv001,ListaUtentes);");  
+        HashMap utentesServico = querie3(argv[1]);
+        if(((SPTerm) utentesServico.get("ListaUtentes")).isEmptyList()  ){ 
+          System.out.println("Nao existem resultados para o input " + argv[1]);          
+        }else{
+          SPTerm resultado_utentesServico = (SPTerm) utentesServico.get("ListaUtentes");
+          SPTerm arrayDeTermos_1[] = resultado_utentesServico.toTermArray();
+          System.out.println(" \tLista Utentes : " + preparaExcecoes(Arrays.toString(arrayDeTermos_1)));
+        }
+        break;
+      case "query4":
+        System.out.println("\n###### QUERIE 4");
+        System.out.println("Lista de servicos de determinada instituicao: \tservicosInstituicao(hospital_viana_castelo,ListaServicos);");
+        HashMap servicosInstituicao = querie4(argv[1]);
+        if(((SPTerm) servicosInstituicao.get("ListaServicos")).isEmptyList()  ){ 
+          System.out.println("Nao existem resultados para o input " + argv[1]);   
+        }else{
+          SPTerm resultado_servicosInstituicao = (SPTerm) servicosInstituicao.get("ListaServicos");
+          SPTerm arrayDeTermos_2[] = resultado_servicosInstituicao.toTermArray();
+          System.out.println(" \tLista Servicos : " + preparaExcecoes(Arrays.toString(arrayDeTermos_2)));
+        }
+        break;
+      default:
+        System.out.println("Query não encontrada.");
+        System.out.println("Modo de execucao: trabalho2.java <query1, query2, query3, query4> <input>");
+        break;
+      }
+    }
   }
-
 }
