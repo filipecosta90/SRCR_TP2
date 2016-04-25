@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="jasper_exemplos/src/" kind="src" path=""/>
+	<classpathentry excluding="deprecated/|deprecated/bin/|deprecated/bin/jasper_exemplos/|deprecated/bin/jasper_exemplos/bin/|deprecated/bin/jasper_exemplos/bin/jasper_exemplos/|deprecated/bin/jasper_exemplos/bin/jasper_exemplos/include/|deprecated/bin/jasper_exemplos/bin/report/|deprecated/bin/jasper_exemplos/bin/report/font/|deprecated/bin/jasper_exemplos/bin/report/img/|deprecated/bin/jasper_exemplos/bin/report/sec/|deprecated/bin/jasper_exemplos/include/|deprecated/bin/report/|deprecated/bin/report/font/|deprecated/bin/report/img/|deprecated/bin/report/sec/|deprecated/include/|deprecated/src/|report/|report/font/|report/img/|report/sec/|src/" kind="src" path=""/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/usr/local/sicstus4.3.0/lib/sicstus-4.3.0/bin/jasper.jar"/>
-	<classpathentry kind="output" path="jasper_exemplos/bin"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

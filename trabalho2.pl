@@ -128,13 +128,13 @@ utente(ut005,ricardo_oliveira,27,rua_gen_humberto_delgado).
 %   Conhecimento imperfeito incerto
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %      O utente filipe marques, de codigo ut006, residente na rua de santo ovideo, tem idade desconhecida no momento
-utente(ut006,filipe_marques,imperfeito_incerto1,rua_santo_ovideo).
+utente(ut006,filipe_marques,imperfeito_incerto_1,rua_santo_ovideo).
 
 %      O utente sergio caldas, de codigo ut007, de idade 25 anos, tem residencia desconhecida no momento
-utente(ut007,sergio_caldas,25,imperfeito_incerto2).
+utente(ut007,sergio_caldas,25,imperfeito_incerto_2).
 
-excecao(utente(IdUt, Nome, Idade, Morada)) :- utente(IdUt, Nome, imperfeito_incerto1, Morada).
-excecao(utente(IdUt, Nome, Idade, Morada)) :- utente(IdUt, Nome, Idade, imperfeito_incerto2).
+excecao(utente(IdUt, Nome, Idade, Morada)) :- utente(IdUt, Nome, imperfeito_incerto_1, Morada).
+excecao(utente(IdUt, Nome, Idade, Morada)) :- utente(IdUt, Nome, Idade, imperfeito_incerto_2).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   Conhecimento imperfeito impreciso
@@ -147,9 +147,9 @@ excecao(utente(ut008, luis_mendes, IDADE, rua_das_margaridas)) :- IDADE =< 30, I
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %      O utente carlos sa, de codigo ut009, mudo, sem documentos, e incapacitado foi encontrado na rua, passando a residir na fundacao abcd,
 %      pelo que se torna impossivel vir a saber a idade do mesmo 
-utente(ut009, carlos_sa, imperfeito_interdito1, fundacao_abcd).
-excecao(utente(IdUt, Nome, Idade, Morada)) :- utente(IdUt, Nome, imperfeito_interdito1, Morada).
-nulo(imperfeito_interdito1).
+utente(ut009, carlos_sa, imperfeito_interdito_1, fundacao_abcd).
+excecao(utente(IdUt, Nome, Idade, Morada)) :- utente(IdUt, Nome, imperfeito_interdito_1, Morada).
+nulo(imperfeito_interdito_1).
 
 +utente(IdUt,Nome,Idade,Morada)::(
   solucoes( (IdUt,Nome,Idade,Morada), ( utente(ut009,carlos_sa,Idade,fundacao_abcd),nao(nulo(Idade))),S),
@@ -189,7 +189,7 @@ servico(sv007,maternidade,maternidade_julio_dinis,porto).
 %     contudo, a descricao do novo servico e ainda desconhecida de momento
 servico(sv008,imperfeito_incerto_3,hospital_viana_castelo,viana_castelo).
 
-excecao(servico(IdServ, Descricao, Instituicao, Cidade)) :- utente(IdServ, Descricao, imperfeito_incerto3, Cidade).
+excecao(servico(IdServ, Descricao, Instituicao, Cidade)) :- utente(IdServ, Descricao, imperfeito_incerto_3, Cidade).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   Conhecimento imperfeito impreciso
@@ -206,7 +206,7 @@ excecao(servico(sv009,geriatria,hospital_sao_marcos,braga)).
 
 servico(sv010,imperfeito_interdito_2,hospital_matosinhos,matosinhos).
 excecao(servico(IdServ, Descricao, Instituicao, Cidade)) :- servico(IdServ, imperfeito_interdito2, Instituicao, Cidade).
-nulo(imperfeito_interdito2).
+nulo(imperfeito_interdito_2).
 
 +servico(IdServ, Descricao, Instituicao, Cidade)::(
   solucoes( (IdServ,Descricao,Instituicao,Cidade), ( servico(sv010,Descricao,hospital_matosinhos,matosinhos),nao(nulo(Descricao))),S),
@@ -242,9 +242,9 @@ consulta(17-06-1988,ut005,sv006,0).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     Foi realizada uma intervencao medica urgente num utente que havia dado entrada acompanhado pela policia, no dia 25-04-2016,
 %     no servico hospitalar de codigo sv004. a consulta medica teve um custo de 200euros. A identificacao do individuo e ainda desconhecida de momento
-consulta(25-04-2016,imperfeito_incerto4,sv004,200).
+consulta(25-04-2016,imperfeito_incerto_4,sv004,200).
 
-excecao(consulta(Data,IdUt,IdServ,Custo)) :- consulta(Data, imperfeito_incerto4, IdServ,Custo).
+excecao(consulta(Data,IdUt,IdServ,Custo)) :- consulta(Data, imperfeito_incerto_4, IdServ,Custo).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   Conhecimento imperfeito impreciso
@@ -300,41 +300,48 @@ removerduplicados(ListaUtentesRep,ListaUtentes).
 % E5) Extensao do predicado Registar utentes, serviços, ou consultas
 
 % Extensao do predicado que pemite registar utentes
-% registarUtente(IdUt,Nome,Idade,Morada) -> {V,F,D}
+% registarUtente(IdUt,Nome,Idade,Morada) -> {V,F}
 registarUtente(IdUt,Nome,Idade,Morada) :- evolucao(utente(IdUt,Nome,Idade,Morada)).
+-registarUtente(IdUt,Nome,Idade,Morada) :- nao(evolucao(utente(IdUt,Nome,Idade,Morada))).
 
 % Extensao do predicado que pemite registar servicos numa instituicao
-% registarServico(IdServ,Descricao, Instituicao, Cidade ) -> {V,F,D}
-registarServico(IdServ,Descricao,Instituicao,Cidade) :- evolucao(servico(IdServ,Descricao,Instituicao,Cidade)).
+% registarServico(IdServ,Descricao, Instituicao, Cidade ) -> {V,F}
+registarServico(IdServ,Descricao,Instituicao,Cidade) :- (evolucao(servico(IdServ,Descricao,Instituicao,Cidade))).
+-registarServico(IdServ,Descricao,Instituicao,Cidade) :- nao(evolucao(servico(IdServ,Descricao,Instituicao,Cidade))).
 
 % Extensao do predicado que pemite registar consultas medicas, indicando a data, a identificacao do utente, do servico,
 % numa instituicao indicando o utente, o profissional, o servico e a instituicao
-% registarConsulta(Data,IdUt,IdServ,Custo) -> {V,F,D}
+% registarConsulta(Data,IdUt,IdServ,Custo) -> {V,F}
 registarConsulta(Data,IdUt,IdServ,Custo) :- evolucao(consulta(Data,IdUt,IdServ,Custo)).
+-registarConsulta(Data,IdUt,IdServ,Custo) :- nao(evolucao(consulta(Data,IdUt,IdServ,Custo))).
 
 % E5) Remover utentes, ou serviços,  ou consultas do sistema de reprensentacao
 
 % Extensao do predicado que pemite remover utentes
-% removerUtente(IdUt,Nome,Idade,Morada) -> {V,F,D}
+% removerUtente(IdUt,Nome,Idade,Morada) -> {V,F}
 removerUtente(IdUt,Nome,Idade,Morada) :- remocao(utente(IdUt,Nome,Idade,Morada)).
+-removerUtente(IdUt,Nome,Idade,Morada) :- nao(remocao(utente(IdUt,Nome,Idade,Morada))).
 
 % Extensao do predicado que pemite remover servicos
-% removerServico(IdServ,Descricao, Instituicao, Cidade ) -> {V,F,D}
+% removerServico(IdServ,Descricao, Instituicao, Cidade ) -> {V,F}
 removerServico(IdServ,Descricao,Instituicao,Cidade) :- evolucao(servico(IdServ,Descricao,Instituicao,Cidade)).
+-removerServico(IdServ,Descricao,Instituicao,Cidade) :- nao(evolucao(servico(IdServ,Descricao,Instituicao,Cidade))).
 
 % Extensao do predicado que pemite remover consultas medicas, indicando a data, a identificacao do utente, do servico,
 % numa instituicao indicando o utente, o profissional, o servico e a instituicao
-% removerConsulta(Data,IdUt,IdServ,Custo) -> {V,F,D}
+% removerConsulta(Data,IdUt,IdServ,Custo) -> {V,F}
 removerConsulta(Data,IdUt,IdServ,Custo) :- remocao(consulta(Data,IdUt,IdServ,Custo)).
+-removerConsulta(Data,IdUt,IdServ,Custo) :- nao(remocao(consulta(Data,IdUt,IdServ,Custo))).
 
 
 % Predicados que permitem evolução do conhecimento ------------------------------------------------------------------------------
 
 % Extensão do predicado que permite a evolucao do conhecimento
 % disponibilizada pelo professor na aula prática da semana5
-evolucao( Termo ):-solucoes(Invariante,+Termo::Invariante,Lista),
-inserir(Termo),
-testar(Lista).
+evolucao( Termo ):-(solucoes(Invariante,+Termo::Invariante,Lista),
+                        inserir(Termo),
+                        testar(Lista)
+                       ).
 
 % predicado disponibilizado pelo professor na semana5
 % inserir: T -> {V,F}
@@ -361,7 +368,7 @@ remover(Termo):-assert(Termo),!,fail.
 solucoes(X,Y,Z):-findall(X,Y,Z).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
-% Extensao do meta-predicado demo: Questao,Resposta -> {V,F}
+% Extensao do meta-predicado demo: Questao,Resposta -> {V,F,D}
 
 demo( Questao,verdadeiro ) :-
 Questao.
